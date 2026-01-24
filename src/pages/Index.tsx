@@ -1,10 +1,11 @@
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { VPNSection } from '@/components/VPNSection';
-import { StatusWidget } from '@/components/StatusWidget';
-import { ServicesSection } from '@/components/ServicesSection';
 import { InfrastructureSection } from '@/components/InfrastructureSection';
+import { ArticlesSection } from '@/components/ArticlesSection';
+import { TelegramSection } from '@/components/TelegramSection';
 import { PricingSection } from '@/components/PricingSection';
+import { StatusWidget } from '@/components/StatusWidget';
 import { Footer } from '@/components/Footer';
 
 const Index = () => {
@@ -14,10 +15,11 @@ const Index = () => {
       <main>
         <HeroSection />
         <VPNSection />
-        <StatusWidget />
-        <ServicesSection />
         <InfrastructureSection />
+        <ArticlesSection />
+        <TelegramSection />
         <PricingSection />
+        <StatusWidget />
       </main>
       <Footer />
     </div>

@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Menu, X, Cpu, Shield } from 'lucide-react';
+import { Menu, X, Cpu, Shield, Server, BookOpen, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { label: 'VPN', href: '#vpn' },
-  { label: 'Сервисы', href: '#services' },
-  { label: 'Инфраструктура', href: '#infrastructure' },
-  { label: 'Цены', href: '#pricing' },
-  { label: 'Поддержка', href: '#support' },
+  { label: 'VPN', href: '#vpn', icon: Shield },
+  { label: 'Дата-центр', href: '#infrastructure', icon: Server },
+  { label: 'Блог', href: '#articles', icon: BookOpen },
+  { label: 'Кабинет', href: '#cabinet', icon: Bot },
+  { label: 'Цены', href: '#pricing', icon: null },
 ];
 
 export const Header = () => {
@@ -30,18 +30,18 @@ export const Header = () => {
           </a>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors relative group ${
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors relative group ${
                   item.label === 'VPN' 
                     ? 'text-primary' 
                     : 'text-muted-foreground hover:text-primary'
                 }`}
               >
-                {item.label === 'VPN' && <Shield className="inline h-4 w-4 mr-1" />}
+                {item.icon && <item.icon className="h-4 w-4" />}
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full" />
               </a>
@@ -52,7 +52,7 @@ export const Header = () => {
           <div className="hidden md:block">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-primary">
               <Shield className="mr-2 h-4 w-4" />
-              Подключить VPN
+              Получить VPN
             </Button>
           </div>
 
@@ -67,26 +67,26 @@ export const Header = () => {
 
         {/* Mobile Nav */}
         {isOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col gap-4">
+          <nav className="md:hidden py-4 border-t border-border animate-fade-in">
+            <div className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`text-sm font-medium transition-colors px-2 py-2 ${
+                  className={`flex items-center gap-2 text-sm font-medium transition-colors px-3 py-3 rounded-lg ${
                     item.label === 'VPN' 
-                      ? 'text-primary' 
-                      : 'text-muted-foreground hover:text-primary'
+                      ? 'text-primary bg-primary/5' 
+                      : 'text-muted-foreground hover:text-primary hover:bg-muted/50'
                   }`}
                 >
-                  {item.label === 'VPN' && <Shield className="inline h-4 w-4 mr-1" />}
+                  {item.icon && <item.icon className="h-4 w-4" />}
                   {item.label}
                 </a>
               ))}
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold mt-2">
                 <Shield className="mr-2 h-4 w-4" />
-                Подключить VPN
+                Получить VPN
               </Button>
             </div>
           </nav>
