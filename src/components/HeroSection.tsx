@@ -1,4 +1,4 @@
-import { ArrowRight, Zap, Shield, Server } from 'lucide-react';
+import { ArrowRight, Shield, Zap, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const HeroSection = () => {
@@ -18,7 +18,7 @@ export const HeroSection = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8">
             <span className="w-2 h-2 rounded-full bg-primary pulse-indicator" />
-            <span className="text-sm font-medium text-primary">Tier III Data Center</span>
+            <span className="text-sm font-medium text-primary">Tier III Data Center • VPN • Dedicated</span>
           </div>
 
           {/* Main Heading */}
@@ -33,7 +33,8 @@ export const HeroSection = () => {
           {/* Subheading */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed">
             Собственный дата-центр Tier III и команда системных инженеров. 
-            Решаем задачи любой сложности: от аренды юнита до миграции в облако.
+            Персональные VPN-серверы на Amnezia & WireGuard. 
+            От аренды юнита до обхода любых блокировок.
           </p>
 
           {/* CTA Buttons */}
@@ -42,7 +43,8 @@ export const HeroSection = () => {
               size="lg" 
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg px-8 py-6 glow-primary group"
             >
-              Запустить аудит систем
+              <Shield className="mr-2 h-5 w-5" />
+              Подключить VPN
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button 
@@ -50,26 +52,26 @@ export const HeroSection = () => {
               variant="outline" 
               className="border-border text-foreground hover:bg-muted hover:text-foreground font-semibold text-lg px-8 py-6"
             >
-              Узнать больше
+              Все услуги
             </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             <div className="flex flex-col items-center p-6 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
-              <Server className="h-8 w-8 text-primary mb-3" />
-              <span className="text-3xl font-bold text-foreground mb-1">500+</span>
-              <span className="text-sm text-muted-foreground">Серверов</span>
-            </div>
-            <div className="flex flex-col items-center p-6 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
               <Shield className="h-8 w-8 text-primary mb-3" />
-              <span className="text-3xl font-bold text-foreground mb-1">99.98%</span>
-              <span className="text-sm text-muted-foreground">Uptime SLA</span>
+              <span className="text-3xl font-bold text-foreground mb-1">Amnezia</span>
+              <span className="text-sm text-muted-foreground">Обход DPI</span>
             </div>
             <div className="flex flex-col items-center p-6 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
-              <Zap className="h-8 w-8 text-primary mb-3" />
-              <span className="text-3xl font-bold text-foreground mb-1">24/7</span>
-              <span className="text-sm text-muted-foreground">Поддержка</span>
+              <Zap className="h-8 w-8 text-accent mb-3" />
+              <span className="text-3xl font-bold text-foreground mb-1">WireGuard</span>
+              <span className="text-sm text-muted-foreground">Пинг от 5ms</span>
+            </div>
+            <div className="flex flex-col items-center p-6 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
+              <Lock className="h-8 w-8 text-primary mb-3" />
+              <span className="text-3xl font-bold text-foreground mb-1">No Logs</span>
+              <span className="text-sm text-muted-foreground">Без логирования</span>
             </div>
           </div>
         </div>
