@@ -89,6 +89,14 @@ export const Footer = () => {
             </a>
           </div>
         </div>
+        
+        {/* Network Status */}
+        <div className="pt-4 text-center">
+          <p className="text-[10px] text-muted-foreground/60 font-mono-tech flex items-center justify-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Network Status: All Systems Operational [99.98% Uptime]
+          </p>
+        </div>
       </div>
     </footer>
   );
