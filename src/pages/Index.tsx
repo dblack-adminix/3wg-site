@@ -8,6 +8,7 @@ import { FAQSection } from '@/components/FAQSection';
 import { InfrastructureSection } from '@/components/InfrastructureSection';
 import { StatusWidget } from '@/components/StatusWidget';
 import { Footer } from '@/components/Footer';
+import { AnimatedSection } from '@/components/AnimatedSection';
 
 const Index = () => {
   return (
@@ -15,13 +16,34 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <VPNSection />
-        <PricingSection />
-        <MiniAppShowcase />
-        <HardwareSection />
-        <InfrastructureSection />
-        <FAQSection />
-        <StatusWidget />
+        
+        <AnimatedSection delay={0.1}>
+          <VPNSection />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.1} direction="up">
+          <PricingSection />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.15} direction="left">
+          <MiniAppShowcase />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.1} direction="right">
+          <HardwareSection />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.1}>
+          <InfrastructureSection />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.1}>
+          <FAQSection />
+        </AnimatedSection>
+        
+        <AnimatedSection delay={0.2} direction="none">
+          <StatusWidget />
+        </AnimatedSection>
       </main>
       <Footer />
     </div>
