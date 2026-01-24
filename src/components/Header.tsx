@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Menu, X, Cpu } from 'lucide-react';
+import { Menu, X, Cpu, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
+  { label: 'VPN', href: '#vpn' },
   { label: 'Сервисы', href: '#services' },
   { label: 'Инфраструктура', href: '#infrastructure' },
   { label: 'Цены', href: '#pricing' },
@@ -34,8 +35,13 @@ export const Header = () => {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary relative group"
+                className={`text-sm font-medium transition-colors relative group ${
+                  item.label === 'VPN' 
+                    ? 'text-primary' 
+                    : 'text-muted-foreground hover:text-primary'
+                }`}
               >
+                {item.label === 'VPN' && <Shield className="inline h-4 w-4 mr-1" />}
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full" />
               </a>
@@ -45,7 +51,8 @@ export const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-primary">
-              Связаться
+              <Shield className="mr-2 h-4 w-4" />
+              Подключить VPN
             </Button>
           </div>
 
@@ -67,13 +74,19 @@ export const Header = () => {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary px-2 py-2"
+                  className={`text-sm font-medium transition-colors px-2 py-2 ${
+                    item.label === 'VPN' 
+                      ? 'text-primary' 
+                      : 'text-muted-foreground hover:text-primary'
+                  }`}
                 >
+                  {item.label === 'VPN' && <Shield className="inline h-4 w-4 mr-1" />}
                   {item.label}
                 </a>
               ))}
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold mt-2">
-                Связаться
+                <Shield className="mr-2 h-4 w-4" />
+                Подключить VPN
               </Button>
             </div>
           </nav>
