@@ -64,7 +64,7 @@ export const Header = () => {
             <Link to="/dashboard">
               <Button 
                 variant="outline" 
-                className="border-accent text-accent hover:bg-accent/10 font-semibold group transition-all duration-300 hover:scale-105"
+                className="border-primary text-primary hover:bg-primary/10 font-semibold group transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_hsl(73_100%_50%/0.5)] hover:border-primary/80"
               >
                 <Rocket className="mr-2 h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
                 Launch App
@@ -109,7 +109,7 @@ export const Header = () => {
                 <Link to="/dashboard" className="block">
                   <Button 
                     variant="outline" 
-                    className="w-full border-accent text-accent hover:bg-accent/10 font-semibold"
+                    className="w-full border-primary text-primary hover:bg-primary/10 font-semibold hover:shadow-[0_0_20px_hsl(73_100%_50%/0.5)]"
                   >
                     <Rocket className="mr-2 h-4 w-4" />
                     Launch App

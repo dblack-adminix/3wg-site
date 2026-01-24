@@ -259,12 +259,13 @@ export const MobileDashboard = () => {
 
           {/* Device List */}
           <div className="space-y-3">
-            {devices.map((device) => {
+            {devices.map((device, index) => {
               const DeviceIcon = getDeviceIcon(device.type);
               return (
                 <div 
                   key={device.id}
-                  className="relative group"
+                  className="relative group animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'backwards' }}
                 >
                   <div className={`absolute -inset-[1px] rounded-xl transition-opacity duration-300 ${
                     device.status === 'online' 
@@ -323,26 +324,26 @@ export const MobileDashboard = () => {
                   onClick={() => setSelectedProtocol('wireguard')}
                   className={`w-full p-4 rounded-xl border transition-all duration-300 text-left ${
                     selectedProtocol === 'wireguard'
-                      ? 'border-[#B10000] bg-[#B10000]/10'
-                      : 'border-white/10 bg-background/50 hover:border-white/20'
+                      ? 'border-[#B10000] bg-[#B10000]/10 shadow-[0_0_20px_rgba(177,0,0,0.3)]'
+                      : 'border-white/10 bg-background/50 hover:border-white/20 opacity-60'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        selectedProtocol === 'wireguard' ? 'bg-[#B10000]/20' : 'bg-muted'
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                        selectedProtocol === 'wireguard' ? 'bg-[#B10000]/30 shadow-[0_0_15px_rgba(177,0,0,0.4)]' : 'bg-muted'
                       }`}>
-                        <Zap className={`h-5 w-5 ${
+                        <Zap className={`h-5 w-5 transition-colors duration-300 ${
                           selectedProtocol === 'wireguard' ? 'text-[#FF3333]' : 'text-muted-foreground'
                         }`} />
                       </div>
                       <div>
-                        <div className="font-bold text-sm">WireGuard</div>
+                        <div className={`font-bold text-sm transition-colors duration-300 ${selectedProtocol === 'wireguard' ? 'text-[#FF3333]' : ''}`}>WireGuard</div>
                         <div className="text-xs text-muted-foreground font-mono-tech">max_speed</div>
                       </div>
                     </div>
                     {selectedProtocol === 'wireguard' && (
-                      <div className="w-2 h-2 rounded-full bg-[#FF3333]" />
+                      <div className="w-2 h-2 rounded-full bg-[#FF3333] shadow-[0_0_8px_#FF3333] animate-pulse" />
                     )}
                   </div>
                 </button>
@@ -352,26 +353,26 @@ export const MobileDashboard = () => {
                   onClick={() => setSelectedProtocol('amnezia')}
                   className={`w-full p-4 rounded-xl border transition-all duration-300 text-left ${
                     selectedProtocol === 'amnezia'
-                      ? 'border-accent bg-accent/10'
-                      : 'border-white/10 bg-background/50 hover:border-white/20'
+                      ? 'border-accent bg-accent/10 shadow-[0_0_20px_rgba(255,153,0,0.3)]'
+                      : 'border-white/10 bg-background/50 hover:border-white/20 opacity-60'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        selectedProtocol === 'amnezia' ? 'bg-accent/20' : 'bg-muted'
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                        selectedProtocol === 'amnezia' ? 'bg-accent/30 shadow-[0_0_15px_rgba(255,153,0,0.4)]' : 'bg-muted'
                       }`}>
-                        <Shield className={`h-5 w-5 ${
+                        <Shield className={`h-5 w-5 transition-colors duration-300 ${
                           selectedProtocol === 'amnezia' ? 'text-accent' : 'text-muted-foreground'
                         }`} />
                       </div>
                       <div>
-                        <div className="font-bold text-sm">AmneziaWG</div>
+                        <div className={`font-bold text-sm transition-colors duration-300 ${selectedProtocol === 'amnezia' ? 'text-accent' : ''}`}>AmneziaWG</div>
                         <div className="text-xs text-muted-foreground font-mono-tech">dpi_bypass</div>
                       </div>
                     </div>
                     {selectedProtocol === 'amnezia' && (
-                      <div className="w-2 h-2 rounded-full bg-accent" />
+                      <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_#FF9900] animate-pulse" />
                     )}
                   </div>
                 </button>

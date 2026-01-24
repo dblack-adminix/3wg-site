@@ -12,16 +12,25 @@ export const HardwareSection = () => {
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-400/30 bg-gray-400/5 text-gray-300 text-sm font-medium mb-6">
-              <Router className="h-4 w-4" />
-              <span className="font-mono-tech text-xs">HARDWARE_SOLUTION</span>
-            </span>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-400/30 bg-gray-400/5 text-gray-300 text-sm font-medium">
+                <Router className="h-4 w-4" />
+                <span className="font-mono-tech text-xs">HARDWARE_SOLUTION</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-bold animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                In Stock
+              </span>
+            </div>
             
-            <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
               <span className="bg-gradient-to-r from-gray-200 via-primary to-gray-300 bg-clip-text text-transparent">3LAB HARDWARE</span>
               <br />
               <span className="text-muted-foreground text-xl md:text-2xl font-normal">Готовый роутер с VPN из коробки</span>
             </h2>
+            <p className="text-sm text-muted-foreground font-mono-tech">
+              Управление через встроенный Telegram Mini App v2.0
+            </p>
           </div>
 
           {/* Main Content Grid */}
