@@ -9,10 +9,10 @@ const plans = [
     period: '/мес',
     description: 'Быстрый старт для одного',
     features: [
-      'До 3 устройств',
-      'Личный IP-адрес',
-      'Протокол WireGuard',
-      'Установка за 1 минуту',
+      'devices: 3',
+      'dedicated_ip: true',
+      'protocol: WireGuard',
+      'setup_time: 60s',
     ],
     accent: false,
     gradient: 'wireguard',
@@ -24,10 +24,10 @@ const plans = [
     period: '/мес',
     description: 'Для всей семьи на одном сервере',
     features: [
-      'До 10 устройств',
-      'AmneziaWG (Обход DPI)',
-      'Вся семья на одном сервере',
-      'Поддержка 24/7',
+      'devices: 10',
+      'protocol: AmneziaWG',
+      'dpi_bypass: enabled',
+      'support: 24/7',
     ],
     accent: true,
     badge: 'Популярный',
@@ -40,10 +40,10 @@ const plans = [
     period: '/мес',
     description: 'Полный контроль для бизнеса',
     features: [
-      'Безлимит устройств*',
-      'Максимальная скорость',
-      'Персональный инженер',
-      'Любые протоколы на выбор',
+      'devices: unlimited*',
+      'bandwidth: max',
+      'engineer: dedicated',
+      'protocols: any',
     ],
     accent: false,
     gradient: 'wireguard',
@@ -58,8 +58,8 @@ export const PricingSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
-            Тарифы VPN
+          <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
+            <span className="font-mono-tech text-xs">PRICING_PLANS</span>
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
             Прозрачные <span className="text-gradient-primary">цены</span>
@@ -70,12 +70,12 @@ export const PricingSection = () => {
         </div>
 
         {/* Article Block */}
-        <div className="max-w-4xl mx-auto mb-16 p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 backdrop-blur-xl">
+        <div className="max-w-4xl mx-auto mb-16 p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-[#B10000]/5 backdrop-blur-xl">
           <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
             Почему 3LAB лучше обычного VPN?
           </h3>
           <p className="text-muted-foreground leading-relaxed">
-            Массовые сервисы используют общие IP, которые легко блокируются. В <span className="text-primary font-semibold">3LAB</span> вы получаете личную виртуальную машину. Это ваш приватный коридор в интернет, <span className="text-accent font-semibold">невидимый для систем фильтрации</span>.
+            Массовые сервисы используют общие IP, которые легко блокируются. В <span className="text-primary font-semibold">3LAB</span> вы получаете личную виртуальную машину. Это ваш приватный коридор в интернет, <span className="text-[#FF3333] font-semibold">невидимый для систем фильтрации</span>.
           </p>
         </div>
 
@@ -92,8 +92,8 @@ export const PricingSection = () => {
               <div 
                 className={`absolute -inset-[1px] rounded-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 ${
                   plan.gradient === 'amnezia' 
-                    ? 'bg-gradient-to-br from-accent via-purple-500 to-accent/50' 
-                    : 'bg-gradient-to-br from-primary via-cyan-400 to-primary/50'
+                    ? 'bg-gradient-to-br from-accent via-purple-500 to-purple-800' 
+                    : 'bg-gradient-to-br from-primary via-[#B10000] to-[#700000]'
                 }`}
               />
               
@@ -118,19 +118,19 @@ export const PricingSection = () => {
                     className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 ${
                       plan.gradient === 'amnezia'
                         ? 'bg-gradient-to-br from-accent/20 to-purple-500/20'
-                        : 'bg-gradient-to-br from-primary/20 to-cyan-400/20'
+                        : 'bg-gradient-to-br from-[#B10000]/30 to-primary/20'
                     }`}
                   >
                     <plan.icon 
                       className={`h-7 w-7 ${
-                        plan.gradient === 'amnezia' ? 'text-accent' : 'text-primary'
+                        plan.gradient === 'amnezia' ? 'text-accent' : 'text-[#FF3333]'
                       }`} 
                     />
                   </div>
                   <h3 className="text-xl font-bold font-['Montserrat'] text-foreground mb-2">
                     {plan.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="text-sm text-muted-foreground mb-4 font-mono-tech">
                     {plan.description}
                   </p>
                   <div className="flex items-baseline justify-center gap-1">
@@ -138,43 +138,37 @@ export const PricingSection = () => {
                       className={`text-4xl font-bold ${
                         plan.gradient === 'amnezia' 
                           ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent' 
-                          : 'bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent'
+                          : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
                       }`}
                     >
                       {plan.price}₽
                     </span>
-                    <span className="text-muted-foreground">{plan.period}</span>
+                    <span className="text-muted-foreground font-mono-tech text-sm">{plan.period}</span>
                   </div>
                 </div>
 
-                {/* Features */}
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <div 
-                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${
-                          plan.gradient === 'amnezia'
-                            ? 'bg-accent/20'
-                            : 'bg-primary/20'
-                        }`}
-                      >
-                        <Check 
-                          className={`h-3 w-3 ${
-                            plan.gradient === 'amnezia' ? 'text-accent' : 'text-primary'
-                          }`} 
+                {/* Features - Monospace Style */}
+                <div className="mb-8 p-4 rounded-xl bg-background/50 border border-white/5">
+                  <ul className="space-y-2">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3">
+                        <div 
+                          className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${
+                            plan.gradient === 'amnezia' ? 'bg-accent' : 'bg-[#FF3333]'
+                          }`}
                         />
-                      </div>
-                      <span className="text-sm text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                        <span className="font-mono-tech text-sm text-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* CTA */}
                 <Button
                   className={`w-full font-semibold transition-all duration-300 ${
                     plan.gradient === 'amnezia'
                       ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30'
-                      : 'bg-gradient-to-r from-primary to-cyan-400 hover:from-primary/90 hover:to-cyan-400/90 text-primary-foreground shadow-lg shadow-primary/30'
+                      : 'bg-gradient-to-r from-primary to-[#B10000] hover:from-primary/90 hover:to-[#B10000]/90 text-primary-foreground shadow-lg shadow-[#B10000]/30'
                   }`}
                 >
                   Заказать
@@ -187,11 +181,11 @@ export const PricingSection = () => {
 
         {/* Bottom Note */}
         <div className="mt-12 text-center">
-          <p className="text-muted-foreground mb-2">
-            Все тарифы включают: установку за 5 минут, гарантию возврата 7 дней, поддержку 24/7
+          <p className="text-muted-foreground mb-2 font-mono-tech text-sm">
+            setup: 5min • refund: 7d • support: 24/7
           </p>
-          <p className="text-xs text-muted-foreground/60">
-            * Безлимит устройств — до 50 одновременных подключений
+          <p className="text-xs text-muted-foreground/60 font-mono-tech">
+            * unlimited = max 50 concurrent connections
           </p>
         </div>
       </div>
