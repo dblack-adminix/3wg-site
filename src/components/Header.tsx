@@ -1,17 +1,27 @@
 import { useState } from 'react';
-import { Menu, X, Cpu, Shield, Server, BookOpen, Bot } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Menu, X, Cpu, Shield, Server, BookOpen, Bot, Rocket, Router, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
   { label: 'VPN', href: '#vpn', icon: Shield },
-  { label: 'Дата-центр', href: '#infrastructure', icon: Server },
-  { label: 'Блог', href: '#articles', icon: BookOpen },
-  { label: 'Кабинет', href: '#cabinet', icon: Bot },
-  { label: 'Цены', href: '#pricing', icon: null },
+  { label: 'Тарифы', href: '#pricing', icon: null },
+  { label: 'Hardware', href: '#hardware', icon: Router },
+  { label: 'FAQ', href: '#faq', icon: HelpCircle },
 ];
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
@@ -35,6 +45,7 @@ export const Header = () => {
               <a
                 key={item.href}
                 href={item.href}
+                onClick={(e) => handleSmoothScroll(e, item.href)}
                 className={`flex items-center gap-1.5 text-sm font-medium transition-colors relative group ${
                   item.label === 'VPN' 
                     ? 'text-primary' 
@@ -48,9 +59,18 @@ export const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-primary">
+          {/* CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link to="/dashboard">
+              <Button 
+                variant="outline" 
+                className="border-accent text-accent hover:bg-accent/10 font-semibold group transition-all duration-300 hover:scale-105"
+              >
+                <Rocket className="mr-2 h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                Launch App
+              </Button>
+            </Link>
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-primary transition-all duration-300 hover:scale-105">
               <Shield className="mr-2 h-4 w-4" />
               Получить VPN
             </Button>
@@ -73,7 +93,7 @@ export const Header = () => {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => handleSmoothScroll(e, item.href)}
                   className={`flex items-center gap-2 text-sm font-medium transition-colors px-3 py-3 rounded-lg ${
                     item.label === 'VPN' 
                       ? 'text-primary bg-primary/5' 
@@ -84,10 +104,22 @@ export const Header = () => {
                   {item.label}
                 </a>
               ))}
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold mt-2">
-                <Shield className="mr-2 h-4 w-4" />
-                Получить VPN
-              </Button>
+              
+              <div className="pt-2 space-y-2">
+                <Link to="/dashboard" className="block">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-accent text-accent hover:bg-accent/10 font-semibold"
+                  >
+                    <Rocket className="mr-2 h-4 w-4" />
+                    Launch App
+                  </Button>
+                </Link>
+                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Получить VPN
+                </Button>
+              </div>
             </div>
           </nav>
         )}
