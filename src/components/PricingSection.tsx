@@ -1,52 +1,58 @@
-import { Check, ArrowRight, Zap, Shield, Server } from 'lucide-react';
+import { Check, ArrowRight, User, Home, Users, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const plans = [
   {
-    icon: Zap,
-    name: 'S - Личный',
+    icon: User,
+    name: 'SOLO',
+    subtitle: 'Личный сервер',
     price: '300',
     period: '/мес',
-    description: 'Быстрый старт для одного',
+    description: 'Для тех, кому нужна приватность в кармане.',
     features: [
-      'devices: 3',
-      'dedicated_ip: true',
-      'protocol: WireGuard',
-      'setup_time: 60s',
+      { key: 'devices', value: 'до 3-х устройств' },
+      { key: 'protocol', value: 'WireGuard' },
+      { key: 'ip', value: 'Выделенный IP' },
+      { key: 'use_case', value: 'Работа с зарубежными банками' },
+      { key: 'support', value: 'Базовая (тикеты)' },
     ],
     accent: false,
     gradient: 'wireguard',
   },
   {
-    icon: Shield,
-    name: 'M - Семейный',
-    price: '600',
+    icon: Home,
+    name: 'FAMILY',
+    subtitle: 'Семейный сервер',
+    price: '650',
     period: '/мес',
-    description: 'Для всей семьи на одном сервере',
+    description: 'Один сервер на весь дом. Никакой платы за каждого члена семьи.',
     features: [
-      'devices: 10',
-      'protocol: AmneziaWG',
-      'dpi_bypass: enabled',
-      'support: 24/7',
+      { key: 'devices', value: 'до 10 устройств + Smart TV' },
+      { key: 'protocols', value: 'AmneziaWG + WireGuard' },
+      { key: 'dpi', value: 'Обход блокировок DPI' },
+      { key: 'router', value: 'Настройка на роутер' },
+      { key: 'support', value: 'Приоритетная' },
     ],
     accent: true,
-    badge: 'Популярный',
-    gradient: 'amnezia',
+    badge: 'ХИТ',
+    gradient: 'primary',
   },
   {
-    icon: Server,
-    name: 'L - Корпоративный',
+    icon: Users,
+    name: 'COMMUNITY',
+    subtitle: 'Для своих',
     price: '1200',
     period: '/мес',
-    description: 'Полный контроль для бизнеса',
+    description: 'Свой узел связи для компании друзей или малого офиса.',
     features: [
-      'devices: unlimited*',
-      'bandwidth: max',
-      'engineer: dedicated',
-      'protocols: any',
+      { key: 'devices', value: 'до 25 устройств' },
+      { key: 'protocols', value: 'Amnezia + WireGuard + SS' },
+      { key: 'power', value: 'Усиленный CPU' },
+      { key: 'streaming', value: '4K стриминг, игры без лагов' },
+      { key: 'support', value: 'Персональный инженер' },
     ],
     accent: false,
-    gradient: 'wireguard',
+    gradient: 'amnezia',
   },
 ];
 
@@ -59,28 +65,18 @@ export const PricingSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
-            <span className="font-mono-tech text-xs">PRICING_PLANS</span>
+            <span className="font-mono-tech text-xs">PRICING_GRID</span>
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
-            Прозрачные <span className="text-gradient-primary">цены</span>
+            Тарифная сетка <span className="text-gradient-primary">3LAB</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Выберите подходящий тариф. Все включено, никаких скрытых платежей.
-          </p>
-        </div>
-
-        {/* Article Block */}
-        <div className="max-w-4xl mx-auto mb-16 p-8 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-[#B10000]/5 backdrop-blur-xl">
-          <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
-            Почему 3LAB лучше обычного VPN?
-          </h3>
-          <p className="text-muted-foreground leading-relaxed">
-            Массовые сервисы используют общие IP, которые легко блокируются. В <span className="text-primary font-semibold">3LAB</span> вы получаете личную виртуальную машину. Это ваш приватный коридор в интернет, <span className="text-[#FF3333] font-semibold">невидимый для систем фильтрации</span>.
+            Личный виртуальный сервер — вы владеете ресурсами, а не делите их с тысячами пользователей.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -90,54 +86,71 @@ export const PricingSection = () => {
             >
               {/* Gradient Border Effect */}
               <div 
-                className={`absolute -inset-[1px] rounded-2xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 ${
+                className={`absolute -inset-[2px] rounded-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-sm ${
                   plan.gradient === 'amnezia' 
                     ? 'bg-gradient-to-br from-accent via-purple-500 to-purple-800' 
-                    : 'bg-gradient-to-br from-primary via-[#B10000] to-[#700000]'
+                    : plan.gradient === 'primary'
+                    ? 'bg-gradient-to-br from-primary via-primary/70 to-primary/40'
+                    : 'bg-gradient-to-br from-[#B10000] via-[#8B0000] to-[#500000]'
                 }`}
               />
               
               {/* Card Content with Glassmorphism */}
-              <div 
-                className={`relative p-6 rounded-2xl backdrop-blur-xl bg-background/80 border border-white/5 h-full ${
-                  plan.accent ? 'bg-background/90' : ''
-                }`}
-              >
+              <div className="relative p-6 md:p-8 rounded-3xl backdrop-blur-xl bg-background/85 border border-white/10 h-full">
                 {/* Badge */}
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-4 py-1 rounded-full bg-gradient-to-r from-accent to-purple-500 text-white text-xs font-bold shadow-lg shadow-accent/30">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-lg shadow-primary/40">
+                      <Sparkles className="h-3 w-3" />
                       {plan.badge}
                     </span>
                   </div>
                 )}
 
                 {/* Plan Header */}
-                <div className="text-center mb-6 pt-2">
+                <div className="text-center mb-8 pt-2">
                   <div 
-                    className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 ${
+                    className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 ${
                       plan.gradient === 'amnezia'
                         ? 'bg-gradient-to-br from-accent/20 to-purple-500/20'
-                        : 'bg-gradient-to-br from-[#B10000]/30 to-primary/20'
+                        : plan.gradient === 'primary'
+                        ? 'bg-gradient-to-br from-primary/20 to-primary/10'
+                        : 'bg-gradient-to-br from-[#B10000]/30 to-[#B10000]/10'
                     }`}
                   >
                     <plan.icon 
-                      className={`h-7 w-7 ${
-                        plan.gradient === 'amnezia' ? 'text-accent' : 'text-[#FF3333]'
+                      className={`h-8 w-8 ${
+                        plan.gradient === 'amnezia' 
+                          ? 'text-accent' 
+                          : plan.gradient === 'primary'
+                          ? 'text-primary'
+                          : 'text-[#FF3333]'
                       }`} 
                     />
                   </div>
-                  <h3 className="text-xl font-bold font-['Montserrat'] text-foreground mb-2">
+                  
+                  <h3 
+                    className={`text-2xl font-bold font-['Montserrat'] mb-1 ${
+                      plan.gradient === 'amnezia'
+                        ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent'
+                        : plan.gradient === 'primary'
+                        ? 'text-primary'
+                        : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
+                    }`}
+                  >
                     {plan.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 font-mono-tech">
-                    {plan.description}
+                  <p className="text-sm text-muted-foreground font-mono-tech mb-4">
+                    {plan.subtitle}
                   </p>
-                  <div className="flex items-baseline justify-center gap-1">
+                  
+                  <div className="flex items-baseline justify-center gap-1 mb-4">
                     <span 
-                      className={`text-4xl font-bold ${
+                      className={`text-5xl font-bold ${
                         plan.gradient === 'amnezia' 
                           ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent' 
+                          : plan.gradient === 'primary'
+                          ? 'text-primary'
                           : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
                       }`}
                     >
@@ -145,19 +158,37 @@ export const PricingSection = () => {
                     </span>
                     <span className="text-muted-foreground font-mono-tech text-sm">{plan.period}</span>
                   </div>
+                  
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {plan.description}
+                  </p>
                 </div>
 
                 {/* Features - Monospace Style */}
                 <div className="mb-8 p-4 rounded-xl bg-background/50 border border-white/5">
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-3">
+                      <li key={idx} className="flex items-start gap-3">
                         <div 
-                          className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${
-                            plan.gradient === 'amnezia' ? 'bg-accent' : 'bg-[#FF3333]'
+                          className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${
+                            plan.gradient === 'amnezia' 
+                              ? 'bg-accent/20' 
+                              : plan.gradient === 'primary'
+                              ? 'bg-primary/20'
+                              : 'bg-[#B10000]/20'
                           }`}
-                        />
-                        <span className="font-mono-tech text-sm text-foreground">{feature}</span>
+                        >
+                          <Check 
+                            className={`h-3 w-3 ${
+                              plan.gradient === 'amnezia' 
+                                ? 'text-accent' 
+                                : plan.gradient === 'primary'
+                                ? 'text-primary'
+                                : 'text-[#FF3333]'
+                            }`}
+                          />
+                        </div>
+                        <span className="font-mono-tech text-sm text-foreground">{feature.value}</span>
                       </li>
                     ))}
                   </ul>
@@ -165,13 +196,15 @@ export const PricingSection = () => {
 
                 {/* CTA */}
                 <Button
-                  className={`w-full font-semibold transition-all duration-300 ${
+                  className={`w-full font-semibold transition-all duration-300 text-base py-6 ${
                     plan.gradient === 'amnezia'
-                      ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30'
-                      : 'bg-gradient-to-r from-primary to-[#B10000] hover:from-primary/90 hover:to-[#B10000]/90 text-primary-foreground shadow-lg shadow-[#B10000]/30'
+                      ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30 hover:shadow-accent/50'
+                      : plan.gradient === 'primary'
+                      ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50'
+                      : 'bg-gradient-to-r from-[#B10000] to-primary hover:from-[#B10000]/90 hover:to-primary/90 text-white shadow-lg shadow-[#B10000]/30 hover:shadow-[#B10000]/50'
                   }`}
                 >
-                  Заказать
+                  Купить
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -179,13 +212,45 @@ export const PricingSection = () => {
           ))}
         </div>
 
+        {/* Why Our Tariffs Are Better Block */}
+        <div className="max-w-4xl mx-auto">
+          <div className="relative group">
+            {/* Gradient Border */}
+            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/40 via-accent/40 to-purple-500/40 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Content */}
+            <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
+              <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
+                Почему наши тарифы <span className="text-gradient-primary">выгоднее</span>?
+              </h3>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                В обычном VPN вы платите за каждый аккаунт отдельно. В <span className="text-primary font-semibold">3LAB</span> вы арендуете мощность сервера. Это как аренда квартиры: сколько людей там будет жить — <span className="text-accent font-semibold">решать вам</span>. Мы не ограничиваем количество девайсов технически, мы подбираем мощность сервера так, чтобы всем было комфортно.
+              </p>
+              
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-primary font-mono-tech">∞</div>
+                    <div className="text-xs text-muted-foreground font-mono-tech">devices_per_plan</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-accent font-mono-tech">0₽</div>
+                    <div className="text-xs text-muted-foreground font-mono-tech">extra_user_fee</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-[#FF3333] font-mono-tech">100%</div>
+                    <div className="text-xs text-muted-foreground font-mono-tech">resources_yours</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Note */}
         <div className="mt-12 text-center">
           <p className="text-muted-foreground mb-2 font-mono-tech text-sm">
-            setup: 5min • refund: 7d • support: 24/7
-          </p>
-          <p className="text-xs text-muted-foreground/60 font-mono-tech">
-            * unlimited = max 50 concurrent connections
+            setup: 5min • refund: 7d • uptime: 99.9%
           </p>
         </div>
       </div>
