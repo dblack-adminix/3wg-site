@@ -1,48 +1,52 @@
-import { Check, ArrowRight } from 'lucide-react';
+import { Check, ArrowRight, Shield, Zap, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const plans = [
   {
-    name: 'VPS Start',
-    price: '990',
+    icon: Zap,
+    name: 'WireGuard Basic',
+    price: '300',
     period: '/мес',
-    description: 'Для небольших проектов и тестирования',
+    description: 'Быстрый VPN для повседневного использования',
     features: [
-      '2 vCPU',
-      '4 GB RAM',
-      '40 GB NVMe SSD',
-      '1 Гбит/с канал',
-      'IPv4 + IPv6',
+      'Протокол WireGuard',
+      'Скорость до 500 Мбит/с',
+      '1 устройство',
+      'Чистый IP-адрес',
+      'Поддержка в Telegram',
     ],
     accent: false,
   },
   {
-    name: 'Dedicated Pro',
-    price: '15 900',
+    icon: Shield,
+    name: 'Amnezia Pro',
+    price: '500',
     period: '/мес',
-    description: 'Оптимальное решение для production',
+    description: 'Максимальная маскировка для обхода DPI',
     features: [
-      'Intel Xeon E-2388G',
-      '64 GB DDR4 ECC',
-      '2x 960GB NVMe SSD',
-      '10 Гбит/с канал',
-      'DDoS защита включена',
-      'Бесплатная миграция',
+      'Протокол AmneziaWG',
+      'Обход DPI-фильтров',
+      '3 устройства',
+      'Чистый IP-адрес',
+      'Telegram-бот управления',
+      'Приоритетная поддержка',
     ],
     accent: true,
     badge: 'Популярный',
   },
   {
-    name: 'Colocation',
-    price: 'от 4 500',
-    period: '/юнит',
-    description: 'Размещение вашего оборудования',
+    icon: Server,
+    name: 'Личный VPS',
+    price: '990',
+    period: '/мес',
+    description: 'Полный контроль над своим сервером',
     features: [
-      '1U в защищенной стойке',
-      '1 кВт электропитания',
-      '100 Мбит/с канал',
-      'Hands & Eyes 24/7',
-      'Резервное питание',
+      'Выделенный VPS 1GB RAM',
+      'Amnezia + WireGuard',
+      'Безлимит устройств',
+      'Root-доступ',
+      'Свой домен/IP',
+      'Установка любого ПО',
     ],
     accent: false,
   },
@@ -60,21 +64,21 @@ export const PricingSection = () => {
             Тарифы
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
-            Прозрачное <span className="text-gradient-primary">ценообразование</span>
+            Прозрачные <span className="text-gradient-primary">цены</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Выберите подходящий тариф или свяжитесь с нами для индивидуального расчета
+            Выберите подходящий тариф. Все включено, никаких скрытых платежей.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={index}
               className={`relative p-6 rounded-2xl border transition-all duration-500 ${
                 plan.accent
-                  ? 'border-primary bg-card glow-primary'
+                  ? 'border-primary bg-card glow-primary scale-[1.02]'
                   : 'border-border bg-card/50 hover:border-primary/30'
               }`}
             >
@@ -89,6 +93,11 @@ export const PricingSection = () => {
 
               {/* Plan Header */}
               <div className="text-center mb-6 pt-2">
+                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
+                  plan.accent ? 'bg-primary/20' : 'bg-muted'
+                }`}>
+                  <plan.icon className={`h-6 w-6 ${plan.accent ? 'text-primary' : 'text-muted-foreground'}`} />
+                </div>
                 <h3 className="text-xl font-bold font-['Montserrat'] text-foreground mb-2">
                   {plan.name}
                 </h3>
@@ -97,9 +106,9 @@ export const PricingSection = () => {
                 </p>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className={`text-4xl font-bold ${plan.accent ? 'text-primary' : 'text-foreground'}`}>
-                    {plan.price}
+                    {plan.price}₽
                   </span>
-                  <span className="text-muted-foreground">₽{plan.period}</span>
+                  <span className="text-muted-foreground">{plan.period}</span>
                 </div>
               </div>
 
@@ -128,14 +137,14 @@ export const PricingSection = () => {
           ))}
         </div>
 
-        {/* Custom Quote */}
+        {/* Bottom Note */}
         <div className="mt-12 text-center">
-          <p className="text-muted-foreground mb-4">
-            Нужна индивидуальная конфигурация?
+          <p className="text-muted-foreground mb-2">
+            Все тарифы включают: установку за 5 минут, гарантию возврата 7 дней, поддержку 24/7
           </p>
-          <Button variant="outline" className="border-accent text-accent hover:bg-accent/10">
-            Запросить расчет
-          </Button>
+          <p className="text-sm text-muted-foreground">
+            Нужен индивидуальный расчет? <a href="#support" className="text-accent hover:underline">Свяжитесь с нами</a>
+          </p>
         </div>
       </div>
     </section>
