@@ -1,4 +1,4 @@
-import { Check, ArrowRight, User, Home, Users, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, User, Home, Users, Sparkles, Router, Wifi, Tv, Gamepad2, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const plans = [
@@ -10,11 +10,11 @@ const plans = [
     period: '/мес',
     description: 'Для тех, кому нужна приватность в кармане.',
     features: [
-      { key: 'devices', value: 'до 3-х устройств' },
-      { key: 'protocol', value: 'WireGuard' },
-      { key: 'ip', value: 'Выделенный IP' },
-      { key: 'use_case', value: 'Работа с зарубежными банками' },
-      { key: 'support', value: 'Базовая (тикеты)' },
+      { value: 'до 3-х устройств' },
+      { value: 'WireGuard' },
+      { value: 'Выделенный IP' },
+      { value: 'Работа с зарубежными банками' },
+      { value: 'Базовая поддержка (тикеты)' },
     ],
     accent: false,
     gradient: 'wireguard',
@@ -27,11 +27,11 @@ const plans = [
     period: '/мес',
     description: 'Один сервер на весь дом. Никакой платы за каждого члена семьи.',
     features: [
-      { key: 'devices', value: 'до 10 устройств + Smart TV' },
-      { key: 'protocols', value: 'AmneziaWG + WireGuard' },
-      { key: 'dpi', value: 'Обход блокировок DPI' },
-      { key: 'router', value: 'Настройка на роутер' },
-      { key: 'support', value: 'Приоритетная' },
+      { value: 'до 10 устройств + Smart TV' },
+      { value: 'AmneziaWG + WireGuard' },
+      { value: 'Обход блокировок DPI' },
+      { value: 'Настройка на роутер' },
+      { value: 'Приоритетная поддержка' },
     ],
     accent: true,
     badge: 'ХИТ',
@@ -45,16 +45,34 @@ const plans = [
     period: '/мес',
     description: 'Свой узел связи для компании друзей или малого офиса.',
     features: [
-      { key: 'devices', value: 'до 25 устройств' },
-      { key: 'protocols', value: 'Amnezia + WireGuard + SS' },
-      { key: 'power', value: 'Усиленный CPU' },
-      { key: 'streaming', value: '4K стриминг, игры без лагов' },
-      { key: 'support', value: 'Персональный инженер' },
+      { value: 'до 25 устройств' },
+      { value: 'Amnezia + WireGuard + SS' },
+      { value: 'Усиленный CPU' },
+      { value: '4K стриминг, игры без лагов' },
+      { value: 'Персональный инженер' },
     ],
     accent: false,
     gradient: 'amnezia',
   },
 ];
+
+const hardwarePlan = {
+  icon: Router,
+  name: 'HARDWARE',
+  subtitle: 'Готовый роутер',
+  price: '1500',
+  period: '/мес',
+  priceNote: '+ оборудование',
+  description: 'VPN на уровне всей домашней сети. Просто включите роутер в розетку.',
+  features: [
+    { icon: Wifi, value: 'VPN на уровне Wi-Fi сети' },
+    { icon: Package, value: 'Plug & Play: Включил и работает' },
+    { icon: Tv, value: 'Поддержка 4K стриминга на ТВ' },
+    { icon: Gamepad2, value: 'Обход блокировок для PS5/Xbox' },
+  ],
+  gradient: 'hardware',
+  badge: 'PREMIUM',
+};
 
 export const PricingSection = () => {
   return (
@@ -75,8 +93,8 @@ export const PricingSection = () => {
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+        {/* Pricing Cards - Main 3 */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -212,13 +230,106 @@ export const PricingSection = () => {
           ))}
         </div>
 
+        {/* HARDWARE Premium Card */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="relative group transition-all duration-500 hover:scale-[1.01]">
+            {/* Metallic Silver + Acid Green Glow */}
+            <div className="absolute -inset-[2px] rounded-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 blur-sm bg-gradient-to-r from-gray-400 via-primary to-gray-300" />
+            <div className="absolute -inset-[3px] rounded-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-md bg-gradient-to-r from-primary via-gray-200 to-primary" />
+            
+            {/* Card Content */}
+            <div className="relative p-8 md:p-10 rounded-3xl backdrop-blur-xl bg-background/90 border border-white/20 overflow-hidden">
+              {/* Background Pattern */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-gray-400/10 to-transparent rounded-full blur-3xl" />
+              
+              {/* Badge */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full bg-gradient-to-r from-gray-300 to-gray-400 text-background text-xs font-bold shadow-lg">
+                  <Sparkles className="h-3 w-3" />
+                  {hardwarePlan.badge}
+                </span>
+              </div>
+
+              <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
+                {/* Left Side - Info */}
+                <div className="text-center md:text-left pt-4">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 bg-gradient-to-br from-gray-400/30 via-primary/20 to-gray-300/30 border border-white/10">
+                    <Router className="h-10 w-10 text-primary" />
+                  </div>
+                  
+                  <h3 className="text-3xl font-bold font-['Montserrat'] mb-2 bg-gradient-to-r from-gray-200 via-primary to-gray-300 bg-clip-text text-transparent">
+                    3LAB {hardwarePlan.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground font-mono-tech mb-4">
+                    {hardwarePlan.subtitle}
+                  </p>
+                  
+                  <div className="flex items-baseline justify-center md:justify-start gap-2 mb-2">
+                    <span className="text-5xl font-bold bg-gradient-to-r from-primary to-gray-300 bg-clip-text text-transparent">
+                      {hardwarePlan.price}₽
+                    </span>
+                    <span className="text-muted-foreground font-mono-tech text-sm">{hardwarePlan.period}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-mono-tech mb-6">
+                    {hardwarePlan.priceNote}
+                  </p>
+                  
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    {hardwarePlan.description}
+                  </p>
+
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-gray-300 via-primary to-gray-400 hover:from-gray-200 hover:via-primary/90 hover:to-gray-300 text-background font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300"
+                  >
+                    Заказать комплект
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Right Side - Features */}
+                <div className="p-6 rounded-2xl bg-background/50 border border-white/10">
+                  <div className="font-mono-tech text-xs text-muted-foreground mb-4">
+                    // hardware_features
+                  </div>
+                  <ul className="space-y-4">
+                    {hardwarePlan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-4">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-gray-400/20 flex items-center justify-center">
+                          <feature.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <span className="font-mono-tech text-sm text-foreground">{feature.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Router Article Block */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="relative group">
+            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-gray-400/40 via-primary/40 to-gray-300/40 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
+              <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
+                Забудьте про настройку VPN <span className="text-primary">на каждом устройстве</span>
+              </h3>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                Устали объяснять бабушке, как включать VPN на планшете, или воевать с телевизором, который не открывает YouTube? Тариф <span className="text-primary font-semibold">3LAB HARDWARE</span> решает это раз и навсегда. Мы берём надёжный роутер, прошиваем его нашими алгоритмами и привозим вам. Весь трафик внутри вашего дома автоматически шифруется и проходит через ваш личный сервер в нашем дата-центре. Это <span className="text-accent font-semibold">максимально безопасный и удобный способ</span> вернуть привычный интернет в каждую комнату.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Why Our Tariffs Are Better Block */}
         <div className="max-w-4xl mx-auto">
           <div className="relative group">
-            {/* Gradient Border */}
             <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/40 via-accent/40 to-purple-500/40 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
             
-            {/* Content */}
             <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
               <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
                 Почему наши тарифы <span className="text-gradient-primary">выгоднее</span>?
