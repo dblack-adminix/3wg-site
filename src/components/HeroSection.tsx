@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { ArrowRight, Shield, Zap, Lock, Server, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { OrderForm } from '@/components/OrderForm';
 
 // 3D Grid Server Rack Component
 const ServerRack3D = () => {
@@ -7,7 +9,6 @@ const ServerRack3D = () => {
     <div className="relative w-full max-w-lg mx-auto h-80 perspective-1000">
       {/* 3D Grid Base */}
       <div className="absolute inset-0 transform-gpu rotateX-60 translateZ-0">
-        {/* Horizontal lines */}
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={`h-${i}`}
@@ -102,6 +103,8 @@ const ServerRack3D = () => {
 };
 
 export const HeroSection = () => {
+  const [isOrderOpen, setIsOrderOpen] = useState(false);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Effects */}
@@ -149,6 +152,7 @@ export const HeroSection = () => {
             <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 mb-8">
               <Button 
                 size="lg" 
+                onClick={() => setIsOrderOpen(true)}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg px-8 py-6 glow-primary group transition-all duration-300 hover:scale-105"
               >
                 <Shield className="mr-2 h-5 w-5" />
@@ -210,6 +214,9 @@ export const HeroSection = () => {
 
       {/* Bottom Gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+
+      {/* Order Form Modal */}
+      <OrderForm isOpen={isOrderOpen} onClose={() => setIsOrderOpen(false)} />
 
       {/* CSS Animations */}
       <style>{`
