@@ -1,4 +1,4 @@
-import { Shield, Zap, Lock, Tv, Smartphone, Router, Globe, EyeOff, Check, ArrowRight } from 'lucide-react';
+import { Shield, Zap, Lock, Tv, Smartphone, Router, Globe, EyeOff, Check, ArrowRight, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const advantages = [
@@ -26,8 +26,8 @@ const protocols = [
   {
     name: 'WireGuard',
     tagline: 'Максимальная скорость',
-    description: 'Современный протокол с минимальным пингом. Идеален для игр, стриминга 4K и работы без задержек.',
-    features: ['Пинг от 5ms', 'Скорость до 1 Гбит/с', '4K видео без буферизации', 'Игры без лагов'],
+    description: 'Мы используем оригинальные протоколы в фирменном стиле, гарантируя надёжность на уровне ядра Linux.',
+    features: ['kernel-level integration', 'latency < 5ms', 'throughput 1 Gbit/s', 'cryptokey routing'],
     gradient: 'wireguard',
     icon: Zap,
   },
@@ -35,7 +35,7 @@ const protocols = [
     name: 'AmneziaWG',
     tagline: 'Обход любых блокировок',
     description: 'Модифицированный протокол, невидимый для DPI-систем. Работает в России, Китае, Иране.',
-    features: ['Устойчив к DPI-анализу', 'Маскировка под HTTPS', 'Смена сигнатур пакетов', 'Обход блокировок РКН'],
+    features: ['DPI-resistant protocol', 'traffic obfuscation', 'signature morphing', 'CDN tunneling'],
     gradient: 'amnezia',
     icon: Shield,
   },
@@ -53,8 +53,8 @@ export const VPNSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-6">
-            <Shield className="h-4 w-4" />
-            Семейный VPN
+            <Server className="h-4 w-4" />
+            <span className="font-mono-tech text-xs">PERSONAL_SERVER</span>
           </span>
           
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-['Montserrat'] mb-6 leading-tight">
@@ -70,23 +70,23 @@ export const VPNSection = () => {
         <div className="max-w-4xl mx-auto mb-16">
           <div className="relative group">
             {/* Animated Gradient Border */}
-            <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-primary via-cyan-400 to-accent opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-500" />
+            <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-primary via-[#B10000] to-accent opacity-50 blur-sm group-hover:opacity-75 transition-opacity duration-500" />
             
             {/* Glassmorphism Card */}
             <div className="relative p-8 md:p-10 rounded-3xl backdrop-blur-xl bg-background/80 border border-white/10">
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex -space-x-2">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-[#B10000] flex items-center justify-center">
                     <Smartphone className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
                     <Tv className="h-5 w-5 text-white" />
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-[#B10000] flex items-center justify-center">
                     <Router className="h-5 w-5 text-primary-foreground" />
                   </div>
                 </div>
-                <span className="text-muted-foreground text-sm">10+ устройств</span>
+                <span className="text-muted-foreground text-sm font-mono-tech">devices: 10+</span>
               </div>
               
               <p className="text-lg md:text-xl text-foreground leading-relaxed">
@@ -105,7 +105,7 @@ export const VPNSection = () => {
                 className={`absolute -inset-[1px] rounded-2xl opacity-40 group-hover:opacity-80 transition-all duration-500 ${
                   item.gradient === 'amnezia' 
                     ? 'bg-gradient-to-br from-accent via-purple-500 to-purple-800' 
-                    : 'bg-gradient-to-br from-cyan-400 via-primary to-primary/50'
+                    : 'bg-gradient-to-br from-primary via-[#B10000] to-[#700000]'
                 }`}
               />
               
@@ -115,12 +115,12 @@ export const VPNSection = () => {
                   className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
                     item.gradient === 'amnezia'
                       ? 'bg-gradient-to-br from-accent/20 to-purple-500/20'
-                      : 'bg-gradient-to-br from-cyan-400/20 to-primary/20'
+                      : 'bg-gradient-to-br from-primary/20 to-[#B10000]/20'
                   }`}
                 >
                   <item.icon 
                     className={`h-6 w-6 ${
-                      item.gradient === 'amnezia' ? 'text-accent' : 'text-primary'
+                      item.gradient === 'amnezia' ? 'text-accent' : 'text-[#FF3333]'
                     }`} 
                   />
                 </div>
@@ -145,7 +145,7 @@ export const VPNSection = () => {
                 className={`absolute -inset-[2px] rounded-3xl opacity-50 group-hover:opacity-100 blur-sm transition-all duration-500 ${
                   protocol.gradient === 'amnezia'
                     ? 'bg-gradient-to-br from-accent via-purple-500 to-purple-900'
-                    : 'bg-gradient-to-br from-cyan-400 via-primary to-primary/30'
+                    : 'bg-gradient-to-br from-primary via-[#B10000] to-[#500000]'
                 }`}
               />
               
@@ -157,12 +157,12 @@ export const VPNSection = () => {
                     className={`p-3 rounded-2xl ${
                       protocol.gradient === 'amnezia'
                         ? 'bg-gradient-to-br from-accent/20 to-purple-500/20'
-                        : 'bg-gradient-to-br from-cyan-400/20 to-primary/20'
+                        : 'bg-gradient-to-br from-[#B10000]/30 to-primary/20'
                     }`}
                   >
                     <protocol.icon 
                       className={`h-8 w-8 ${
-                        protocol.gradient === 'amnezia' ? 'text-accent' : 'text-primary'
+                        protocol.gradient === 'amnezia' ? 'text-accent' : 'text-[#FF3333]'
                       }`}
                     />
                   </div>
@@ -171,12 +171,12 @@ export const VPNSection = () => {
                       className={`text-2xl font-bold font-['Montserrat'] ${
                         protocol.gradient === 'amnezia'
                           ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent'
-                          : 'bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent'
+                          : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
                       }`}
                     >
                       {protocol.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{protocol.tagline}</p>
+                    <p className="text-sm text-muted-foreground font-mono-tech">{protocol.tagline}</p>
                   </div>
                 </div>
 
@@ -185,34 +185,31 @@ export const VPNSection = () => {
                   {protocol.description}
                 </p>
 
-                {/* Features */}
-                <ul className="space-y-3 mb-8">
-                  {protocol.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <div 
-                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${
-                          protocol.gradient === 'amnezia'
-                            ? 'bg-accent/20'
-                            : 'bg-primary/20'
-                        }`}
-                      >
-                        <Check 
-                          className={`h-3 w-3 ${
-                            protocol.gradient === 'amnezia' ? 'text-accent' : 'text-primary'
+                {/* Technical Specs - Monospace */}
+                <div className="mb-8 p-4 rounded-xl bg-background/50 border border-white/5">
+                  <div className="font-mono-tech text-xs text-muted-foreground mb-2">
+                    // specs
+                  </div>
+                  <ul className="space-y-2">
+                    {protocol.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3">
+                        <div 
+                          className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${
+                            protocol.gradient === 'amnezia' ? 'bg-accent' : 'bg-[#FF3333]'
                           }`}
                         />
-                      </div>
-                      <span className="text-sm text-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                        <span className="font-mono-tech text-sm text-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* CTA */}
                 <Button
                   className={`w-full font-semibold transition-all duration-300 ${
                     protocol.gradient === 'amnezia'
                       ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30'
-                      : 'bg-gradient-to-r from-cyan-400 to-primary hover:from-cyan-400/90 hover:to-primary/90 text-primary-foreground shadow-lg shadow-primary/30'
+                      : 'bg-gradient-to-r from-primary to-[#B10000] hover:from-primary/90 hover:to-[#B10000]/90 text-primary-foreground shadow-lg shadow-[#B10000]/30'
                   }`}
                 >
                   Подключить {protocol.name}
@@ -227,15 +224,15 @@ export const VPNSection = () => {
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border bg-card/50 backdrop-blur-sm mb-6">
             <Lock className="h-4 w-4 text-primary" />
-            <span className="text-sm text-muted-foreground">
-              Установка за 5 минут • Поддержка 24/7 • Гарантия возврата 7 дней
+            <span className="text-sm text-muted-foreground font-mono-tech">
+              setup: 5min • support: 24/7 • refund: 7d
             </span>
           </div>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-primary"
+              className="bg-gradient-to-r from-primary to-[#B10000] text-primary-foreground hover:from-primary/90 hover:to-[#B10000]/90 font-semibold glow-wireguard"
             >
               Выбрать тариф
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -243,9 +240,9 @@ export const VPNSection = () => {
             <Button 
               size="lg" 
               variant="outline"
-              className="border-muted-foreground/30 text-muted-foreground hover:bg-muted/10"
+              className="border-muted-foreground/30 text-muted-foreground hover:bg-muted/10 font-mono-tech"
             >
-              Сравнить протоколы
+              diff --protocols
             </Button>
           </div>
         </div>
