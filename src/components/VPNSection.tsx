@@ -1,6 +1,7 @@
 import { Shield, Zap, Lock, Tv, Smartphone, Router, Globe, EyeOff, Check, ArrowRight, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import amneziaWgLogo from '@/assets/amneziawg-logo.webp';
+import wireguardLogo from '@/assets/wireguard-logo.svg';
 
 const advantages = [
   {
@@ -177,11 +178,13 @@ export const VPNSection = () => {
                         />
                       </div>
                     ) : (
-                      <h3 
-                        className="text-2xl font-bold font-['Montserrat'] bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent"
-                      >
-                        {protocol.name}
-                      </h3>
+                      <div className="h-10 flex items-center">
+                        <img 
+                          src={wireguardLogo} 
+                          alt="WireGuard" 
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
                     )}
                     <p className="text-sm text-muted-foreground font-mono-tech">{protocol.tagline}</p>
                   </div>
