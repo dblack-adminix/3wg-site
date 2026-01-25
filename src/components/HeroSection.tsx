@@ -197,9 +197,9 @@ const ServerRack3D = () => {
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Animated Logo - WireGuard (Top Right) - Large with overlap */}
+      {/* Animated Logo - WireGuard (Top Right) - Behind servers */}
       <motion.div
-        className="absolute top-[5%] right-[-25%] z-[1]"
+        className="absolute top-[15%] right-[5%] z-[-1]"
         initial={{ opacity: 0, x: 40, scale: 0.8 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -228,7 +228,7 @@ const ServerRack3D = () => {
             className="h-32 w-auto relative"
             style={{ 
               filter: 'drop-shadow(0 0 30px rgba(136, 23, 26, 0.5))',
-              opacity: 0.85,
+              opacity: 0.7,
             }}
             animate={{
               filter: [
@@ -242,9 +242,9 @@ const ServerRack3D = () => {
         </motion.div>
       </motion.div>
 
-      {/* Animated Logo - AmneziaWG (Bottom Left) - Large with overlap */}
+      {/* Animated Logo - AmneziaWG (Bottom Left) - Behind servers, smaller */}
       <motion.div
-        className="absolute bottom-[0%] left-[-20%] z-[1]"
+        className="absolute bottom-[10%] left-[-5%] z-[-1]"
         initial={{ opacity: 0, x: -40, scale: 0.8 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 1, delay: 0.7 }}
@@ -270,10 +270,10 @@ const ServerRack3D = () => {
           <motion.img
             src={amneziaSymbol}
             alt="AmneziaWG"
-            className="h-56 w-auto relative"
+            className="h-40 w-auto relative"
             style={{ 
               filter: 'drop-shadow(0 0 35px rgba(255, 153, 0, 0.5))',
-              opacity: 0.9,
+              opacity: 0.75,
             }}
             animate={{
               filter: [
