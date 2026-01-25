@@ -9,6 +9,7 @@ import Pricing from "./pages/Pricing";
 import Hardware from "./pages/Hardware";
 import Infrastructure from "./pages/Infrastructure";
 import FAQ from "./pages/FAQ";
+import AmneziaWG from "./pages/AmneziaWG";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -25,6 +26,7 @@ const AnimatedRoutes = () => {
         <Route path="/hardware" element={<Hardware />} />
         <Route path="/infrastructure" element={<Infrastructure />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/amnezia-tech" element={<AmneziaWG />} />
         <Route path="/dashboard" element={<Dashboard />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
