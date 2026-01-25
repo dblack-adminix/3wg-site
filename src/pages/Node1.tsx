@@ -997,13 +997,52 @@ const Node1 = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {firmwareFeatures.map((feature, i) => (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
-                <div className="p-6 bg-card/50 rounded-lg border border-border hover:border-primary/30 transition-colors h-full">
-                  <div className="p-2 bg-primary/10 rounded-lg w-fit mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
+                <motion.div 
+                  className="p-6 bg-card/50 rounded-lg border border-border h-full relative overflow-hidden group cursor-pointer"
+                  whileHover={{ 
+                    y: -8,
+                    borderColor: 'hsl(73 100% 50% / 0.5)',
+                  }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 25 
+                  }}
+                >
+                  {/* Hover glow effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: 'radial-gradient(circle at 50% 0%, hsl(73 100% 50% / 0.15) 0%, transparent 70%)',
+                    }}
+                  />
+                  
+                  {/* Bottom glow line */}
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent, hsl(73 100% 50% / 0.5), transparent)',
+                    }}
+                  />
+                  
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <motion.div 
+                      className="p-2 bg-primary/10 rounded-lg w-fit mb-4"
+                      whileHover={{ 
+                        scale: 1.1,
+                        boxShadow: '0 0 20px hsl(73 100% 50% / 0.3)',
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    >
+                      <feature.icon className="w-6 h-6 text-primary" />
+                    </motion.div>
+                    <h4 className="font-medium text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                      {feature.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">{feature.description}</p>
                   </div>
-                  <h4 className="font-medium text-foreground mb-2">{feature.title}</h4>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
-                </div>
+                </motion.div>
               </AnimatedSection>
             ))}
           </div>
