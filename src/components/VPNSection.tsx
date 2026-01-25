@@ -1,5 +1,6 @@
 import { Shield, Zap, Lock, Tv, Smartphone, Router, Globe, EyeOff, Check, ArrowRight, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import amneziaWgLogo from '@/assets/amneziawg-logo.webp';
 
 const advantages = [
   {
@@ -167,15 +168,21 @@ export const VPNSection = () => {
                     />
                   </div>
                   <div>
-                    <h3 
-                      className={`text-2xl font-bold font-['Montserrat'] ${
-                        protocol.gradient === 'amnezia'
-                          ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent'
-                          : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
-                      }`}
-                    >
-                      {protocol.name}
-                    </h3>
+                    {protocol.gradient === 'amnezia' ? (
+                      <div className="h-10 flex items-center">
+                        <img 
+                          src={amneziaWgLogo} 
+                          alt="AmneziaWG" 
+                          className="h-8 w-auto object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <h3 
+                        className="text-2xl font-bold font-['Montserrat'] bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent"
+                      >
+                        {protocol.name}
+                      </h3>
+                    )}
                     <p className="text-sm text-muted-foreground font-mono-tech">{protocol.tagline}</p>
                   </div>
                 </div>
