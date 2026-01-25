@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Shield, Zap, Lock, Server, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OrderForm } from '@/components/OrderForm';
+
+// Blinking Node positions (fixed for consistency)
+const blinkingNodes = [
+  { x: 15, y: 20 }, { x: 45, y: 35 }, { x: 75, y: 15 },
+  { x: 25, y: 55 }, { x: 85, y: 45 }, { x: 55, y: 70 },
+  { x: 10, y: 80 }, { x: 65, y: 25 }, { x: 35, y: 85 },
+];
 
 // 3D Grid Server Rack Component
 const ServerRack3D = () => {
@@ -104,31 +111,81 @@ const ServerRack3D = () => {
 
 export const HeroSection = () => {
   const [isOrderOpen, setIsOrderOpen] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        setMousePos({ x, y });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]">
-      {/* CSS Grid Background Pattern */}
+    <section 
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]"
+    >
+      {/* 3D Perspective Grid - Tactical HUD */}
       <div 
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        style={{ perspective: '1000px' }}
+      >
+        <div 
+          className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%]"
+          style={{
+            transform: 'rotateX(60deg)',
+            backgroundImage: `
+              linear-gradient(rgba(204, 255, 0, 0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(204, 255, 0, 0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+          }}
+        />
+      </div>
+
+      {/* Mouse Follow Glow */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-[1] transition-opacity duration-300"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
+          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(204, 255, 0, 0.12) 0%, transparent 50%)`,
         }}
       />
+
+      {/* Blinking Nodes at Grid Intersections */}
+      <div className="absolute inset-0 pointer-events-none">
+        {blinkingNodes.map((node, i) => (
+          <div
+            key={i}
+            className="absolute w-[3px] h-[3px] bg-primary rounded-sm"
+            style={{
+              left: `${node.x}%`,
+              top: `${node.y}%`,
+              boxShadow: '0 0 8px 2px rgba(204, 255, 0, 0.6), 0 0 16px 4px rgba(204, 255, 0, 0.3)',
+              animation: `node-blink ${2 + (i % 3)}s ease-in-out infinite`,
+              animationDelay: `${i * 0.4}s`,
+            }}
+          />
+        ))}
+      </div>
       
       {/* Animated Floating Blobs */}
       <div 
-        className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30 pointer-events-none"
+        className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-[150px] opacity-25 pointer-events-none"
         style={{
           background: 'radial-gradient(circle, #CCFF00 0%, transparent 70%)',
           animation: 'float-blob-1 12s ease-in-out infinite',
         }}
       />
       <div 
-        className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full blur-[180px] opacity-25 pointer-events-none"
+        className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full blur-[180px] opacity-20 pointer-events-none"
         style={{
           background: 'radial-gradient(circle, #FF9900 0%, #1a1a1a 70%)',
           animation: 'float-blob-2 15s ease-in-out infinite',
@@ -137,13 +194,57 @@ export const HeroSection = () => {
       
       {/* Scanline Overlay Effect */}
       <div 
-        className="absolute inset-0 pointer-events-none z-20"
+        className="absolute inset-0 pointer-events-none z-[2]"
         style={{
-          background: 'linear-gradient(180deg, transparent 0%, rgba(204, 255, 0, 0.05) 50%, transparent 100%)',
+          background: 'linear-gradient(180deg, transparent 0%, rgba(204, 255, 0, 0.04) 50%, transparent 100%)',
           backgroundSize: '100% 200%',
           animation: 'scanline-move 8s linear infinite',
         }}
       />
+
+      {/* Vignette Overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-[3]"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(8, 8, 8, 0.6) 70%, #080808 100%)',
+        }}
+      />
+
+      {/* Terminal Elements - Left Bottom */}
+      <div className="absolute bottom-6 left-6 z-10 hidden md:block">
+        <div className="font-mono text-[10px] text-white/20 tracking-wider space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse" />
+            <span>LATENCY: <span className="text-primary/40">12ms</span></span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+            <span>PACKET_LOSS: <span className="text-primary/40">0.00%</span></span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+            <span>ENCRYPTION: <span className="text-primary/40">AES-256-GCM</span></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Terminal Elements - Right Bottom */}
+      <div className="absolute bottom-6 right-6 z-10 hidden md:block text-right">
+        <div className="font-mono text-[10px] text-white/20 tracking-wider space-y-1">
+          <div className="flex items-center justify-end gap-2">
+            <span>NODE-1 STATUS: <span className="text-primary/40">ACTIVE</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse" />
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            <span>UPLINK: <span className="text-primary/40">1000Mbps</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            <span>LOCATION: <span className="text-white/30">[55.7558, 37.6173]</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+          </div>
+        </div>
+      </div>
       
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
@@ -290,6 +391,10 @@ export const HeroSection = () => {
         @keyframes scanline-move {
           0% { background-position: 0% 0%; }
           100% { background-position: 0% 200%; }
+        }
+        @keyframes node-blink {
+          0%, 100% { opacity: 0.3; box-shadow: 0 0 4px 1px rgba(204, 255, 0, 0.3); }
+          50% { opacity: 1; box-shadow: 0 0 12px 4px rgba(204, 255, 0, 0.8), 0 0 24px 8px rgba(204, 255, 0, 0.4); }
         }
         .perspective-1000 { perspective: 1000px; }
         .rotateX-60 { transform: rotateX(60deg); }
