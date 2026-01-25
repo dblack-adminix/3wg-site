@@ -422,11 +422,25 @@ const DotMap = () => {
             <stop offset="100%" stopColor="rgba(255, 153, 0, 0)" />
           </linearGradient>
           
-          {/* Glow filter */}
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="0.5" result="coloredBlur"/>
+          {/* Glow filter - enhanced for firefly effect */}
+          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.2" result="coloredBlur"/>
+            <feFlood floodColor="rgba(204, 255, 0, 0.8)" result="glowColor"/>
+            <feComposite in="glowColor" in2="coloredBlur" operator="in" result="softGlow"/>
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="softGlow"/>
+              <feMergeNode in="softGlow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          
+          <filter id="glowOrange" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.2" result="coloredBlur"/>
+            <feFlood floodColor="rgba(255, 153, 0, 0.8)" result="glowColor"/>
+            <feComposite in="glowColor" in2="coloredBlur" operator="in" result="softGlow"/>
+            <feMerge>
+              <feMergeNode in="softGlow"/>
+              <feMergeNode in="softGlow"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
@@ -448,77 +462,88 @@ const DotMap = () => {
           <path id="path-de1-fi" d="M 50 21 Q 51.5 18.5 53 16" />
         </g>
         
-        {/* Animated data packets */}
+        {/* Animated data packets - firefly effect */}
         {/* Path 1: Amsterdam to Frankfurt */}
-        <circle r="0.35" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.15" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="2s" repeatCount="indefinite">
             <mpath href="#path-nl-de1" />
           </animateMotion>
+          <animate attributeName="r" values="0.12;0.18;0.12" dur="0.5s" repeatCount="indefinite" />
         </circle>
         
         {/* Path 2: Frankfurt to Munich */}
-        <circle r="0.3" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.12" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.5s">
             <mpath href="#path-de1-de2" />
           </animateMotion>
+          <animate attributeName="r" values="0.1;0.15;0.1" dur="0.4s" repeatCount="indefinite" />
         </circle>
         
         {/* Path 3: Munich to Helsinki */}
-        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.15" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
           <animateMotion dur="2.5s" repeatCount="indefinite" begin="1s">
             <mpath href="#path-de2-fi" />
           </animateMotion>
+          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.6s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 4: Amsterdam to New York - larger packet for transatlantic */}
-        <circle r="0.45" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        {/* Path 4: Amsterdam to New York */}
+        <circle r="0.18" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="4s" repeatCount="indefinite">
             <mpath href="#path-nl-us" />
           </animateMotion>
+          <animate attributeName="r" values="0.15;0.22;0.15" dur="0.7s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.14" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
           <animateMotion dur="4s" repeatCount="indefinite" begin="2s">
             <mpath href="#path-nl-us" />
           </animateMotion>
+          <animate attributeName="r" values="0.1;0.18;0.1" dur="0.5s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 5: Munich to Singapore - multiple packets */}
-        <circle r="0.4" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        {/* Path 5: Munich to Singapore */}
+        <circle r="0.16" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite">
             <mpath href="#path-de2-sg" />
           </animateMotion>
+          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.6s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.3" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.12" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="1.5s">
             <mpath href="#path-de2-sg" />
           </animateMotion>
+          <animate attributeName="r" values="0.1;0.16;0.1" dur="0.4s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.25" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.1" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="3s">
             <mpath href="#path-de2-sg" />
           </animateMotion>
+          <animate attributeName="r" values="0.08;0.14;0.08" dur="0.5s" repeatCount="indefinite" />
         </circle>
         
         {/* Path 6: Frankfurt to Helsinki */}
-        <circle r="0.3" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.12" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="3s" repeatCount="indefinite" begin="0.7s">
             <mpath href="#path-de1-fi" />
           </animateMotion>
+          <animate attributeName="r" values="0.1;0.16;0.1" dur="0.45s" repeatCount="indefinite" />
         </circle>
         
         {/* Reverse direction packets */}
         {/* New York to Amsterdam */}
-        <circle r="0.4" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.16" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
           <animateMotion dur="4s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
             <mpath href="#path-nl-us" />
           </animateMotion>
+          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.55s" repeatCount="indefinite" />
         </circle>
         
         {/* Singapore to Munich */}
-        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.14" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="2.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
             <mpath href="#path-de2-sg" />
           </animateMotion>
+          <animate attributeName="r" values="0.1;0.18;0.1" dur="0.5s" repeatCount="indefinite" />
         </circle>
       </svg>
 
