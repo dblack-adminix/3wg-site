@@ -13,29 +13,25 @@ const blinkingNodes = [
 // 3D Grid Server Rack Component
 const ServerRack3D = () => {
   return (
-    <div className="relative w-full max-w-lg mx-auto h-80 perspective-1000">
-      {/* 3D Grid Base - cleaner, less dense */}
-      <div className="absolute inset-0 transform-gpu rotateX-60 translateZ-0">
-        {/* Horizontal lines - fewer, more subtle */}
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={`h-${i}`}
-            className="absolute w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-            style={{
-              top: `${(i + 1) * 15}%`,
-            }}
-          />
-        ))}
-        {/* Vertical lines - fewer, more subtle */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={`v-${i}`}
-            className="absolute h-full w-px bg-gradient-to-b from-transparent via-primary/15 to-transparent"
-            style={{
-              left: `${(i + 1) * 11}%`,
-            }}
-          />
-        ))}
+    <div className="relative w-full max-w-lg mx-auto h-80" style={{ perspective: '1000px' }}>
+      {/* 3D Grid Base - matching background grid direction */}
+      <div 
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          transform: 'rotateX(60deg)',
+          transformOrigin: 'center center',
+        }}
+      >
+        <div 
+          className="absolute w-full h-full"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(204, 255, 0, 0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(204, 255, 0, 0.08) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
       </div>
       
       {/* Floating Server Units */}
