@@ -756,60 +756,146 @@ const Node1 = () => {
                   {/* Protocol Toggles */}
                   <div className="grid grid-cols-2 gap-4">
                     {/* WireGuard Toggle */}
-                    <div 
-                      className="p-3 rounded-lg border transition-all cursor-pointer"
-                      style={{
-                        borderColor: wireGuardOn ? 'hsl(var(--primary))' : 'hsl(var(--border))',
-                        background: wireGuardOn ? 'hsl(var(--primary) / 0.1)' : 'transparent',
-                      }}
+                    <motion.div 
+                      className="p-3 rounded-lg border cursor-pointer overflow-hidden relative"
                       onClick={() => setWireGuardOn(!wireGuardOn)}
+                      animate={{
+                        borderColor: wireGuardOn ? 'hsl(73 100% 50%)' : 'hsl(240 3.7% 15.9%)',
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono-tech text-sm text-foreground">WireGuard</span>
-                        <div 
-                          className="w-10 h-5 rounded-full relative transition-colors"
-                          style={{
-                            background: wireGuardOn ? 'hsl(var(--primary))' : 'hsl(var(--muted))',
-                          }}
-                        >
-                          <div 
-                            className="absolute top-0.5 w-4 h-4 rounded-full bg-background transition-all"
-                            style={{ left: wireGuardOn ? 'calc(100% - 18px)' : '2px' }}
-                          />
+                      {/* Background glow */}
+                      <motion.div
+                        className="absolute inset-0 rounded-lg"
+                        animate={{
+                          background: wireGuardOn 
+                            ? 'linear-gradient(135deg, hsl(73 100% 50% / 0.15) 0%, hsl(73 100% 50% / 0.05) 100%)'
+                            : 'transparent',
+                          boxShadow: wireGuardOn 
+                            ? 'inset 0 0 20px hsl(73 100% 50% / 0.1)'
+                            : 'none',
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono-tech text-sm text-foreground">WireGuard</span>
+                          
+                          {/* Toggle Switch */}
+                          <motion.div 
+                            className="w-11 h-6 rounded-full relative p-0.5 cursor-pointer"
+                            animate={{
+                              background: wireGuardOn 
+                                ? 'linear-gradient(90deg, hsl(73 100% 40%), hsl(73 100% 50%))'
+                                : 'hsl(240 3.7% 20%)',
+                              boxShadow: wireGuardOn 
+                                ? '0 0 12px hsl(73 100% 50% / 0.5)'
+                                : 'inset 0 1px 3px rgba(0,0,0,0.3)',
+                            }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                          >
+                            <motion.div 
+                              className="w-5 h-5 rounded-full bg-white shadow-md"
+                              animate={{
+                                x: wireGuardOn ? 20 : 0,
+                                boxShadow: wireGuardOn 
+                                  ? '0 0 8px hsl(73 100% 50% / 0.3)'
+                                  : '0 1px 3px rgba(0,0,0,0.2)',
+                              }}
+                              transition={{ 
+                                type: "spring", 
+                                stiffness: 500, 
+                                damping: 30 
+                              }}
+                            />
+                          </motion.div>
                         </div>
+                        
+                        <motion.span 
+                          className="font-mono-tech text-xs block"
+                          animate={{
+                            color: wireGuardOn ? 'hsl(73 100% 50%)' : 'hsl(240 5% 50%)',
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {wireGuardOn ? '● ACTIVE' : '○ INACTIVE'}
+                        </motion.span>
                       </div>
-                      <span className="font-mono-tech text-xs text-muted-foreground">
-                        {wireGuardOn ? 'ACTIVE' : 'INACTIVE'}
-                      </span>
-                    </div>
+                    </motion.div>
                     
                     {/* AmneziaWG Toggle */}
-                    <div 
-                      className="p-3 rounded-lg border transition-all cursor-pointer"
-                      style={{
-                        borderColor: amneziaOn ? 'hsl(var(--secondary))' : 'hsl(var(--border))',
-                        background: amneziaOn ? 'hsl(var(--secondary) / 0.1)' : 'transparent',
-                      }}
+                    <motion.div 
+                      className="p-3 rounded-lg border cursor-pointer overflow-hidden relative"
                       onClick={() => setAmneziaOn(!amneziaOn)}
+                      animate={{
+                        borderColor: amneziaOn ? 'hsl(33 100% 50%)' : 'hsl(240 3.7% 15.9%)',
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono-tech text-sm text-foreground">AmneziaWG</span>
-                        <div 
-                          className="w-10 h-5 rounded-full relative transition-colors"
-                          style={{
-                            background: amneziaOn ? 'hsl(var(--secondary))' : 'hsl(var(--muted))',
-                          }}
-                        >
-                          <div 
-                            className="absolute top-0.5 w-4 h-4 rounded-full bg-background transition-all"
-                            style={{ left: amneziaOn ? 'calc(100% - 18px)' : '2px' }}
-                          />
+                      {/* Background glow */}
+                      <motion.div
+                        className="absolute inset-0 rounded-lg"
+                        animate={{
+                          background: amneziaOn 
+                            ? 'linear-gradient(135deg, hsl(33 100% 50% / 0.15) 0%, hsl(33 100% 50% / 0.05) 100%)'
+                            : 'transparent',
+                          boxShadow: amneziaOn 
+                            ? 'inset 0 0 20px hsl(33 100% 50% / 0.1)'
+                            : 'none',
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
+                      
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono-tech text-sm text-foreground">AmneziaWG</span>
+                          
+                          {/* Toggle Switch */}
+                          <motion.div 
+                            className="w-11 h-6 rounded-full relative p-0.5 cursor-pointer"
+                            animate={{
+                              background: amneziaOn 
+                                ? 'linear-gradient(90deg, hsl(33 100% 40%), hsl(33 100% 50%))'
+                                : 'hsl(240 3.7% 20%)',
+                              boxShadow: amneziaOn 
+                                ? '0 0 12px hsl(33 100% 50% / 0.5)'
+                                : 'inset 0 1px 3px rgba(0,0,0,0.3)',
+                            }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                          >
+                            <motion.div 
+                              className="w-5 h-5 rounded-full bg-white shadow-md"
+                              animate={{
+                                x: amneziaOn ? 20 : 0,
+                                boxShadow: amneziaOn 
+                                  ? '0 0 8px hsl(33 100% 50% / 0.3)'
+                                  : '0 1px 3px rgba(0,0,0,0.2)',
+                              }}
+                              transition={{ 
+                                type: "spring", 
+                                stiffness: 500, 
+                                damping: 30 
+                              }}
+                            />
+                          </motion.div>
                         </div>
+                        
+                        <motion.span 
+                          className="font-mono-tech text-xs block"
+                          animate={{
+                            color: amneziaOn ? 'hsl(33 100% 50%)' : 'hsl(240 5% 50%)',
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {amneziaOn ? '● STEALTH MODE' : '○ INACTIVE'}
+                        </motion.span>
                       </div>
-                      <span className="font-mono-tech text-xs text-muted-foreground">
-                        {amneziaOn ? 'STEALTH MODE' : 'INACTIVE'}
-                      </span>
-                    </div>
+                    </motion.div>
                   </div>
                   
                   {/* Network Activity Graph - Animated */}
