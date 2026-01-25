@@ -244,7 +244,7 @@ const ServerRack3D = () => {
 
       {/* Animated Logo - AmneziaWG (Bottom Left) - Behind servers, smaller */}
       <motion.div
-        className="absolute bottom-[10%] left-[-5%] z-[-1]"
+        className="absolute bottom-[10%] left-[15%] z-[-1]"
         initial={{ opacity: 0, x: -40, scale: 0.8 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 1, delay: 0.7 }}
