@@ -298,51 +298,119 @@ const LiveTerminal = () => {
 const DotMap = () => {
   const [hoveredDot, setHoveredDot] = useState<string | null>(null);
 
+  // Generate continent outlines with more dots
+  const generateContinentDots = () => {
+    const dots: { x: number; y: number; continent: string }[] = [];
+    
+    // North America - more dense outline
+    const northAmerica = [
+      [12,15],[14,14],[16,13],[18,14],[20,15],[22,14],[24,15],[26,16],
+      [10,18],[12,20],[14,22],[16,21],[18,23],[20,22],[22,24],[24,23],
+      [12,25],[14,27],[16,26],[18,28],[20,27],[22,29],[24,28],
+      [14,30],[16,32],[18,31],[20,33],[22,32],
+    ];
+    northAmerica.forEach(([x, y]) => dots.push({ x, y, continent: 'na' }));
+    
+    // South America
+    const southAmerica = [
+      [24,38],[26,40],[28,42],[27,44],[26,46],[25,48],[24,50],
+      [22,40],[23,42],[24,44],[23,46],[22,48],
+      [26,38],[28,40],[29,42],[28,44],[27,46],
+    ];
+    southAmerica.forEach(([x, y]) => dots.push({ x, y, continent: 'sa' }));
+    
+    // Europe - dense cluster
+    const europe = [
+      [45,16],[47,15],[49,14],[51,15],[53,14],
+      [44,18],[46,17],[48,18],[50,17],[52,18],[54,17],
+      [45,20],[47,19],[49,20],[51,19],[53,20],[55,19],
+      [46,22],[48,21],[50,22],[52,21],[54,22],
+      [47,24],[49,23],[51,24],[53,23],
+    ];
+    europe.forEach(([x, y]) => dots.push({ x, y, continent: 'eu' }));
+    
+    // Africa
+    const africa = [
+      [48,28],[50,27],[52,28],[54,27],
+      [47,30],[49,31],[51,30],[53,31],[55,30],
+      [48,33],[50,34],[52,33],[54,34],
+      [49,36],[51,37],[53,36],
+      [50,39],[52,40],[51,42],
+    ];
+    africa.forEach(([x, y]) => dots.push({ x, y, continent: 'af' }));
+    
+    // Asia - large area
+    const asia = [
+      [58,14],[60,13],[62,14],[64,13],[66,14],[68,13],[70,14],[72,13],
+      [56,17],[58,16],[60,17],[62,16],[64,17],[66,16],[68,17],[70,16],[72,17],[74,16],
+      [58,19],[60,20],[62,19],[64,20],[66,19],[68,20],[70,19],[72,20],[74,19],[76,20],
+      [60,22],[62,23],[64,22],[66,23],[68,22],[70,23],[72,22],[74,23],
+      [62,25],[64,26],[66,25],[68,26],[70,25],[72,26],
+      [64,28],[66,29],[68,28],[70,29],
+      [78,28],[80,29],[82,30],[84,29], // Southeast Asia
+    ];
+    asia.forEach(([x, y]) => dots.push({ x, y, continent: 'as' }));
+    
+    // Australia
+    const australia = [
+      [80,40],[82,39],[84,40],[86,39],[88,40],
+      [81,42],[83,43],[85,42],[87,43],
+      [82,45],[84,46],[86,45],
+    ];
+    australia.forEach(([x, y]) => dots.push({ x, y, continent: 'au' }));
+    
+    return dots;
+  };
+
+  const continentDots = generateContinentDots();
+
   return (
-    <div className="relative w-full aspect-[2/1] rounded-xl border border-primary/20 bg-[#050505] overflow-hidden">
+    <div className="relative w-full aspect-[2/1] min-h-[300px] rounded-xl border border-primary/20 bg-[#030303] overflow-hidden">
+      {/* Gradient Overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.5) 100%)',
+        }}
+      />
+
       {/* Grid Background */}
       <div 
         className="absolute inset-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(204, 255, 0, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(204, 255, 0, 0.03) 1px, transparent 1px)
+            linear-gradient(rgba(204, 255, 0, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(204, 255, 0, 0.04) 1px, transparent 1px)
           `,
-          backgroundSize: '40px 40px',
+          backgroundSize: '30px 30px',
         }}
       />
 
-      {/* Simplified World Map Dots */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 50" preserveAspectRatio="xMidYMid slice">
-        {/* North America */}
-        {[[15,20],[17,22],[19,21],[21,23],[23,22],[18,25],[20,27],[22,26],[24,28],[16,28],[14,25]].map(([x, y], i) => (
-          <circle key={`na-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
+      {/* World Map Dots - SVG */}
+      <svg 
+        className="absolute inset-0 w-full h-full" 
+        viewBox="0 0 100 55" 
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* Continent outline dots */}
+        {continentDots.map((dot, i) => (
+          <circle 
+            key={`dot-${i}`} 
+            cx={dot.x} 
+            cy={dot.y} 
+            r="0.6" 
+            fill="rgba(204, 255, 0, 0.25)"
+          />
         ))}
         
-        {/* South America */}
-        {[[25,32],[27,34],[26,36],[28,38],[27,40],[25,42],[26,44]].map(([x, y], i) => (
-          <circle key={`sa-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
-        ))}
-        
-        {/* Europe */}
-        {[[45,18],[47,19],[49,18],[51,19],[48,21],[50,22],[52,21],[46,23],[48,24],[50,25],[52,24],[54,23]].map(([x, y], i) => (
-          <circle key={`eu-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
-        ))}
-        
-        {/* Africa */}
-        {[[50,28],[52,30],[48,32],[50,34],[52,36],[50,38],[48,40]].map(([x, y], i) => (
-          <circle key={`af-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
-        ))}
-        
-        {/* Asia */}
-        {[[60,18],[62,20],[64,19],[66,21],[68,20],[70,22],[72,21],[65,24],[67,26],[69,25],[75,24],[77,26],[80,25]].map(([x, y], i) => (
-          <circle key={`as-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
-        ))}
-        
-        {/* Australia */}
-        {[[82,38],[84,40],[86,39],[83,42],[85,43]].map(([x, y], i) => (
-          <circle key={`au-${i}`} cx={x} cy={y} r="0.3" fill="rgba(204, 255, 0, 0.15)" />
-        ))}
+        {/* Connection lines between nodes */}
+        <g stroke="rgba(204, 255, 0, 0.1)" strokeWidth="0.15" fill="none">
+          <line x1="48" y1="20" x2="50" y2="21" strokeDasharray="1,1" />
+          <line x1="50" y1="21" x2="51" y2="22" strokeDasharray="1,1" />
+          <line x1="51" y1="22" x2="53" y2="16" strokeDasharray="1,1" />
+          <line x1="48" y1="20" x2="22" y2="24" strokeDasharray="1,1" />
+          <line x1="51" y1="22" x2="78" y2="34" strokeDasharray="1,1" />
+        </g>
       </svg>
 
       {/* Active Node Locations */}
@@ -358,45 +426,85 @@ const DotMap = () => {
           onMouseEnter={() => setHoveredDot(dot.node)}
           onMouseLeave={() => setHoveredDot(null)}
         >
-          {/* Pulse ring */}
+          {/* Outer pulse ring */}
           <motion.div
-            className="absolute w-8 h-8 rounded-full border border-primary/30"
-            style={{ left: '-12px', top: '-12px' }}
-            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute rounded-full border border-primary/40"
+            style={{ 
+              width: '24px', 
+              height: '24px', 
+              left: '-10px', 
+              top: '-10px' 
+            }}
+            animate={{ 
+              scale: [1, 2, 1], 
+              opacity: [0.6, 0, 0.6] 
+            }}
+            transition={{ duration: 2.5, repeat: Infinity }}
           />
           
-          {/* Dot */}
+          {/* Inner pulse ring */}
           <motion.div
-            className="w-3 h-3 rounded-full bg-primary"
-            style={{ boxShadow: '0 0 15px 5px rgba(204, 255, 0, 0.5)' }}
-            animate={{ scale: hoveredDot === dot.node ? 1.5 : 1 }}
+            className="absolute rounded-full bg-primary/20"
+            style={{ 
+              width: '16px', 
+              height: '16px', 
+              left: '-6px', 
+              top: '-6px' 
+            }}
+            animate={{ 
+              scale: [1, 1.5, 1], 
+              opacity: [0.4, 0.1, 0.4] 
+            }}
+            transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
+          />
+          
+          {/* Main Dot */}
+          <motion.div
+            className="w-3 h-3 rounded-full bg-primary relative z-10"
+            style={{ 
+              boxShadow: '0 0 20px 6px rgba(204, 255, 0, 0.6), 0 0 40px 10px rgba(204, 255, 0, 0.3)' 
+            }}
+            animate={{ 
+              scale: hoveredDot === dot.node ? 1.8 : 1,
+              boxShadow: hoveredDot === dot.node 
+                ? '0 0 30px 10px rgba(204, 255, 0, 0.8), 0 0 60px 20px rgba(204, 255, 0, 0.4)'
+                : '0 0 20px 6px rgba(204, 255, 0, 0.6), 0 0 40px 10px rgba(204, 255, 0, 0.3)'
+            }}
+            transition={{ duration: 0.2 }}
           />
 
           {/* Tooltip */}
           {hoveredDot === dot.node && (
             <motion.div
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-3 py-2 rounded-lg bg-card border border-primary/30 whitespace-nowrap z-20"
+              initial={{ opacity: 0, y: 5, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-card/95 backdrop-blur-sm border border-primary/40 whitespace-nowrap z-20"
+              style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)' }}
             >
-              <div className="font-mono text-xs text-foreground font-bold">{dot.label}</div>
-              <div className="font-mono text-[10px] text-primary">PING: {dot.ping}</div>
-              <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-primary/30" />
+              <div className="font-mono text-sm text-foreground font-bold">{dot.label}</div>
+              <div className="font-mono text-xs text-primary mt-1">PING: {dot.ping}</div>
+              <div className="font-mono text-[10px] text-muted-foreground">NODE-{dot.node}</div>
+              <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-primary/40" />
             </motion.div>
           )}
         </motion.div>
       ))}
 
       {/* Legend */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary" style={{ boxShadow: '0 0 8px rgba(204, 255, 0, 0.5)' }} />
-          <span className="font-mono text-[10px] text-muted-foreground">ACTIVE NODE</span>
+      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-primary" style={{ boxShadow: '0 0 10px rgba(204, 255, 0, 0.6)' }} />
+            <span className="font-mono text-[10px] text-muted-foreground">ACTIVE NODE</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary/30" />
+            <span className="font-mono text-[10px] text-muted-foreground">COVERAGE</span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <Activity className="w-3 h-3 text-primary" />
-          <span className="font-mono text-[10px] text-primary">{serverNodes.length} NODES ONLINE</span>
+          <Activity className="w-3.5 h-3.5 text-primary" />
+          <span className="font-mono text-xs text-primary font-bold">{serverNodes.length} NODES</span>
         </div>
       </div>
     </div>
