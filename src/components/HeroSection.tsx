@@ -14,25 +14,6 @@ const blinkingNodes = [
 const ServerRack3D = () => {
   return (
     <div className="relative w-full max-w-lg mx-auto h-80" style={{ perspective: '1000px' }}>
-      {/* 3D Grid Base - matching background grid direction */}
-      <div 
-        className="absolute inset-0 overflow-hidden"
-        style={{
-          transform: 'rotateX(60deg)',
-          transformOrigin: 'center center',
-        }}
-      >
-        <div 
-          className="absolute w-full h-full"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(204, 255, 0, 0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(204, 255, 0, 0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </div>
       
       {/* Floating Server Units */}
       <div className="absolute inset-0 flex items-center justify-center">
