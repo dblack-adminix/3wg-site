@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Shield, Zap, Lock, Server, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { OrderForm } from '@/components/OrderForm';
+import { motion } from 'framer-motion';
 
 // Blinking Node positions (fixed for consistency)
 const blinkingNodes = [
@@ -10,61 +11,161 @@ const blinkingNodes = [
   { x: 10, y: 80 }, { x: 65, y: 25 }, { x: 35, y: 85 },
 ];
 
-// 3D Grid Server Rack Component
+// 3D Grid Server Rack Component with Advanced Effects
 const ServerRack3D = () => {
   return (
-    <div className="relative w-full max-w-lg mx-auto h-80" style={{ perspective: '1000px' }}>
+    <div className="relative w-full max-w-lg mx-auto h-96" style={{ perspective: '1200px' }}>
       
-      {/* Floating Server Units */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      {/* Outer Orbit Ring */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-80 h-80 rounded-full border border-primary/20"
+        style={{ 
+          x: '-50%', 
+          y: '-50%',
+          transformStyle: 'preserve-3d',
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+      >
+        {/* Orbit Data Points */}
+        {[0, 90, 180, 270].map((deg) => (
+          <motion.div
+            key={deg}
+            className="absolute w-2 h-2 rounded-full bg-primary"
+            style={{
+              top: '50%',
+              left: '50%',
+              boxShadow: '0 0 10px 3px rgba(204, 255, 0, 0.6)',
+            }}
+            animate={{
+              x: [
+                `${Math.cos((deg * Math.PI) / 180) * 160 - 4}px`,
+                `${Math.cos(((deg + 360) * Math.PI) / 180) * 160 - 4}px`,
+              ],
+              y: [
+                `${Math.sin((deg * Math.PI) / 180) * 160 - 4}px`,
+                `${Math.sin(((deg + 360) * Math.PI) / 180) * 160 - 4}px`,
+              ],
+            }}
+            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Inner Orbit Ring */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-56 h-56 rounded-full border border-accent/15"
+        style={{ 
+          x: '-50%', 
+          y: '-50%',
+        }}
+        animate={{ rotate: -360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+      >
+        {[45, 135, 225, 315].map((deg) => (
+          <motion.div
+            key={deg}
+            className="absolute w-1.5 h-1.5 rounded-full bg-accent"
+            style={{
+              top: '50%',
+              left: '50%',
+              boxShadow: '0 0 8px 2px rgba(255, 153, 0, 0.5)',
+            }}
+            animate={{
+              x: [
+                `${Math.cos((deg * Math.PI) / 180) * 112 - 3}px`,
+                `${Math.cos(((deg - 360) * Math.PI) / 180) * 112 - 3}px`,
+              ],
+              y: [
+                `${Math.sin((deg * Math.PI) / 180) * 112 - 3}px`,
+                `${Math.sin(((deg - 360) * Math.PI) / 180) * 112 - 3}px`,
+              ],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Floating Server Units Container */}
+      <motion.div 
+        className="absolute inset-0 flex items-center justify-center"
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        whileHover={{ 
+          scale: 1.05,
+          rotateX: 5,
+          rotateY: -5,
+        }}
+        style={{ transformStyle: 'preserve-3d' }}
+      >
         <div className="relative">
           {/* Server Stack */}
           {[0, 1, 2].map((i) => (
-            <div
+            <motion.div
               key={i}
-              className="relative w-48 h-8 mb-2 rounded bg-gradient-to-r from-card via-card/80 to-card border border-primary/30 overflow-hidden group"
+              className="relative w-56 h-10 mb-3 rounded-lg bg-gradient-to-r from-card via-card/90 to-card border border-primary/40 overflow-hidden group"
               style={{
-                transform: `perspective(500px) rotateX(10deg) translateZ(${i * 10}px)`,
-                animation: `float-server 3s ease-in-out infinite`,
-                animationDelay: `${i * 0.3}s`,
+                transform: `perspective(500px) rotateX(8deg) translateZ(${i * 15}px)`,
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+              }}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.15, duration: 0.5 }}
+              whileHover={{
+                borderColor: 'rgba(204, 255, 0, 0.8)',
+                boxShadow: '0 4px 30px rgba(204, 255, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               }}
             >
               {/* LED Lights */}
-              <div className="absolute left-2 top-1/2 -translate-y-1/2 flex gap-1">
-                <div className={`w-1.5 h-1.5 rounded-full ${i === 1 ? 'bg-primary' : 'bg-[#B10000]'} pulse-indicator`} />
-                <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
-              </div>
-              {/* Activity Bar */}
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-16 h-1 bg-muted rounded overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-primary to-accent rounded"
-                  style={{ 
-                    width: `${60 + i * 15}%`,
-                    animation: 'data-flow 1.5s ease-in-out infinite',
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 flex gap-1.5">
+                <motion.div 
+                  className={`w-2 h-2 rounded-full ${i === 1 ? 'bg-primary' : 'bg-[#B10000]'}`}
+                  animate={{ 
+                    boxShadow: [
+                      `0 0 4px 1px ${i === 1 ? 'rgba(204, 255, 0, 0.5)' : 'rgba(177, 0, 0, 0.5)'}`,
+                      `0 0 10px 3px ${i === 1 ? 'rgba(204, 255, 0, 0.8)' : 'rgba(177, 0, 0, 0.8)'}`,
+                      `0 0 4px 1px ${i === 1 ? 'rgba(204, 255, 0, 0.5)' : 'rgba(177, 0, 0, 0.5)'}`,
+                    ]
                   }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+                />
+                <div className="w-2 h-2 rounded-full bg-primary/40" />
+                <div className="w-2 h-2 rounded-full bg-primary/20" />
+              </div>
+              
+              {/* Activity Bar */}
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-20 h-1.5 bg-muted/60 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
+                  animate={{ width: ['30%', `${60 + i * 15}%`, '30%'] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                 />
               </div>
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
+              
+              {/* Glow Effect on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.div>
           ))}
           
           {/* Connection Lines */}
-          <svg className="absolute -left-8 top-0 w-8 h-full" viewBox="0 0 32 100">
-            <path
-              d="M32 20 L16 20 L16 50 L0 50"
+          <svg className="absolute -left-10 top-0 w-10 h-full" viewBox="0 0 40 120">
+            <motion.path
+              d="M40 25 L20 25 L20 60 L0 60"
               fill="none"
               stroke="url(#lineGradient)"
-              strokeWidth="1"
-              className="animate-pulse"
+              strokeWidth="2"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, delay: 0.5 }}
             />
-            <path
-              d="M32 50 L16 50 L16 80 L0 80"
+            <motion.path
+              d="M40 60 L20 60 L20 95 L0 95"
               fill="none"
               stroke="url(#lineGradient)"
-              strokeWidth="1"
-              className="animate-pulse"
-              style={{ animationDelay: '0.5s' }}
+              strokeWidth="2"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, delay: 0.8 }}
             />
             <defs>
               <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -75,10 +176,71 @@ const ServerRack3D = () => {
             </defs>
           </svg>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/20 rounded-full blur-[80px] animate-pulse" />
+      {/* Pulsing Point on Server */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-3 h-3 rounded-full bg-primary"
+        style={{ 
+          x: 'calc(-50% + 80px)', 
+          y: 'calc(-50% - 5px)',
+        }}
+        animate={{
+          boxShadow: [
+            '0 0 5px 2px rgba(204, 255, 0, 0.4)',
+            '0 0 20px 8px rgba(204, 255, 0, 0.7)',
+            '0 0 5px 2px rgba(204, 255, 0, 0.4)',
+          ],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Animated Labels */}
+      <motion.div
+        className="absolute top-[15%] right-0 font-mono text-[10px] text-primary/70 tracking-widest"
+        animate={{ opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      >
+        WireGuard
+      </motion.div>
+      <motion.div
+        className="absolute bottom-[20%] left-0 font-mono text-[10px] text-accent/70 tracking-widest"
+        animate={{ opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+      >
+        AmneziaWG
+      </motion.div>
+
+      {/* Multi-layer Ambient Glows */}
+      <motion.div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full blur-[100px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(204, 255, 0, 0.25) 0%, transparent 70%)' }}
+        animate={{ 
+          scale: [1, 1.15, 1],
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(0, 200, 255, 0.15) 0%, transparent 70%)' }}
+        animate={{ 
+          scale: [1.1, 1, 1.1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
+
+      {/* Dynamic Shadow */}
+      <motion.div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-6 rounded-[100%] bg-black/60 blur-xl"
+        animate={{ 
+          scaleX: [1, 1.1, 1],
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
     </div>
   );
 };
