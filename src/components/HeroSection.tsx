@@ -220,6 +220,59 @@ export const HeroSection = () => {
         </div>
       </div>
       
+      {/* AuthKit-style Light Beams */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden z-[3]">
+        {/* Left Light Beam */}
+        <div 
+          className="absolute top-0 left-1/2 w-[600px] h-[800px] opacity-20"
+          style={{
+            transform: 'translateX(-100%) rotate(-25deg)',
+            transformOrigin: 'top center',
+            background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.3) 0%, transparent 60%)',
+            filter: 'blur(40px)',
+          }}
+        />
+        {/* Right Light Beam */}
+        <div 
+          className="absolute top-0 left-1/2 w-[600px] h-[800px] opacity-20"
+          style={{
+            transform: 'translateX(0%) rotate(25deg)',
+            transformOrigin: 'top center',
+            background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.3) 0%, transparent 60%)',
+            filter: 'blur(40px)',
+          }}
+        />
+        {/* Center Glow */}
+        <div 
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] h-[400px]"
+          style={{
+            background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.4) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
+      </div>
+
+      {/* X-shaped Decorative Lines */}
+      <div className="absolute inset-0 pointer-events-none z-[4] overflow-hidden">
+        {/* Left X Line */}
+        <svg className="absolute left-[15%] top-[10%] w-32 h-32 opacity-20" viewBox="0 0 100 100">
+          <line x1="0" y1="0" x2="100" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
+          <line x1="100" y1="0" x2="0" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
+        </svg>
+        {/* Right X Line */}
+        <svg className="absolute right-[15%] top-[10%] w-32 h-32 opacity-20" viewBox="0 0 100 100">
+          <line x1="0" y1="0" x2="100" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
+          <line x1="100" y1="0" x2="0" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
+        </svg>
+      </div>
+
+      {/* Horizontal Accent Lines */}
+      <div className="absolute top-[12%] left-1/2 -translate-x-1/2 flex items-center gap-4 z-[5]">
+        <div className="w-24 md:w-40 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/20" />
+        <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+        <div className="w-24 md:w-40 h-px bg-gradient-to-l from-transparent via-primary/40 to-primary/20" />
+      </div>
+      
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
@@ -231,29 +284,46 @@ export const HeroSection = () => {
               <span className="text-sm font-medium text-primary font-mono-tech">MANIFESTO_2024</span>
             </div>
 
-            {/* Main Heading with Glow Effect */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 font-['Montserrat']">
-              <span className="text-gradient-primary">3LAB.PRO</span>
-              <span className="text-foreground"> — Ваш</span>
-              <br />
-              <span 
-                className="text-foreground inline-block"
+            {/* Main Heading with AuthKit-style Glow */}
+            <div className="relative">
+              {/* Background Glow for Text */}
+              <div 
+                className="absolute -inset-8 opacity-30 blur-3xl pointer-events-none"
                 style={{
-                  textShadow: '0 0 40px rgba(204, 255, 0, 0.4), 0 0 80px rgba(204, 255, 0, 0.2), 0 0 120px rgba(204, 255, 0, 0.1)',
+                  background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.3) 0%, transparent 70%)',
                 }}
-              >
-                ЦИФРОВОЙ
-              </span>
-              <br />
-              <span 
-                className="text-gradient-accent inline-block"
-                style={{
-                  textShadow: '0 0 40px rgba(255, 153, 0, 0.4), 0 0 80px rgba(255, 153, 0, 0.2)',
-                }}
-              >
-                СУВЕРЕНИТЕТ.
-              </span>
-            </h1>
+              />
+              
+              <h1 className="relative text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 font-['Montserrat']">
+                <span className="text-gradient-primary">3LAB.PRO</span>
+                <span className="text-foreground"> — Ваш</span>
+                <br />
+                <span 
+                  className="text-foreground inline-block relative"
+                  style={{
+                    textShadow: '0 0 60px rgba(204, 255, 0, 0.5), 0 0 100px rgba(204, 255, 0, 0.3), 0 0 140px rgba(204, 255, 0, 0.2)',
+                  }}
+                >
+                  ЦИФРОВОЙ
+                  {/* Underline Glow */}
+                  <span 
+                    className="absolute -bottom-2 left-0 right-0 h-px"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.6), transparent)',
+                    }}
+                  />
+                </span>
+                <br />
+                <span 
+                  className="text-gradient-accent inline-block"
+                  style={{
+                    textShadow: '0 0 60px rgba(255, 153, 0, 0.5), 0 0 100px rgba(255, 153, 0, 0.3)',
+                  }}
+                >
+                  СУВЕРЕНИТЕТ.
+                </span>
+              </h1>
+            </div>
 
             {/* Manifesto Text */}
             <div className="space-y-4 mb-10">
