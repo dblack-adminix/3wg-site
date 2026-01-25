@@ -18,6 +18,7 @@ import {
   Terminal
 } from 'lucide-react';
 import node1Internal from '@/assets/node1-internal.jpg';
+import node1Router from '@/assets/node1-router.png';
 
 const firmwareFeatures = [
   {
@@ -167,46 +168,165 @@ const Node1 = () => {
               </div>
             </AnimatedSection>
             
-            {/* Right: NODE-1 3D Image */}
+            {/* Right: NODE-1 3D Router Image */}
             <AnimatedSection delay={0.2} direction="right">
               <div className="relative flex items-center justify-center">
-                {/* Glow Effect */}
-                <div 
-                  className="absolute w-[500px] h-[500px] rounded-full opacity-50"
+                {/* Animated background glow layers */}
+                <motion.div 
+                  className="absolute w-[550px] h-[550px] rounded-full"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                   style={{
-                    background: 'radial-gradient(circle, hsl(var(--primary) / 0.25) 0%, hsl(180 100% 50% / 0.1) 40%, transparent 70%)',
-                    filter: 'blur(50px)',
+                    background: 'radial-gradient(circle, hsl(73 100% 50% / 0.2) 0%, transparent 60%)',
+                    filter: 'blur(60px)',
                   }}
                 />
+                <motion.div 
+                  className="absolute w-[400px] h-[400px] rounded-full"
+                  animate={{
+                    scale: [1.1, 1, 1.1],
+                    opacity: [0.4, 0.6, 0.4],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5,
+                  }}
+                  style={{
+                    background: 'radial-gradient(circle, hsl(180 100% 50% / 0.15) 0%, transparent 50%)',
+                    filter: 'blur(40px)',
+                  }}
+                />
+                
+                {/* Rotating ring effect */}
+                <motion.div
+                  className="absolute w-[480px] h-[480px] rounded-full border border-primary/20"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  style={{
+                    boxShadow: '0 0 30px hsl(73 100% 50% / 0.1)',
+                  }}
+                >
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary/50" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-cyan-400/50" />
+                </motion.div>
+                
+                {/* Second rotating ring (opposite direction) */}
+                <motion.div
+                  className="absolute w-[420px] h-[420px] rounded-full border border-cyan-500/10"
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                >
+                  <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary/40" />
+                </motion.div>
                 
                 {/* Circuit background pattern */}
                 <div 
-                  className="absolute inset-0 opacity-20"
+                  className="absolute inset-0 opacity-10"
                   style={{
                     backgroundImage: `
-                      linear-gradient(90deg, hsl(var(--primary) / 0.1) 1px, transparent 1px),
-                      linear-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px)
+                      linear-gradient(90deg, hsl(var(--primary) / 0.2) 1px, transparent 1px),
+                      linear-gradient(hsl(var(--primary) / 0.2) 1px, transparent 1px)
                     `,
-                    backgroundSize: '30px 30px',
+                    backgroundSize: '40px 40px',
                   }}
                 />
                 
-                {/* 3D Image */}
-                <div className="relative">
-                  <img 
-                    src={node1Internal} 
-                    alt="NODE-1 Internal Architecture" 
-                    className="w-full max-w-[450px] h-auto relative z-10"
+                {/* 3D Router Image with floating animation */}
+                <motion.div 
+                  className="relative z-10"
+                  animate={{
+                    y: [0, -15, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  {/* Image shadow (separate for 3D effect) */}
+                  <motion.div
+                    className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-8 rounded-full"
+                    animate={{
+                      scale: [1, 0.9, 1],
+                      opacity: [0.3, 0.2, 0.3],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                     style={{
-                      filter: 'drop-shadow(0 0 30px hsl(var(--primary) / 0.3)) drop-shadow(0 0 60px hsl(180 100% 50% / 0.2))',
+                      background: 'radial-gradient(ellipse, hsl(73 100% 50% / 0.3) 0%, transparent 70%)',
+                      filter: 'blur(15px)',
                     }}
                   />
                   
-                  {/* Label */}
-                  <div className="absolute bottom-4 left-4 font-mono-tech text-xs text-primary/80 tracking-widest">
-                    NODE-1 INTERNAL
-                  </div>
-                </div>
+                  <motion.img 
+                    src={node1Router} 
+                    alt="NODE-1 Router" 
+                    className="w-full max-w-[500px] h-auto"
+                    whileHover={{
+                      scale: 1.05,
+                      rotateY: 5,
+                      rotateX: -5,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20,
+                    }}
+                    style={{
+                      filter: 'drop-shadow(0 0 40px hsl(73 100% 50% / 0.4)) drop-shadow(0 0 80px hsl(180 100% 50% / 0.2))',
+                    }}
+                  />
+                  
+                  {/* Glowing accent points on the device */}
+                  <motion.div
+                    className="absolute top-[35%] left-[45%] w-4 h-4 rounded-full"
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                      scale: [1, 1.2, 1],
+                      boxShadow: [
+                        '0 0 10px hsl(73 100% 50% / 0.5)',
+                        '0 0 25px hsl(73 100% 50% / 0.8)',
+                        '0 0 10px hsl(73 100% 50% / 0.5)',
+                      ],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      background: 'radial-gradient(circle, hsl(73 100% 70%) 0%, hsl(73 100% 50%) 100%)',
+                    }}
+                  />
+                </motion.div>
+                
+                {/* Tech labels floating around */}
+                <motion.div
+                  className="absolute top-10 right-10 font-mono-tech text-xs text-primary/60 tracking-widest"
+                  animate={{ opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  AmneziaWG
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-16 left-10 font-mono-tech text-xs text-cyan-400/60 tracking-widest"
+                  animate={{ opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                >
+                  ENCRYPTED
+                </motion.div>
               </div>
             </AnimatedSection>
           </div>
