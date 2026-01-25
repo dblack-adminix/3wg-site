@@ -1,341 +1,388 @@
-import { Check, ArrowRight, User, Home, Users, Sparkles, Router, Wifi, Tv, Gamepad2, Package, Shield, Zap } from 'lucide-react';
+import { Check, ArrowRight, Shield, Zap, Globe, Cpu, Server, Package, Lock, Terminal, Bitcoin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const plans = [
-  {
-    icon: User,
-    name: 'SOLO',
-    subtitle: 'Личный сервер',
-    price: '300',
-    period: '/мес',
-    description: 'Для тех, кому нужна приватность в кармане.',
-    features: [
-      { value: 'до 3-х устройств' },
-      { value: 'WireGuard' },
-      { value: 'Выделенный IP' },
-      { value: 'Работа с зарубежными банками' },
-      { value: 'Базовая поддержка (тикеты)' },
-    ],
-    accent: false,
-    gradient: 'wireguard',
-  },
-  {
-    icon: Home,
-    name: 'FAMILY',
-    subtitle: 'Семейный сервер',
-    price: '650',
-    period: '/мес',
-    description: 'Один сервер на весь дом. Никакой платы за каждого члена семьи.',
-    features: [
-      { value: 'до 10 устройств + Smart TV' },
-      { value: 'AmneziaWG + WireGuard' },
-      { value: 'Обход блокировок DPI' },
-      { value: 'Настройка на роутер' },
-      { value: 'Приоритетная поддержка' },
-    ],
-    accent: true,
-    badge: 'ХИТ',
-    gradient: 'primary',
-  },
-  {
-    icon: Users,
-    name: 'COMMUNITY',
-    subtitle: 'Для своих',
-    price: '1200',
-    period: '/мес',
-    description: 'Свой узел связи для компании друзей или малого офиса.',
-    features: [
-      { value: 'до 25 устройств' },
-      { value: 'Amnezia + WireGuard + SS' },
-      { value: 'Усиленный CPU' },
-      { value: '4K стриминг, игры без лагов' },
-      { value: 'Персональный инженер' },
-    ],
-    accent: false,
-    gradient: 'amnezia',
-  },
+// Crypto payment icons data
+const cryptoPayments = [
+  { name: 'Bitcoin', symbol: 'BTC', color: '#F7931A' },
+  { name: 'Ethereum', symbol: 'ETH', color: '#627EEA' },
+  { name: 'USDT', symbol: 'USDT', color: '#26A17B' },
+  { name: 'Monero', symbol: 'XMR', color: '#FF6600' },
+  { name: 'Litecoin', symbol: 'LTC', color: '#BFBBBB' },
 ];
 
-const hardwarePlan = {
-  icon: Router,
-  name: 'HARDWARE',
-  subtitle: 'Готовый роутер',
-  price: '1500',
-  period: '/мес',
-  priceNote: '+ оборудование',
-  description: 'VPN на уровне всей домашней сети. Просто включите роутер в розетку.',
-  features: [
-    { icon: Wifi, value: 'VPN на уровне Wi-Fi сети' },
-    { icon: Package, value: 'Plug & Play: Включил и работает' },
-    { icon: Tv, value: 'Поддержка 4K стриминга на ТВ' },
-    { icon: Gamepad2, value: 'Обход блокировок для PS5/Xbox' },
-  ],
-  gradient: 'hardware',
-  badge: 'PREMIUM',
-};
-
 const Pricing = () => {
+  const [hoveredCrypto, setHoveredCrypto] = useState<string | null>(null);
+
   return (
     <Layout>
-      <section className="pt-32 pb-24 relative">
-        <div className="absolute inset-0 cyber-grid opacity-30" />
+      <section className="pt-32 pb-24 relative min-h-screen">
+        {/* Background grid */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(204, 255, 0, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(204, 255, 0, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+        
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.6) 100%)',
+          }}
+        />
         
         <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
+          {/* Header */}
           <AnimatedSection>
             <div className="text-center mb-16">
-              <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-4">
-                <span className="font-mono-tech text-xs">PRICING_GRID</span>
-              </span>
-              <h1 className="text-4xl md:text-6xl font-bold font-['Montserrat'] mb-4">
-                Тарифная сетка <span className="text-gradient-primary">3LAB</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-6">
+                <Terminal className="h-4 w-4 text-primary" />
+                <span className="font-mono text-xs text-primary tracking-wider">ACCESS_CONTROL</span>
+              </div>
+              
+              <h1 className="font-mono text-3xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 tracking-tight">
+                ВЫБЕРИТЕ УРОВЕНЬ СУВЕРЕНИТЕТА
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Личный виртуальный сервер — вы владеете ресурсами, а не делите их с тысячами пользователей.
+              
+              <p className="font-mono text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
+                Доступ к узлам 3LAB.PRO. Никаких логов. Никаких следов.
               </p>
             </div>
           </AnimatedSection>
 
-          {/* VPN vs Server Rent Separator */}
-          <AnimatedSection delay={0.1}>
-            <div className="flex items-center justify-center gap-4 mb-12">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#B10000]/10 border border-[#B10000]/30">
-                <Zap className="h-4 w-4 text-[#FF3333]" />
-                <span className="text-sm font-medium text-[#FF3333]">VPN-only тарифы</span>
-              </div>
-              <div className="h-px w-16 bg-gradient-to-r from-[#B10000]/50 to-primary/50" />
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30">
-                <Shield className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Аренда сервера</span>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          {/* Pricing Cards - Main 3 */}
+          {/* Pricing Cards */}
           <AnimatedSection delay={0.15}>
-            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
-              {plans.map((plan, index) => (
-                <div
-                  key={index}
-                  className={`relative group transition-all duration-500 ${
-                    plan.accent ? 'scale-[1.02] z-10' : 'hover:scale-[1.01]'
-                  }`}
-                >
-                  <div 
-                    className={`absolute -inset-[2px] rounded-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-sm ${
-                      plan.gradient === 'amnezia' 
-                        ? 'bg-gradient-to-br from-accent via-purple-500 to-purple-800' 
-                        : plan.gradient === 'primary'
-                        ? 'bg-gradient-to-br from-primary via-primary/70 to-primary/40'
-                        : 'bg-gradient-to-br from-[#B10000] via-[#8B0000] to-[#500000]'
-                    }`}
-                  />
-                  
-                  <div className="relative p-6 md:p-8 rounded-3xl backdrop-blur-xl bg-background/85 border border-white/10 h-full">
-                    {plan.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-bold shadow-lg shadow-primary/40">
-                          <Sparkles className="h-3 w-3" />
-                          {plan.badge}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="text-center mb-8 pt-2">
-                      <div 
-                        className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 ${
-                          plan.gradient === 'amnezia'
-                            ? 'bg-gradient-to-br from-accent/20 to-purple-500/20'
-                            : plan.gradient === 'primary'
-                            ? 'bg-gradient-to-br from-primary/20 to-primary/10'
-                            : 'bg-gradient-to-br from-[#B10000]/30 to-[#B10000]/10'
-                        }`}
-                      >
-                        <plan.icon 
-                          className={`h-8 w-8 ${
-                            plan.gradient === 'amnezia' 
-                              ? 'text-accent' 
-                              : plan.gradient === 'primary'
-                              ? 'text-primary'
-                              : 'text-[#FF3333]'
-                          }`} 
-                        />
-                      </div>
-                      
-                      <h3 
-                        className={`text-2xl font-bold font-['Montserrat'] mb-1 ${
-                          plan.gradient === 'amnezia'
-                            ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent'
-                            : plan.gradient === 'primary'
-                            ? 'text-primary'
-                            : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
-                        }`}
-                      >
-                        {plan.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground font-mono-tech mb-4">
-                        {plan.subtitle}
-                      </p>
-                      
-                      <div className="flex items-baseline justify-center gap-1 mb-4">
-                        <span 
-                          className={`text-5xl font-bold ${
-                            plan.gradient === 'amnezia' 
-                              ? 'bg-gradient-to-r from-accent to-purple-400 bg-clip-text text-transparent' 
-                              : plan.gradient === 'primary'
-                              ? 'text-primary'
-                              : 'bg-gradient-to-r from-primary to-[#FF3333] bg-clip-text text-transparent'
-                          }`}
-                        >
-                          {plan.price}₽
-                        </span>
-                        <span className="text-muted-foreground font-mono-tech text-sm">{plan.period}</span>
-                      </div>
-                      
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {plan.description}
-                      </p>
-                    </div>
-
-                    <div className="mb-8 p-4 rounded-xl bg-background/50 border border-white/5">
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-3">
-                            <div 
-                              className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${
-                                plan.gradient === 'amnezia' 
-                                  ? 'bg-accent/20' 
-                                  : plan.gradient === 'primary'
-                                  ? 'bg-primary/20'
-                                  : 'bg-[#B10000]/20'
-                              }`}
-                            >
-                              <Check 
-                                className={`h-3 w-3 ${
-                                  plan.gradient === 'amnezia' 
-                                    ? 'text-accent' 
-                                    : plan.gradient === 'primary'
-                                    ? 'text-primary'
-                                    : 'text-[#FF3333]'
-                                }`}
-                              />
-                            </div>
-                            <span className="font-mono-tech text-sm text-foreground">{feature.value}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <Button
-                      className={`w-full font-semibold transition-all duration-300 text-base py-6 hover:scale-105 ${
-                        plan.gradient === 'amnezia'
-                          ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30 hover:shadow-accent/50'
-                          : plan.gradient === 'primary'
-                          ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-[0_0_30px_hsl(73_100%_50%/0.5)]'
-                          : 'bg-gradient-to-r from-[#B10000] to-primary hover:from-[#B10000]/90 hover:to-primary/90 text-white shadow-lg shadow-[#B10000]/30 hover:shadow-[#B10000]/50'
-                      }`}
-                    >
-                      Купить
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-
-          {/* HARDWARE Premium Card */}
-          <AnimatedSection delay={0.2}>
-            <div className="max-w-4xl mx-auto mb-16">
-              <div className="relative group transition-all duration-500 hover:scale-[1.01]">
-                <div className="absolute -inset-[2px] rounded-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 blur-sm bg-gradient-to-r from-gray-400 via-primary to-gray-300" />
-                <div className="absolute -inset-[3px] rounded-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-md bg-gradient-to-r from-primary via-gray-200 to-primary" />
+            <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-20">
+              
+              {/* LITE Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="relative group"
+              >
+                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-muted-foreground/30 to-muted-foreground/10 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
                 
-                <div className="relative p-8 md:p-10 rounded-3xl backdrop-blur-xl bg-background/90 border border-white/20 overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl" />
-                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-gray-400/10 to-transparent rounded-full blur-3xl" />
-                  
+                <div className="relative h-full p-6 md:p-8 rounded-2xl bg-[#0a0a0a] border border-muted-foreground/20 group-hover:border-muted-foreground/40 transition-all duration-500">
+                  {/* Terminal header */}
+                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-muted-foreground/20">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
+                    </div>
+                    <span className="font-mono text-[10px] text-muted-foreground ml-2">tier_lite.sh</span>
+                  </div>
+
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-muted-foreground/10 border border-muted-foreground/20 mb-4">
+                      <Shield className="h-7 w-7 text-muted-foreground" />
+                    </div>
+                    
+                    <h3 className="font-mono text-2xl font-bold text-foreground mb-1">LITE</h3>
+                    <p className="font-mono text-xs text-muted-foreground mb-6">Базовый доступ</p>
+                    
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="font-mono text-5xl font-bold text-foreground">9$</span>
+                      <span className="font-mono text-sm text-muted-foreground">/ mo</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    {[
+                      'WireGuard Protocol',
+                      'Standard Speed',
+                      '1 Device',
+                      'Location: Netherlands',
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
+                        <div className="w-4 h-4 rounded-sm bg-muted-foreground/10 flex items-center justify-center">
+                          <Check className="w-3 h-3 text-muted-foreground" />
+                        </div>
+                        <span className="text-muted-foreground">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    className="w-full font-mono border-muted-foreground/30 text-muted-foreground hover:bg-muted-foreground/10 hover:border-muted-foreground/50 transition-all"
+                  >
+                    <span className="mr-2">&gt;</span> SELECT_TIER
+                  </Button>
+                </div>
+              </motion.div>
+
+              {/* PRO Card - Highlighted */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="relative group lg:scale-105 z-10"
+              >
+                {/* Glow effect */}
+                <div 
+                  className="absolute -inset-[2px] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 40%) 50%, hsl(73, 100%, 50%) 100%)',
+                  }}
+                />
+                <div 
+                  className="absolute -inset-[3px] rounded-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-md"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 30%) 100%)',
+                  }}
+                />
+                
+                <div 
+                  className="relative h-full p-6 md:p-8 rounded-2xl border border-primary/50 backdrop-blur-xl"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.08) 0%, rgba(10, 10, 10, 0.95) 30%)',
+                  }}
+                >
+                  {/* Recommended badge */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full bg-gradient-to-r from-gray-300 to-gray-400 text-background text-xs font-bold shadow-lg">
-                      <Sparkles className="h-3 w-3" />
-                      {hardwarePlan.badge}
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold font-mono tracking-wider shadow-lg shadow-primary/40">
+                      <Zap className="h-3 w-3" />
+                      OPTIMAL_CHOICE
                     </span>
                   </div>
 
-                  <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
-                    <div className="text-center md:text-left pt-4">
-                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 bg-gradient-to-br from-gray-400/30 via-primary/20 to-gray-300/30 border border-white/10">
-                        <Router className="h-10 w-10 text-primary" />
-                      </div>
-                      
-                      <h3 className="text-3xl font-bold font-['Montserrat'] mb-2 bg-gradient-to-r from-gray-200 via-primary to-gray-300 bg-clip-text text-transparent">
-                        3LAB {hardwarePlan.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground font-mono-tech mb-4">
-                        {hardwarePlan.subtitle}
-                      </p>
-                      
-                      <div className="flex items-baseline justify-center md:justify-start gap-2 mb-2">
-                        <span className="text-5xl font-bold bg-gradient-to-r from-primary to-gray-300 bg-clip-text text-transparent">
-                          {hardwarePlan.price}₽
-                        </span>
-                        <span className="text-muted-foreground font-mono-tech text-sm">{hardwarePlan.period}</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground font-mono-tech mb-6">
-                        {hardwarePlan.priceNote}
-                      </p>
-                      
-                      <p className="text-muted-foreground leading-relaxed mb-6">
-                        {hardwarePlan.description}
-                      </p>
+                  {/* Terminal header */}
+                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-primary/30 pt-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/40" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary/20" />
+                    </div>
+                    <span className="font-mono text-[10px] text-primary ml-2">tier_pro.sh</span>
+                  </div>
 
-                      <Button
-                        size="lg"
-                        className="bg-gradient-to-r from-gray-300 via-primary to-gray-400 hover:from-gray-200 hover:via-primary/90 hover:to-gray-300 text-background font-semibold shadow-lg shadow-primary/30 hover:shadow-[0_0_30px_hsl(73_100%_50%/0.5)] transition-all duration-300 hover:scale-105"
+                  <div className="text-center mb-8">
+                    <div 
+                      className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 border border-primary/30 mb-4"
+                      style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)' }}
+                    >
+                      <Zap className="h-8 w-8 text-primary" />
+                    </div>
+                    
+                    <h3 className="font-mono text-3xl font-bold text-primary mb-1">PRO</h3>
+                    <p className="font-mono text-xs text-primary/70 mb-6">Оптимальный выбор</p>
+                    
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="font-mono text-6xl font-bold text-primary">19$</span>
+                      <span className="font-mono text-sm text-primary/70">/ mo</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    {[
+                      'WireGuard + AmneziaWG',
+                      'High Speed (1Gbps)',
+                      '5 Devices',
+                      'All Locations',
+                      'Priority Support',
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
+                        <div className="w-4 h-4 rounded-sm bg-primary/20 flex items-center justify-center">
+                          <Check className="w-3 h-3 text-primary" />
+                        </div>
+                        <span className="text-foreground">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    className="w-full font-mono bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all"
+                  >
+                    <span className="mr-2">&gt;</span> SELECT_TIER
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </motion.div>
+
+              {/* SOVEREIGN Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="relative group"
+              >
+                {/* Orange glow */}
+                <div 
+                  className="absolute -inset-[2px] rounded-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500 blur-sm"
+                  style={{
+                    background: 'linear-gradient(135deg, #FF9900 0%, #CC7700 50%, #FF9900 100%)',
+                  }}
+                />
+                <div 
+                  className="absolute -inset-[3px] rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-md"
+                  style={{
+                    background: 'linear-gradient(135deg, #FF9900 0%, #FF6600 100%)',
+                  }}
+                />
+                
+                <div 
+                  className="relative h-full p-6 md:p-8 rounded-2xl border border-accent/50"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255, 153, 0, 0.08) 0%, rgba(10, 10, 10, 0.98) 30%)',
+                  }}
+                >
+                  {/* Badge */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold font-mono tracking-wider shadow-lg shadow-accent/40">
+                      <Package className="h-3 w-3" />
+                      HARDWARE_BUNDLE
+                    </span>
+                  </div>
+
+                  {/* Terminal header */}
+                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-accent/30 pt-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-accent/60" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-accent/40" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-accent/20" />
+                    </div>
+                    <span className="font-mono text-[10px] text-accent ml-2">tier_sovereign.sh</span>
+                  </div>
+
+                  <div className="text-center mb-8">
+                    <div 
+                      className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/10 border border-accent/30 mb-4"
+                      style={{ boxShadow: '0 0 30px rgba(255, 153, 0, 0.2)' }}
+                    >
+                      <Server className="h-8 w-8 text-accent" />
+                    </div>
+                    
+                    <h3 className="font-mono text-2xl font-bold text-accent mb-1">SOVEREIGN</h3>
+                    <p className="font-mono text-xs text-accent/70 mb-6">Железо + Сеть</p>
+                    
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="font-mono text-5xl font-bold text-accent">99$</span>
+                      <span className="font-mono text-sm text-accent/70">+ Shipping</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    {[
+                      'NODE-1 Hardware Included',
+                      'Lifetime Firmware Updates',
+                      'Personal Node Setup',
+                      'Private Domain Access',
+                    ].map((feature, idx) => (
+                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
+                        <div className="w-4 h-4 rounded-sm bg-accent/20 flex items-center justify-center">
+                          <Check className="w-3 h-3 text-accent" />
+                        </div>
+                        <span className="text-foreground">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link to="/hardware">
+                    <Button
+                      className="w-full font-mono bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/30 hover:shadow-accent/50 transition-all"
+                    >
+                      <span className="mr-2">&gt;</span> CONFIGURE_NODE
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+
+            </div>
+          </AnimatedSection>
+
+          {/* Payment Section */}
+          <AnimatedSection delay={0.3}>
+            <div className="max-w-3xl mx-auto mb-16">
+              <div className="relative">
+                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-50" />
+                
+                <div className="relative p-8 md:p-10 rounded-2xl bg-[#0a0a0a] border border-primary/20">
+                  {/* Header */}
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 mb-4">
+                      <Lock className="h-4 w-4 text-primary" />
+                      <span className="font-mono text-xs text-primary tracking-wider">PAYMENT_METHOD: CRYPTO_ONLY</span>
+                    </div>
+                    <h3 className="font-mono text-xl md:text-2xl font-bold text-foreground">
+                      Anonymous Settlement
+                    </h3>
+                  </div>
+
+                  {/* Crypto Icons */}
+                  <div className="flex items-center justify-center gap-4 md:gap-8 flex-wrap">
+                    {cryptoPayments.map((crypto) => (
+                      <motion.div
+                        key={crypto.symbol}
+                        className="relative cursor-pointer"
+                        onMouseEnter={() => setHoveredCrypto(crypto.symbol)}
+                        onMouseLeave={() => setHoveredCrypto(null)}
+                        whileHover={{ scale: 1.1, y: -5 }}
                       >
-                        Заказать комплект
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-
-                    <div className="p-6 rounded-2xl bg-background/50 border border-white/10">
-                      <div className="font-mono-tech text-xs text-muted-foreground mb-4">
-                        // hardware_features
-                      </div>
-                      <ul className="space-y-4">
-                        {hardwarePlan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center gap-4">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-gray-400/20 flex items-center justify-center">
-                              <feature.icon className="h-5 w-5 text-primary" />
-                            </div>
-                            <span className="font-mono-tech text-sm text-foreground">{feature.value}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                        <div 
+                          className="w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center transition-all duration-300"
+                          style={{
+                            backgroundColor: hoveredCrypto === crypto.symbol ? `${crypto.color}20` : 'rgba(255,255,255,0.05)',
+                            borderWidth: '1px',
+                            borderStyle: 'solid',
+                            borderColor: hoveredCrypto === crypto.symbol ? crypto.color : 'rgba(255,255,255,0.1)',
+                            boxShadow: hoveredCrypto === crypto.symbol ? `0 0 30px ${crypto.color}40` : 'none',
+                          }}
+                        >
+                          <span 
+                            className="font-mono text-lg font-bold transition-colors duration-300"
+                            style={{
+                              color: hoveredCrypto === crypto.symbol ? crypto.color : 'rgba(255,255,255,0.4)',
+                            }}
+                          >
+                            {crypto.symbol}
+                          </span>
+                        </div>
+                        
+                        {/* Tooltip */}
+                        {hoveredCrypto === crypto.symbol && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="absolute left-1/2 -translate-x-1/2 -bottom-8 whitespace-nowrap"
+                          >
+                            <span 
+                              className="font-mono text-[10px] px-2 py-1 rounded"
+                              style={{ 
+                                backgroundColor: `${crypto.color}20`,
+                                color: crypto.color,
+                              }}
+                            >
+                              {crypto.name}
+                            </span>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           </AnimatedSection>
 
-          {/* Why Better Block */}
-          <AnimatedSection delay={0.25}>
-            <div className="max-w-4xl mx-auto">
-              <div className="relative group">
-                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/40 via-accent/40 to-purple-500/40 opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
-                  <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
-                    Почему наши тарифы <span className="text-gradient-primary">выгоднее</span>?
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
-                    В обычном VPN вы платите за каждый аккаунт отдельно. В <span className="text-primary font-semibold">3LAB</span> вы арендуете мощность сервера. Это как аренда квартиры: сколько людей там будет жить — <span className="text-accent font-semibold">решать вам</span>. Мы не ограничиваем количество девайсов технически, мы подбираем мощность сервера так, чтобы всем было комфортно.
-                  </p>
-                </div>
-              </div>
+          {/* Footer Note */}
+          <AnimatedSection delay={0.4}>
+            <div className="text-center">
+              <p className="font-mono text-xs text-muted-foreground/60 max-w-lg mx-auto">
+                *Мы не запрашиваем вашу почту или имя. Только хэш транзакции. Только приватность.
+              </p>
             </div>
           </AnimatedSection>
         </div>
