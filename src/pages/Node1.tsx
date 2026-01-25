@@ -154,90 +154,263 @@ const Node1 = () => {
 
       {/* Performance Section */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-        
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Abstract Chip Visualization */}
-            <AnimatedSection delay={0.1} direction="left">
-              <div className="relative h-[400px] flex items-center justify-center">
-                {/* Circuit Lines */}
-                <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 400">
-                  <defs>
-                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="hsl(73 100% 50%)" stopOpacity="0" />
-                      <stop offset="50%" stopColor="hsl(73 100% 50%)" stopOpacity="1" />
-                      <stop offset="100%" stopColor="hsl(73 100% 50%)" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
+          {/* Section Header */}
+          <AnimatedSection delay={0.1}>
+            <div className="mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold font-mono-tech">
+                Под Капотом:
+              </h2>
+              <p className="text-xl text-muted-foreground mt-2">Производительность</p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Chip Schematic Visualization */}
+            <AnimatedSection delay={0.2} direction="left">
+              <div className="relative">
+                {/* Main Frame */}
+                <div 
+                  className="relative aspect-square max-w-[450px] mx-auto rounded-lg border border-cyan-500/30 p-6"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(0,40,60,0.3) 0%, rgba(0,20,30,0.5) 100%)',
+                    boxShadow: '0 0 30px rgba(0, 180, 255, 0.1), inset 0 0 30px rgba(0, 180, 255, 0.05)',
+                  }}
+                >
+                  {/* SVG Circuit Board */}
+                  <svg className="w-full h-full" viewBox="0 0 400 400">
+                    <defs>
+                      {/* Cyan glow gradient */}
+                      <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#00ffff" stopOpacity="0.2" />
+                        <stop offset="50%" stopColor="#00ffff" stopOpacity="0.8" />
+                        <stop offset="100%" stopColor="#00ffff" stopOpacity="0.2" />
+                      </linearGradient>
+                      <linearGradient id="greenGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.2" />
+                        <stop offset="50%" stopColor="#CCFF00" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#CCFF00" stopOpacity="0.2" />
+                      </linearGradient>
+                      {/* Glow filter */}
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    
+                    {/* Background circuit traces - Cyan */}
+                    <g stroke="#00b4d8" strokeWidth="1" fill="none" opacity="0.4">
+                      {/* Outer frame connections */}
+                      <path d="M 50 100 L 120 100" />
+                      <path d="M 50 150 L 100 150 L 100 130" />
+                      <path d="M 50 300 L 120 300" />
+                      <path d="M 50 350 L 80 350 L 80 320" />
+                      
+                      <path d="M 280 100 L 350 100" />
+                      <path d="M 300 150 L 350 150" />
+                      <path d="M 280 300 L 350 300" />
+                      <path d="M 300 350 L 350 350" />
+                      
+                      <path d="M 100 50 L 100 100" />
+                      <path d="M 150 50 L 150 120" />
+                      <path d="M 250 50 L 250 120" />
+                      <path d="M 300 50 L 300 100" />
+                      
+                      <path d="M 100 300 L 100 350" />
+                      <path d="M 150 280 L 150 350" />
+                      <path d="M 250 280 L 250 350" />
+                      <path d="M 300 300 L 300 350" />
+                    </g>
+                    
+                    {/* Center CPU Frame */}
+                    <rect 
+                      x="120" y="120" 
+                      width="160" height="160" 
+                      fill="rgba(0,30,40,0.8)" 
+                      stroke="#00ffff" 
+                      strokeWidth="2"
+                      rx="4"
+                      filter="url(#glow)"
+                    />
+                    
+                    {/* CPU Pins - Top */}
+                    <g stroke="#00ffff" strokeWidth="1.5" filter="url(#glow)">
+                      <line x1="140" y1="120" x2="140" y2="95" />
+                      <line x1="160" y1="120" x2="160" y2="95" />
+                      <line x1="180" y1="120" x2="180" y2="95" />
+                      <line x1="200" y1="120" x2="200" y2="95" />
+                      <line x1="220" y1="120" x2="220" y2="95" />
+                      <line x1="240" y1="120" x2="240" y2="95" />
+                      <line x1="260" y1="120" x2="260" y2="95" />
+                    </g>
+                    
+                    {/* CPU Pins - Bottom */}
+                    <g stroke="#00ffff" strokeWidth="1.5" filter="url(#glow)">
+                      <line x1="140" y1="280" x2="140" y2="305" />
+                      <line x1="160" y1="280" x2="160" y2="305" />
+                      <line x1="180" y1="280" x2="180" y2="305" />
+                      <line x1="200" y1="280" x2="200" y2="305" />
+                      <line x1="220" y1="280" x2="220" y2="305" />
+                      <line x1="240" y1="280" x2="240" y2="305" />
+                      <line x1="260" y1="280" x2="260" y2="305" />
+                    </g>
+                    
+                    {/* CPU Pins - Left */}
+                    <g stroke="#00ffff" strokeWidth="1.5" filter="url(#glow)">
+                      <line x1="120" y1="140" x2="95" y2="140" />
+                      <line x1="120" y1="160" x2="95" y2="160" />
+                      <line x1="120" y1="180" x2="95" y2="180" />
+                      <line x1="120" y1="200" x2="95" y2="200" />
+                      <line x1="120" y1="220" x2="95" y2="220" />
+                      <line x1="120" y1="240" x2="95" y2="240" />
+                      <line x1="120" y1="260" x2="95" y2="260" />
+                    </g>
+                    
+                    {/* CPU Pins - Right */}
+                    <g stroke="#00ffff" strokeWidth="1.5" filter="url(#glow)">
+                      <line x1="280" y1="140" x2="305" y2="140" />
+                      <line x1="280" y1="160" x2="305" y2="160" />
+                      <line x1="280" y1="180" x2="305" y2="180" />
+                      <line x1="280" y1="200" x2="305" y2="200" />
+                      <line x1="280" y1="220" x2="305" y2="220" />
+                      <line x1="280" y1="240" x2="305" y2="240" />
+                      <line x1="280" y1="260" x2="305" y2="260" />
+                    </g>
+                    
+                    {/* CPU Inner Core */}
+                    <rect 
+                      x="160" y="160" 
+                      width="80" height="80" 
+                      fill="rgba(0,60,80,0.6)" 
+                      stroke="#CCFF00" 
+                      strokeWidth="2"
+                      rx="2"
+                      filter="url(#glow)"
+                    />
+                    
+                    {/* CPU Label */}
+                    <text x="200" y="208" textAnchor="middle" fill="#CCFF00" fontSize="18" fontFamily="JetBrains Mono" fontWeight="bold">
+                      CPU
+                    </text>
+                    
+                    {/* RAM Module - Top Right */}
+                    <rect x="300" y="60" width="60" height="30" fill="rgba(0,40,50,0.8)" stroke="#00ffff" strokeWidth="1" rx="2" />
+                    <text x="330" y="80" textAnchor="middle" fill="#CCFF00" fontSize="10" fontFamily="JetBrains Mono">RAM</text>
+                    
+                    {/* STORAGE Module - Below RAM */}
+                    <rect x="300" y="100" width="60" height="30" fill="rgba(0,40,50,0.8)" stroke="#00ffff" strokeWidth="1" rx="2" />
+                    <text x="330" y="120" textAnchor="middle" fill="#CCFF00" fontSize="9" fontFamily="JetBrains Mono">STORAGE</text>
+                    
+                    {/* Shield Icon - Left Side (representing security) */}
+                    <path 
+                      d="M 60 200 L 60 230 Q 60 250 75 260 L 60 270 L 60 200 Z" 
+                      fill="none" 
+                      stroke="#CCFF00" 
+                      strokeWidth="1.5"
+                      transform="translate(-10, -35)"
+                      filter="url(#glow)"
+                    />
+                    <path 
+                      d="M 55 180 L 75 165 L 95 180 L 95 210 Q 95 230 75 245 Q 55 230 55 210 Z" 
+                      fill="rgba(204,255,0,0.1)" 
+                      stroke="#CCFF00" 
+                      strokeWidth="1.5"
+                      filter="url(#glow)"
+                    />
+                    
+                    {/* AmneziaWG Label - Bottom Left */}
+                    <rect x="40" y="310" width="90" height="30" fill="rgba(0,40,50,0.8)" stroke="#CCFF00" strokeWidth="1" rx="2" />
+                    <text x="85" y="330" textAnchor="middle" fill="#CCFF00" fontSize="10" fontFamily="JetBrains Mono">AmneziaWG</text>
+                    
+                    {/* Connection dots */}
+                    <g fill="#00ffff" filter="url(#glow)">
+                      <circle cx="50" cy="100" r="3" />
+                      <circle cx="50" cy="150" r="3" />
+                      <circle cx="50" cy="300" r="3" />
+                      <circle cx="350" cy="100" r="3" />
+                      <circle cx="350" cy="150" r="3" />
+                      <circle cx="350" cy="300" r="3" />
+                      <circle cx="100" cy="50" r="3" />
+                      <circle cx="300" cy="50" r="3" />
+                      <circle cx="100" cy="350" r="3" />
+                      <circle cx="300" cy="350" r="3" />
+                    </g>
+                    
+                    {/* Data flow paths - animated glow lines */}
+                    <path 
+                      d="M 85 330 L 120 280" 
+                      stroke="#CCFF00" 
+                      strokeWidth="1.5" 
+                      strokeDasharray="4 4"
+                      opacity="0.6"
+                    />
+                    <path 
+                      d="M 75 210 L 95 200 L 120 200" 
+                      stroke="#CCFF00" 
+                      strokeWidth="1.5" 
+                      strokeDasharray="4 4"
+                      opacity="0.6"
+                    />
+                  </svg>
                   
-                  {/* Horizontal Lines */}
-                  <line x1="0" y1="100" x2="400" y2="100" stroke="url(#lineGrad)" strokeWidth="1" />
-                  <line x1="0" y1="200" x2="400" y2="200" stroke="url(#lineGrad)" strokeWidth="1" />
-                  <line x1="0" y1="300" x2="400" y2="300" stroke="url(#lineGrad)" strokeWidth="1" />
-                  
-                  {/* Vertical Lines */}
-                  <line x1="100" y1="0" x2="100" y2="400" stroke="url(#lineGrad)" strokeWidth="1" />
-                  <line x1="200" y1="0" x2="200" y2="400" stroke="url(#lineGrad)" strokeWidth="1" />
-                  <line x1="300" y1="0" x2="300" y2="400" stroke="url(#lineGrad)" strokeWidth="1" />
-                  
-                  {/* Connection Nodes */}
-                  <circle cx="100" cy="100" r="4" fill="hsl(73 100% 50%)" />
-                  <circle cx="200" cy="200" r="6" fill="hsl(73 100% 50%)" />
-                  <circle cx="300" cy="100" r="4" fill="hsl(73 100% 50%)" />
-                  <circle cx="100" cy="300" r="4" fill="hsl(73 100% 50%)" />
-                  <circle cx="300" cy="300" r="4" fill="hsl(73 100% 50%)" />
-                </svg>
-                
-                {/* Central Chip */}
-                <div className="relative w-32 h-32 bg-zinc-900 border-2 border-primary/50 rounded-lg flex items-center justify-center">
-                  <Cpu className="w-12 h-12 text-primary" />
-                  <div 
-                    className="absolute inset-0 rounded-lg"
-                    style={{
-                      boxShadow: '0 0 30px hsl(73 100% 50% / 0.3), inset 0 0 20px hsl(73 100% 50% / 0.1)',
-                    }}
-                  />
-                </div>
-                
-                {/* Orbiting Elements */}
-                <div className="absolute w-64 h-64 border border-primary/20 rounded-full animate-spin" style={{ animationDuration: '20s' }}>
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rounded-full shadow-[0_0_10px_hsl(73_100%_50%)]" />
+                  {/* Corner accents */}
+                  <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-cyan-400" />
+                  <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-cyan-400" />
+                  <div className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2 border-cyan-400" />
+                  <div className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-cyan-400" />
                 </div>
               </div>
             </AnimatedSection>
             
             {/* Right: Content */}
-            <AnimatedSection delay={0.2}>
+            <AnimatedSection delay={0.3}>
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold font-mono-tech mb-4">
-                    Не просто роутер.
+                  <h3 className="text-2xl md:text-3xl font-bold font-mono-tech mb-4">
+                    Не просто router.
                     <br />
                     <span className="text-gradient-primary">Ваш личный сервер.</span>
-                  </h2>
-                  <p className="text-muted-foreground text-lg leading-relaxed">
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
                     NODE-1 — это не клиентское устройство. Это выделенный вычислительный узел, 
                     созданный для одной цели: обеспечить ваш цифровой суверенитет. 
                     Отказоустойчивость, скорость и невидимость — его фундаментальные принципы.
                   </p>
                 </div>
                 
-                {/* Tech Specs Terminal */}
-                <div className="bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border-b border-zinc-800">
-                    <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                    <div className="w-3 h-3 rounded-full bg-secondary/60" />
-                    <div className="w-3 h-3 rounded-full bg-primary/60" />
-                    <span className="ml-3 text-xs font-mono-tech text-muted-foreground">specs.conf</span>
+                {/* Tech Specs - Terminal Style */}
+                <div 
+                  className="border border-primary/40 rounded p-4 space-y-1"
+                  style={{
+                    background: 'rgba(0,20,10,0.5)',
+                  }}
+                >
+                  <div className="font-mono-tech text-sm text-primary mb-3">Hardware Specs:</div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    <span className="text-cyan-400">{'>'}</span> CPU: Custom ARM Core @ 1.8 GHz
                   </div>
-                  <div className="p-4 space-y-2">
-                    {techSpecs.map((spec, i) => (
-                      <div key={i} className="flex font-mono-tech text-sm">
-                        <span className="text-primary w-44 shrink-0">{spec.label}:</span>
-                        <span className="text-muted-foreground">{spec.value}</span>
-                      </div>
-                    ))}
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    RAM: 2GB DDR4 ECC (Error-Correcting Code)
+                  </div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    Storage: 32GB eMMC (Secure Flash)
+                  </div>
+                  
+                  <div className="font-mono-tech text-sm text-primary mt-4 mb-2">Performance Specs:</div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    Throughput (VPN): Up to 950 Mbps (WireGuard)
+                  </div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    Throughput (VPN): Up to 800 Mbps (AmneziaWG)
+                  </div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    Power Draw: {'<'}10W (optimized 24/7 operation)
+                  </div>
+                  <div className="font-mono-tech text-sm text-muted-foreground">
+                    Operating Temperature: -20°C to +60°C
                   </div>
                 </div>
               </div>
