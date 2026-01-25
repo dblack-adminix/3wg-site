@@ -450,57 +450,57 @@ const DotMap = () => {
         
         {/* Animated data packets */}
         {/* Path 1: Amsterdam to Frankfurt */}
-        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.35" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="2s" repeatCount="indefinite">
             <mpath href="#path-nl-de1" />
           </animateMotion>
         </circle>
         
         {/* Path 2: Frankfurt to Munich */}
-        <circle r="0.6" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.3" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.5s">
             <mpath href="#path-de1-de2" />
           </animateMotion>
         </circle>
         
         {/* Path 3: Munich to Helsinki */}
-        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
           <animateMotion dur="2.5s" repeatCount="indefinite" begin="1s">
             <mpath href="#path-de2-fi" />
           </animateMotion>
         </circle>
         
         {/* Path 4: Amsterdam to New York - larger packet for transatlantic */}
-        <circle r="1" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.45" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="4s" repeatCount="indefinite">
             <mpath href="#path-nl-us" />
           </animateMotion>
         </circle>
-        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
           <animateMotion dur="4s" repeatCount="indefinite" begin="2s">
             <mpath href="#path-nl-us" />
           </animateMotion>
         </circle>
         
         {/* Path 5: Munich to Singapore - multiple packets */}
-        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.4" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite">
             <mpath href="#path-de2-sg" />
           </animateMotion>
         </circle>
-        <circle r="0.6" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.3" fill="url(#dataFlowOrange)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="1.5s">
             <mpath href="#path-de2-sg" />
           </animateMotion>
         </circle>
-        <circle r="0.5" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.25" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="3s">
             <mpath href="#path-de2-sg" />
           </animateMotion>
         </circle>
         
         {/* Path 6: Frankfurt to Helsinki */}
-        <circle r="0.6" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.3" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="3s" repeatCount="indefinite" begin="0.7s">
             <mpath href="#path-de1-fi" />
           </animateMotion>
@@ -508,14 +508,14 @@ const DotMap = () => {
         
         {/* Reverse direction packets */}
         {/* New York to Amsterdam */}
-        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+        <circle r="0.4" fill="url(#dataFlowGradient)" filter="url(#glow)">
           <animateMotion dur="4s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
             <mpath href="#path-nl-us" />
           </animateMotion>
         </circle>
         
         {/* Singapore to Munich */}
-        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+        <circle r="0.35" fill="url(#dataFlowOrange)" filter="url(#glow)">
           <animateMotion dur="5s" repeatCount="indefinite" begin="2.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
             <mpath href="#path-de2-sg" />
           </animateMotion>
