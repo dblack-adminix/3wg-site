@@ -14,28 +14,25 @@ const blinkingNodes = [
 const ServerRack3D = () => {
   return (
     <div className="relative w-full max-w-lg mx-auto h-80 perspective-1000">
-      {/* 3D Grid Base */}
+      {/* 3D Grid Base - cleaner, less dense */}
       <div className="absolute inset-0 transform-gpu rotateX-60 translateZ-0">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {/* Horizontal lines - fewer, more subtle */}
+        {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={`h-${i}`}
-            className="absolute w-full h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
+            className="absolute w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
             style={{
-              top: `${(i + 1) * 8}%`,
-              animation: `pulse-line ${2 + i * 0.1}s ease-in-out infinite`,
-              animationDelay: `${i * 0.1}s`,
+              top: `${(i + 1) * 15}%`,
             }}
           />
         ))}
-        {/* Vertical lines */}
-        {Array.from({ length: 16 }).map((_, i) => (
+        {/* Vertical lines - fewer, more subtle */}
+        {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={`v-${i}`}
-            className="absolute h-full w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent"
+            className="absolute h-full w-px bg-gradient-to-b from-transparent via-primary/15 to-transparent"
             style={{
-              left: `${(i + 1) * 6}%`,
-              animation: `pulse-line ${2.5 + i * 0.1}s ease-in-out infinite`,
-              animationDelay: `${i * 0.15}s`,
+              left: `${(i + 1) * 11}%`,
             }}
           />
         ))}
