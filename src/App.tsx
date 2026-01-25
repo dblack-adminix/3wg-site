@@ -12,6 +12,7 @@ import FAQ from "./pages/FAQ";
 import AmneziaWG from "./pages/AmneziaWG";
 import Dashboard from "./pages/Dashboard";
 import Node1 from "./pages/Node1";
+import Generator from "./pages/Generator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const AnimatedRoutes = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/amnezia-tech" element={<AmneziaWG />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/generator" element={<Generator />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
