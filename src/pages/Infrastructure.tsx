@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Server, Globe, ExternalLink, Cpu, HardDrive, Activity, Terminal, ArrowRight } from 'lucide-react';
+import { Server, Globe, Cpu, HardDrive, Terminal, ArrowRight } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import worldMapSvg from '@/assets/world-map.svg';
 
 // Server nodes data
 const serverNodes = [
@@ -294,55 +295,68 @@ const LiveTerminal = () => {
   );
 };
 
-// World Map with Solid Continents
+// World Map Component using imported SVG
 const WorldMap = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
-  // Node positions (percentage based) - Netherlands, Germany, Finland, USA East, Turkey
+  // Node positions based on actual SVG viewBox (2000 x 857), converted to percentages
+  // Netherlands, Germany, Finland, USA East, Turkey, Singapore
   const nodes = [
-    { id: 'NL', x: 48, y: 28, label: 'Amsterdam', ping: '28ms' },
-    { id: 'DE', x: 51, y: 32, label: 'Frankfurt', ping: '22ms' },
-    { id: 'FI', x: 55, y: 22, label: 'Helsinki', ping: '32ms' },
-    { id: 'US', x: 22, y: 35, label: 'New York', ping: '85ms' },
-    { id: 'TR', x: 58, y: 38, label: 'Istanbul', ping: '45ms' },
+    { id: 'NL', x: 50.5, y: 19, label: 'Amsterdam', ping: '28ms' },
+    { id: 'DE', x: 52, y: 22, label: 'Frankfurt', ping: '22ms' },
+    { id: 'FI', x: 56, y: 14, label: 'Helsinki', ping: '32ms' },
+    { id: 'US', x: 24, y: 28, label: 'New York', ping: '85ms' },
+    { id: 'TR', x: 58, y: 28, label: 'Istanbul', ping: '45ms' },
+    { id: 'SG', x: 78, y: 54, label: 'Singapore', ping: '120ms' },
   ];
 
-  // Connection paths between nodes (curved lines)
+  // Connection paths between nodes
   const connections = [
     { from: 'US', to: 'NL' },
     { from: 'NL', to: 'DE' },
     { from: 'DE', to: 'FI' },
     { from: 'NL', to: 'FI' },
     { from: 'DE', to: 'TR' },
+    { from: 'TR', to: 'SG' },
   ];
 
   const getNodePos = (id: string) => nodes.find(n => n.id === id);
 
   return (
-    <div className="relative w-full aspect-[2.5/1] min-h-[320px] rounded-xl border border-primary/30 bg-[#080808] overflow-hidden">
+    <div className="relative w-full aspect-[2.33/1] min-h-[340px] rounded-xl border border-primary/30 bg-[#080808] overflow-hidden">
       {/* Tactical corner frames */}
-      <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-primary/60" />
-      <div className="absolute top-0 right-0 w-8 h-8 border-r-2 border-t-2 border-primary/60" />
-      <div className="absolute bottom-0 left-0 w-8 h-8 border-l-2 border-b-2 border-primary/60" />
-      <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-primary/60" />
+      <div className="absolute top-0 left-0 w-10 h-10 border-l-2 border-t-2 border-primary/60 z-10" />
+      <div className="absolute top-0 right-0 w-10 h-10 border-r-2 border-t-2 border-primary/60 z-10" />
+      <div className="absolute bottom-0 left-0 w-10 h-10 border-l-2 border-b-2 border-primary/60 z-10" />
+      <div className="absolute bottom-0 right-0 w-10 h-10 border-r-2 border-b-2 border-primary/60 z-10" />
 
       {/* Inner tactical frame */}
-      <div className="absolute top-2 left-2 w-4 h-4 border-l border-t border-primary/30" />
-      <div className="absolute top-2 right-2 w-4 h-4 border-r border-t border-primary/30" />
-      <div className="absolute bottom-2 left-2 w-4 h-4 border-l border-b border-primary/30" />
-      <div className="absolute bottom-2 right-2 w-4 h-4 border-r border-b border-primary/30" />
+      <div className="absolute top-3 left-3 w-5 h-5 border-l border-t border-primary/30 z-10" />
+      <div className="absolute top-3 right-3 w-5 h-5 border-r border-t border-primary/30 z-10" />
+      <div className="absolute bottom-3 left-3 w-5 h-5 border-l border-b border-primary/30 z-10" />
+      <div className="absolute bottom-3 right-3 w-5 h-5 border-r border-b border-primary/30 z-10" />
 
-      {/* SVG World Map */}
+      {/* Background world map image */}
+      <img 
+        src={worldMapSvg} 
+        alt="World Map" 
+        className="absolute inset-0 w-full h-full object-cover opacity-40"
+        style={{ 
+          filter: 'brightness(0.3) saturate(0)',
+        }}
+      />
+
+      {/* SVG overlay for nodes and connections */}
       <svg 
         className="absolute inset-0 w-full h-full" 
-        viewBox="0 0 1000 500" 
-        preserveAspectRatio="xMidYMid slice"
+        viewBox="0 0 100 100" 
+        preserveAspectRatio="none"
       >
         <defs>
           {/* Glow filter for nodes */}
-          <filter id="nodeGlow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="4" result="blur"/>
-            <feFlood floodColor="#CCFF00" floodOpacity="0.8" result="color"/>
+          <filter id="nodeGlowMap" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="0.4" result="blur"/>
+            <feFlood floodColor="#CCFF00" floodOpacity="0.9" result="color"/>
             <feComposite in="color" in2="blur" operator="in" result="glow"/>
             <feMerge>
               <feMergeNode in="glow"/>
@@ -352,55 +366,16 @@ const WorldMap = () => {
           </filter>
 
           {/* Line glow filter */}
-          <filter id="lineGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feFlood floodColor="#CCFF00" floodOpacity="0.5" result="color"/>
+          <filter id="lineGlowMap" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.3" result="blur"/>
+            <feFlood floodColor="#CCFF00" floodOpacity="0.6" result="color"/>
             <feComposite in="color" in2="blur" operator="in" result="glow"/>
             <feMerge>
               <feMergeNode in="glow"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-
-          {/* Gradient for connection lines */}
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.1"/>
-            <stop offset="50%" stopColor="#CCFF00" stopOpacity="0.6"/>
-            <stop offset="100%" stopColor="#CCFF00" stopOpacity="0.1"/>
-          </linearGradient>
         </defs>
-
-        {/* World Map Continents - Solid shapes */}
-        <g fill="#1A1A1A" stroke="#2A2A2A" strokeWidth="0.5">
-          {/* North America */}
-          <path d="M 50 80 L 80 60 L 120 50 L 160 45 L 200 50 L 240 55 L 260 70 L 280 90 L 290 120 L 280 150 L 260 180 L 240 200 L 220 210 L 200 200 L 180 195 L 160 200 L 140 210 L 120 200 L 100 180 L 80 160 L 60 140 L 50 120 Z" />
-          {/* Greenland */}
-          <path d="M 320 40 L 360 35 L 400 40 L 420 60 L 410 90 L 380 100 L 340 95 L 320 70 Z" />
-          {/* South America */}
-          <path d="M 220 250 L 260 240 L 300 250 L 320 280 L 330 320 L 320 360 L 300 400 L 280 430 L 260 450 L 240 440 L 230 400 L 220 360 L 210 320 L 215 280 Z" />
-          {/* Europe */}
-          <path d="M 440 100 L 480 90 L 520 95 L 560 100 L 580 120 L 570 150 L 540 170 L 500 175 L 460 165 L 430 150 L 420 130 L 430 110 Z" />
-          {/* UK & Ireland */}
-          <path d="M 420 110 L 440 105 L 450 120 L 445 140 L 425 145 L 415 130 Z" />
-          {/* Africa */}
-          <path d="M 440 200 L 490 190 L 540 195 L 580 210 L 600 250 L 610 300 L 600 350 L 580 400 L 550 430 L 510 440 L 470 430 L 440 400 L 420 350 L 415 300 L 420 250 Z" />
-          {/* Russia / Northern Asia */}
-          <path d="M 560 80 L 620 70 L 700 65 L 780 70 L 850 80 L 900 90 L 920 110 L 910 140 L 880 160 L 820 170 L 750 165 L 680 160 L 620 155 L 580 145 L 560 120 Z" />
-          {/* Middle East */}
-          <path d="M 560 180 L 600 175 L 640 185 L 660 210 L 650 240 L 620 260 L 580 255 L 550 230 L 545 200 Z" />
-          {/* India */}
-          <path d="M 660 220 L 700 210 L 740 230 L 750 280 L 730 330 L 700 350 L 670 330 L 655 280 L 660 240 Z" />
-          {/* Southeast Asia */}
-          <path d="M 750 260 L 790 250 L 830 260 L 860 290 L 850 330 L 820 350 L 780 340 L 760 310 L 755 280 Z" />
-          {/* China / East Asia */}
-          <path d="M 760 150 L 820 140 L 880 150 L 910 180 L 900 220 L 860 250 L 810 260 L 770 240 L 750 200 L 755 170 Z" />
-          {/* Japan */}
-          <path d="M 900 160 L 920 155 L 935 170 L 930 200 L 910 220 L 895 210 L 895 180 Z" />
-          {/* Australia */}
-          <path d="M 800 380 L 860 370 L 920 385 L 950 420 L 940 470 L 900 495 L 850 490 L 810 460 L 795 420 Z" />
-          {/* Indonesia */}
-          <path d="M 780 360 L 820 355 L 860 365 L 880 380 L 860 395 L 820 390 L 790 380 Z" />
-        </g>
 
         {/* Connection lines */}
         {connections.map((conn, idx) => {
@@ -408,34 +383,30 @@ const WorldMap = () => {
           const to = getNodePos(conn.to);
           if (!from || !to) return null;
 
-          const x1 = from.x * 10;
-          const y1 = from.y * 10;
-          const x2 = to.x * 10;
-          const y2 = to.y * 10;
-
           // Calculate control point for curved line
-          const midX = (x1 + x2) / 2;
-          const midY = (y1 + y2) / 2 - Math.abs(x2 - x1) * 0.15;
+          const midX = (from.x + to.x) / 2;
+          const midY = Math.min(from.y, to.y) - Math.abs(to.x - from.x) * 0.12;
 
-          const pathId = `connection-${idx}`;
+          const pathId = `conn-${idx}`;
 
           return (
             <g key={pathId}>
               {/* Main connection line */}
               <path
                 id={pathId}
-                d={`M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`}
+                d={`M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`}
                 fill="none"
-                stroke="url(#lineGradient)"
-                strokeWidth="2"
-                filter="url(#lineGlow)"
+                stroke="#CCFF00"
+                strokeWidth="0.25"
+                strokeOpacity="0.5"
+                filter="url(#lineGlowMap)"
               />
               {/* Animated data packet */}
-              <circle r="4" fill="#CCFF00" filter="url(#nodeGlow)">
+              <circle r="0.5" fill="#CCFF00" filter="url(#nodeGlowMap)">
                 <animateMotion
-                  dur={`${2 + idx * 0.5}s`}
+                  dur={`${2.5 + idx * 0.4}s`}
                   repeatCount="indefinite"
-                  begin={`${idx * 0.3}s`}
+                  begin={`${idx * 0.5}s`}
                 >
                   <mpath href={`#${pathId}`} />
                 </animateMotion>
@@ -445,40 +416,35 @@ const WorldMap = () => {
         })}
 
         {/* Node markers */}
-        {nodes.map((node) => {
-          const x = node.x * 10;
-          const y = node.y * 10;
-
-          return (
-            <g key={node.id}>
-              {/* Outer pulse ring */}
-              <circle cx={x} cy={y} r="12" fill="none" stroke="#CCFF00" strokeWidth="1" opacity="0.4">
-                <animate attributeName="r" values="12;25;12" dur="2s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite" />
-              </circle>
-              {/* Middle glow */}
-              <circle cx={x} cy={y} r="10" fill="rgba(204, 255, 0, 0.2)">
-                <animate attributeName="r" values="10;14;10" dur="1.5s" repeatCount="indefinite" />
-              </circle>
-              {/* Core node */}
-              <circle cx={x} cy={y} r="8" fill="#CCFF00" filter="url(#nodeGlow)" />
-              {/* Inner highlight */}
-              <circle cx={x - 2} cy={y - 2} r="3" fill="rgba(255,255,255,0.4)" />
-            </g>
-          );
-        })}
+        {nodes.map((node) => (
+          <g key={node.id}>
+            {/* Outer pulse ring */}
+            <circle cx={node.x} cy={node.y} r="1.5" fill="none" stroke="#CCFF00" strokeWidth="0.15" opacity="0.5">
+              <animate attributeName="r" values="1.5;3;1.5" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite" />
+            </circle>
+            {/* Middle glow */}
+            <circle cx={node.x} cy={node.y} r="1.2" fill="rgba(204, 255, 0, 0.25)">
+              <animate attributeName="r" values="1.2;1.6;1.2" dur="1.5s" repeatCount="indefinite" />
+            </circle>
+            {/* Core node */}
+            <circle cx={node.x} cy={node.y} r="1" fill="#CCFF00" filter="url(#nodeGlowMap)" />
+            {/* Inner highlight */}
+            <circle cx={node.x - 0.25} cy={node.y - 0.25} r="0.35" fill="rgba(255,255,255,0.5)" />
+          </g>
+        ))}
       </svg>
 
       {/* Interactive hover zones for nodes */}
       {nodes.map((node) => (
         <div
           key={`hover-${node.id}`}
-          className="absolute cursor-pointer z-10"
+          className="absolute cursor-pointer z-20"
           style={{ 
             left: `${node.x}%`, 
             top: `${node.y}%`,
-            width: '40px',
-            height: '40px',
+            width: '50px',
+            height: '50px',
             transform: 'translate(-50%, -50%)',
           }}
           onMouseEnter={() => setHoveredNode(node.id)}
@@ -489,8 +455,8 @@ const WorldMap = () => {
             <motion.div
               initial={{ opacity: 0, y: 5, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-[#0a0a0a]/95 backdrop-blur-sm border border-primary/50 whitespace-nowrap z-20"
-              style={{ boxShadow: '0 0 25px rgba(204, 255, 0, 0.3)' }}
+              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-[#0a0a0a]/95 backdrop-blur-sm border border-primary/50 whitespace-nowrap z-30"
+              style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.4)' }}
             >
               <div className="font-mono text-sm text-foreground font-bold">{node.label}</div>
               <div className="font-mono text-xs text-primary mt-1">PING: {node.ping}</div>
@@ -502,38 +468,39 @@ const WorldMap = () => {
       ))}
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex items-center gap-6 font-mono text-[11px] text-muted-foreground">
+      <div className="absolute bottom-5 left-5 flex items-center gap-6 font-mono text-[11px] text-muted-foreground z-10">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-primary" style={{ boxShadow: '0 0 10px rgba(204, 255, 0, 0.8)' }} />
+          <div className="w-3 h-3 rounded-full bg-primary" style={{ boxShadow: '0 0 12px rgba(204, 255, 0, 0.9)' }} />
           <span>ACTIVE NODE</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+          <div className="w-8 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
           <span>COVERAGE</span>
         </div>
       </div>
 
       {/* Status overlay */}
-      <div className="absolute bottom-4 right-4 font-mono text-xs text-primary flex items-center gap-3 bg-[#0a0a0a]/80 px-3 py-2 rounded border border-primary/30">
+      <div className="absolute bottom-5 right-5 font-mono text-xs flex items-center gap-2 bg-[#0a0a0a]/90 px-4 py-2 rounded border border-primary/40 z-10">
         <span className="text-primary font-bold">{nodes.length} NODES ACTIVE</span>
         <span className="text-muted-foreground">/</span>
         <span className="text-primary">GLOBAL COVERAGE INITIATED</span>
       </div>
 
       {/* Top left data overlay */}
-      <div className="absolute top-4 left-4 font-mono text-[10px] text-muted-foreground space-y-1">
-        <div>NODES_ONLINE: <span className="text-primary">{nodes.length}</span></div>
-        <div>UPTIME: <span className="text-primary">99.9%</span></div>
+      <div className="absolute top-5 left-5 font-mono text-[11px] text-muted-foreground space-y-1 z-10">
+        <div>NODES_ONLINE: <span className="text-primary font-bold">{nodes.length}</span></div>
+        <div>UPTIME: <span className="text-primary font-bold">99.9%</span></div>
       </div>
 
       {/* Top right LIVE indicator */}
-      <div className="absolute top-4 right-4 flex items-center gap-2">
+      <div className="absolute top-5 right-5 flex items-center gap-2 z-10">
         <motion.div
-          className="w-2 h-2 rounded-full bg-primary"
+          className="w-2.5 h-2.5 rounded-full bg-primary"
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
+          style={{ boxShadow: '0 0 8px rgba(204, 255, 0, 0.8)' }}
         />
-        <span className="font-mono text-xs text-primary">LIVE</span>
+        <span className="font-mono text-xs text-primary font-bold">LIVE</span>
       </div>
     </div>
   );
