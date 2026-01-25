@@ -106,34 +106,78 @@ export const HeroSection = () => {
   const [isOrderOpen, setIsOrderOpen] = useState(false);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0 cyber-grid" />
-      <div className="absolute inset-0 scan-line pointer-events-none" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]">
+      {/* CSS Grid Background Pattern */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+        }}
+      />
       
-      {/* Gradient Orbs */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-[128px]" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-[128px]" />
+      {/* Animated Floating Blobs */}
+      <div 
+        className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-[150px] opacity-30 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, #CCFF00 0%, transparent 70%)',
+          animation: 'float-blob-1 12s ease-in-out infinite',
+        }}
+      />
+      <div 
+        className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full blur-[180px] opacity-25 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, #FF9900 0%, #1a1a1a 70%)',
+          animation: 'float-blob-2 15s ease-in-out infinite',
+        }}
+      />
+      
+      {/* Scanline Overlay Effect */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-20"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, rgba(204, 255, 0, 0.05) 50%, transparent 100%)',
+          backgroundSize: '100% 200%',
+          animation: 'scanline-move 8s linear infinite',
+        }}
+      />
       
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
           {/* Left - Text Content */}
           <div className="text-center lg:text-left">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8">
+            {/* Badge - Glassmorphism */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-md mb-8">
               <span className="w-2 h-2 rounded-full bg-primary pulse-indicator" />
               <span className="text-sm font-medium text-primary font-mono-tech">MANIFESTO_2024</span>
             </div>
 
-            {/* Main Heading */}
+            {/* Main Heading with Glow Effect */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 font-['Montserrat']">
               <span className="text-gradient-primary">3LAB.PRO</span>
               <span className="text-foreground"> — Ваш</span>
               <br />
-              <span className="text-foreground">технологический </span>
+              <span 
+                className="text-foreground inline-block"
+                style={{
+                  textShadow: '0 0 40px rgba(204, 255, 0, 0.4), 0 0 80px rgba(204, 255, 0, 0.2), 0 0 120px rgba(204, 255, 0, 0.1)',
+                }}
+              >
+                ЦИФРОВОЙ
+              </span>
               <br />
-              <span className="text-gradient-accent">суверенитет.</span>
+              <span 
+                className="text-gradient-accent inline-block"
+                style={{
+                  textShadow: '0 0 40px rgba(255, 153, 0, 0.4), 0 0 80px rgba(255, 153, 0, 0.2)',
+                }}
+              >
+                СУВЕРЕНИТЕТ.
+              </span>
             </h1>
 
             {/* Manifesto Text */}
@@ -192,19 +236,19 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        {/* Protocol Cards - Mobile Only */}
+        {/* Protocol Cards - Mobile Only - Glassmorphism Style */}
         <div className="lg:hidden mt-12 grid grid-cols-3 gap-4 max-w-md mx-auto">
-          <div className="flex flex-col items-center p-4 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
             <Shield className="h-6 w-6 text-primary mb-2" />
             <span className="text-sm font-bold text-foreground">Amnezia</span>
             <span className="text-[10px] text-muted-foreground">DPI bypass</span>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
             <Zap className="h-6 w-6 text-[#FF3333] mb-2" />
             <span className="text-sm font-bold text-foreground">WireGuard</span>
             <span className="text-[10px] text-muted-foreground">5ms ping</span>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-xl border-glow bg-card/50 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
             <Lock className="h-6 w-6 text-accent mb-2" />
             <span className="text-sm font-bold text-foreground">Zero Logs</span>
             <span className="text-[10px] text-muted-foreground">privacy</span>
@@ -231,6 +275,21 @@ export const HeroSection = () => {
         @keyframes data-flow {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
+        }
+        @keyframes float-blob-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          25% { transform: translate(30px, -20px) scale(1.05); }
+          50% { transform: translate(-20px, 30px) scale(0.95); }
+          75% { transform: translate(20px, 20px) scale(1.02); }
+        }
+        @keyframes float-blob-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(-40px, 20px) scale(1.08); }
+          66% { transform: translate(30px, -30px) scale(0.92); }
+        }
+        @keyframes scanline-move {
+          0% { background-position: 0% 0%; }
+          100% { background-position: 0% 200%; }
         }
         .perspective-1000 { perspective: 1000px; }
         .rotateX-60 { transform: rotateX(60deg); }
