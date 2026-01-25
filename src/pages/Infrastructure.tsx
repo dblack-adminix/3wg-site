@@ -75,14 +75,14 @@ const serverNodes = [
   },
 ];
 
-// Map dots data (approximate positions)
-const mapDots = [
-  { x: 48, y: 35, node: 'NL-1', label: 'Amsterdam', ping: '28ms' },
-  { x: 50, y: 38, node: 'DE-1', label: 'Frankfurt', ping: '22ms' },
-  { x: 51, y: 40, node: 'DE-2', label: 'Munich', ping: '25ms' },
-  { x: 53, y: 28, node: 'FI-1', label: 'Helsinki', ping: '32ms' },
-  { x: 22, y: 42, node: 'US-1', label: 'New York', ping: '85ms' },
-  { x: 78, y: 62, node: 'SG-1', label: 'Singapore', ping: '120ms' },
+// Map nodes with correct SVG coordinates (viewBox 0 0 100 50)
+const mapNodes = [
+  { x: 51, y: 17, node: 'NL-1', label: 'Amsterdam', ping: '28ms' },
+  { x: 52, y: 19, node: 'DE-1', label: 'Frankfurt', ping: '22ms' },
+  { x: 53, y: 20, node: 'DE-2', label: 'Munich', ping: '25ms' },
+  { x: 56, y: 14, node: 'FI-1', label: 'Helsinki', ping: '32ms' },
+  { x: 24, y: 22, node: 'US-1', label: 'New York', ping: '85ms' },
+  { x: 80, y: 35, node: 'SG-1', label: 'Singapore', ping: '120ms' },
 ];
 
 // Log messages for terminal
@@ -298,352 +298,269 @@ const LiveTerminal = () => {
 const DotMap = () => {
   const [hoveredDot, setHoveredDot] = useState<string | null>(null);
 
-  // Generate continent outlines with more dots
-  const generateContinentDots = () => {
-    const dots: { x: number; y: number; continent: string }[] = [];
-    
-    // North America - more dense outline
-    const northAmerica = [
-      [12,15],[14,14],[16,13],[18,14],[20,15],[22,14],[24,15],[26,16],
-      [10,18],[12,20],[14,22],[16,21],[18,23],[20,22],[22,24],[24,23],
-      [12,25],[14,27],[16,26],[18,28],[20,27],[22,29],[24,28],
-      [14,30],[16,32],[18,31],[20,33],[22,32],
-    ];
-    northAmerica.forEach(([x, y]) => dots.push({ x, y, continent: 'na' }));
-    
-    // South America
-    const southAmerica = [
-      [24,38],[26,40],[28,42],[27,44],[26,46],[25,48],[24,50],
-      [22,40],[23,42],[24,44],[23,46],[22,48],
-      [26,38],[28,40],[29,42],[28,44],[27,46],
-    ];
-    southAmerica.forEach(([x, y]) => dots.push({ x, y, continent: 'sa' }));
-    
-    // Europe - dense cluster
-    const europe = [
-      [45,16],[47,15],[49,14],[51,15],[53,14],
-      [44,18],[46,17],[48,18],[50,17],[52,18],[54,17],
-      [45,20],[47,19],[49,20],[51,19],[53,20],[55,19],
-      [46,22],[48,21],[50,22],[52,21],[54,22],
-      [47,24],[49,23],[51,24],[53,23],
-    ];
-    europe.forEach(([x, y]) => dots.push({ x, y, continent: 'eu' }));
-    
-    // Africa
-    const africa = [
-      [48,28],[50,27],[52,28],[54,27],
-      [47,30],[49,31],[51,30],[53,31],[55,30],
-      [48,33],[50,34],[52,33],[54,34],
-      [49,36],[51,37],[53,36],
-      [50,39],[52,40],[51,42],
-    ];
-    africa.forEach(([x, y]) => dots.push({ x, y, continent: 'af' }));
-    
-    // Asia - large area
-    const asia = [
-      [58,14],[60,13],[62,14],[64,13],[66,14],[68,13],[70,14],[72,13],
-      [56,17],[58,16],[60,17],[62,16],[64,17],[66,16],[68,17],[70,16],[72,17],[74,16],
-      [58,19],[60,20],[62,19],[64,20],[66,19],[68,20],[70,19],[72,20],[74,19],[76,20],
-      [60,22],[62,23],[64,22],[66,23],[68,22],[70,23],[72,22],[74,23],
-      [62,25],[64,26],[66,25],[68,26],[70,25],[72,26],
-      [64,28],[66,29],[68,28],[70,29],
-      [78,28],[80,29],[82,30],[84,29], // Southeast Asia
-    ];
-    asia.forEach(([x, y]) => dots.push({ x, y, continent: 'as' }));
-    
-    // Australia
-    const australia = [
-      [80,40],[82,39],[84,40],[86,39],[88,40],
-      [81,42],[83,43],[85,42],[87,43],
-      [82,45],[84,46],[86,45],
-    ];
-    australia.forEach(([x, y]) => dots.push({ x, y, continent: 'au' }));
-    
-    return dots;
-  };
-
-  const continentDots = generateContinentDots();
-
   return (
-    <div className="relative w-full aspect-[2/1] min-h-[300px] rounded-xl border border-primary/20 bg-[#030303] overflow-hidden">
-      {/* Gradient Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.5) 100%)',
-        }}
-      />
-
+    <div className="relative w-full aspect-[2.5/1] min-h-[280px] rounded-xl border border-primary/20 bg-[#0a0a0a] overflow-hidden">
       {/* Grid Background */}
       <div 
         className="absolute inset-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(204, 255, 0, 0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(204, 255, 0, 0.04) 1px, transparent 1px)
+            linear-gradient(rgba(204, 255, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(204, 255, 0, 0.03) 1px, transparent 1px)
           `,
-          backgroundSize: '30px 30px',
+          backgroundSize: '40px 40px',
         }}
       />
 
-      {/* World Map Dots - SVG */}
+      {/* SVG Map */}
       <svg 
         className="absolute inset-0 w-full h-full" 
-        viewBox="0 0 100 55" 
-        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 100 50" 
+        preserveAspectRatio="xMidYMid slice"
       >
-        {/* Continent outline dots */}
-        {continentDots.map((dot, i) => (
-          <circle 
-            key={`dot-${i}`} 
-            cx={dot.x} 
-            cy={dot.y} 
-            r="0.6" 
-            fill="rgba(204, 255, 0, 0.25)"
-          />
-        ))}
-        
-        {/* Connection paths between nodes with data flow animation */}
         <defs>
-          {/* Gradient for data packets */}
-          <linearGradient id="dataFlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(204, 255, 0, 0)" />
-            <stop offset="40%" stopColor="rgba(204, 255, 0, 0.8)" />
-            <stop offset="50%" stopColor="rgba(204, 255, 0, 1)" />
-            <stop offset="60%" stopColor="rgba(204, 255, 0, 0.8)" />
-            <stop offset="100%" stopColor="rgba(204, 255, 0, 0)" />
-          </linearGradient>
-          
-          <linearGradient id="dataFlowOrange" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(255, 153, 0, 0)" />
-            <stop offset="40%" stopColor="rgba(255, 153, 0, 0.8)" />
-            <stop offset="50%" stopColor="rgba(255, 153, 0, 1)" />
-            <stop offset="60%" stopColor="rgba(255, 153, 0, 0.8)" />
-            <stop offset="100%" stopColor="rgba(255, 153, 0, 0)" />
-          </linearGradient>
-          
-          {/* Glow filter - enhanced for firefly effect */}
-          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.2" result="coloredBlur"/>
-            <feFlood floodColor="rgba(204, 255, 0, 0.8)" result="glowColor"/>
-            <feComposite in="glowColor" in2="coloredBlur" operator="in" result="softGlow"/>
+          {/* Glow filters */}
+          <filter id="glowGreen" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+            <feFlood floodColor="rgba(204, 255, 0, 0.9)" result="color"/>
+            <feComposite in="color" in2="blur" operator="in" result="glow"/>
             <feMerge>
-              <feMergeNode in="softGlow"/>
-              <feMergeNode in="softGlow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          
-          <filter id="glowOrange" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.2" result="coloredBlur"/>
-            <feFlood floodColor="rgba(255, 153, 0, 0.8)" result="glowColor"/>
-            <feComposite in="glowColor" in2="coloredBlur" operator="in" result="softGlow"/>
+          <filter id="glowOrangeNew" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.2" result="blur"/>
+            <feFlood floodColor="rgba(255, 153, 0, 0.9)" result="color"/>
+            <feComposite in="color" in2="blur" operator="in" result="glow"/>
             <feMerge>
-              <feMergeNode in="softGlow"/>
-              <feMergeNode in="softGlow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
         </defs>
-        
-        {/* Static connection lines */}
-        <g stroke="rgba(204, 255, 0, 0.15)" strokeWidth="0.2" fill="none">
-          {/* Amsterdam - Frankfurt */}
-          <path id="path-nl-de1" d="M 48 20 Q 49 20.5 50 21" />
-          {/* Frankfurt - Munich */}
-          <path id="path-de1-de2" d="M 50 21 Q 50.5 21.5 51 22" />
-          {/* Munich - Helsinki */}
-          <path id="path-de2-fi" d="M 51 22 Q 52 19 53 16" />
-          {/* Amsterdam - New York */}
-          <path id="path-nl-us" d="M 48 20 Q 35 22 22 24" />
-          {/* Munich - Singapore */}
-          <path id="path-de2-sg" d="M 51 22 Q 65 28 78 34" />
-          {/* Frankfurt - Helsinki */}
-          <path id="path-de1-fi" d="M 50 21 Q 51.5 18.5 53 16" />
+
+        {/* Continent dots - North America */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          {/* Alaska */}
+          <circle cx="8" cy="10" r="0.5"/><circle cx="10" cy="9" r="0.5"/><circle cx="12" cy="10" r="0.5"/>
+          {/* Canada */}
+          <circle cx="14" cy="10" r="0.5"/><circle cx="16" cy="9" r="0.5"/><circle cx="18" cy="10" r="0.5"/>
+          <circle cx="20" cy="9" r="0.5"/><circle cx="22" cy="10" r="0.5"/><circle cx="24" cy="9" r="0.5"/>
+          <circle cx="26" cy="10" r="0.5"/><circle cx="28" cy="11" r="0.5"/>
+          <circle cx="14" cy="12" r="0.5"/><circle cx="16" cy="13" r="0.5"/><circle cx="18" cy="12" r="0.5"/>
+          <circle cx="20" cy="13" r="0.5"/><circle cx="22" cy="12" r="0.5"/><circle cx="24" cy="13" r="0.5"/>
+          {/* USA */}
+          <circle cx="14" cy="16" r="0.5"/><circle cx="16" cy="17" r="0.5"/><circle cx="18" cy="16" r="0.5"/>
+          <circle cx="20" cy="17" r="0.5"/><circle cx="22" cy="18" r="0.5"/><circle cx="24" cy="19" r="0.5"/>
+          <circle cx="26" cy="20" r="0.5"/><circle cx="28" cy="21" r="0.5"/>
+          <circle cx="14" cy="20" r="0.5"/><circle cx="16" cy="21" r="0.5"/><circle cx="18" cy="22" r="0.5"/>
+          <circle cx="20" cy="23" r="0.5"/><circle cx="22" cy="22" r="0.5"/>
+          {/* Mexico */}
+          <circle cx="16" cy="25" r="0.5"/><circle cx="18" cy="26" r="0.5"/><circle cx="20" cy="27" r="0.5"/>
+          <circle cx="18" cy="28" r="0.5"/>
         </g>
-        
-        {/* Animated data packets - firefly effect */}
-        {/* Path 1: Amsterdam to Frankfurt */}
-        <circle r="0.15" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="2s" repeatCount="indefinite">
-            <mpath href="#path-nl-de1" />
-          </animateMotion>
-          <animate attributeName="r" values="0.12;0.18;0.12" dur="0.5s" repeatCount="indefinite" />
+
+        {/* South America */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          <circle cx="26" cy="30" r="0.5"/><circle cx="28" cy="31" r="0.5"/><circle cx="30" cy="30" r="0.5"/>
+          <circle cx="28" cy="33" r="0.5"/><circle cx="30" cy="34" r="0.5"/><circle cx="32" cy="33" r="0.5"/>
+          <circle cx="28" cy="36" r="0.5"/><circle cx="30" cy="37" r="0.5"/><circle cx="32" cy="36" r="0.5"/>
+          <circle cx="28" cy="39" r="0.5"/><circle cx="30" cy="40" r="0.5"/>
+          <circle cx="28" cy="42" r="0.5"/><circle cx="30" cy="43" r="0.5"/>
+          <circle cx="28" cy="45" r="0.5"/>
+        </g>
+
+        {/* Europe */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          {/* Scandinavia */}
+          <circle cx="52" cy="8" r="0.5"/><circle cx="54" cy="9" r="0.5"/><circle cx="56" cy="8" r="0.5"/>
+          <circle cx="54" cy="11" r="0.5"/><circle cx="56" cy="12" r="0.5"/><circle cx="58" cy="11" r="0.5"/>
+          {/* UK */}
+          <circle cx="47" cy="14" r="0.5"/><circle cx="48" cy="16" r="0.5"/><circle cx="47" cy="18" r="0.5"/>
+          {/* Western Europe */}
+          <circle cx="49" cy="18" r="0.5"/><circle cx="51" cy="17" r="0.5"/><circle cx="53" cy="18" r="0.5"/>
+          <circle cx="50" cy="20" r="0.5"/><circle cx="52" cy="21" r="0.5"/><circle cx="54" cy="20" r="0.5"/>
+          <circle cx="49" cy="22" r="0.5"/><circle cx="51" cy="23" r="0.5"/><circle cx="53" cy="22" r="0.5"/>
+          {/* Eastern Europe */}
+          <circle cx="56" cy="16" r="0.5"/><circle cx="58" cy="17" r="0.5"/><circle cx="60" cy="16" r="0.5"/>
+          <circle cx="56" cy="19" r="0.5"/><circle cx="58" cy="20" r="0.5"/><circle cx="60" cy="19" r="0.5"/>
+        </g>
+
+        {/* Africa */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          <circle cx="50" cy="26" r="0.5"/><circle cx="52" cy="27" r="0.5"/><circle cx="54" cy="26" r="0.5"/>
+          <circle cx="48" cy="29" r="0.5"/><circle cx="50" cy="30" r="0.5"/><circle cx="52" cy="29" r="0.5"/>
+          <circle cx="54" cy="30" r="0.5"/><circle cx="56" cy="29" r="0.5"/>
+          <circle cx="50" cy="33" r="0.5"/><circle cx="52" cy="34" r="0.5"/><circle cx="54" cy="33" r="0.5"/>
+          <circle cx="52" cy="37" r="0.5"/><circle cx="54" cy="38" r="0.5"/>
+          <circle cx="54" cy="41" r="0.5"/>
+        </g>
+
+        {/* Asia */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          {/* Russia */}
+          <circle cx="62" cy="10" r="0.5"/><circle cx="64" cy="9" r="0.5"/><circle cx="66" cy="10" r="0.5"/>
+          <circle cx="68" cy="9" r="0.5"/><circle cx="70" cy="10" r="0.5"/><circle cx="72" cy="9" r="0.5"/>
+          <circle cx="74" cy="10" r="0.5"/><circle cx="76" cy="11" r="0.5"/><circle cx="78" cy="10" r="0.5"/>
+          <circle cx="80" cy="11" r="0.5"/><circle cx="82" cy="10" r="0.5"/><circle cx="84" cy="11" r="0.5"/>
+          {/* Middle East */}
+          <circle cx="60" cy="24" r="0.5"/><circle cx="62" cy="25" r="0.5"/><circle cx="64" cy="24" r="0.5"/>
+          <circle cx="62" cy="27" r="0.5"/><circle cx="64" cy="28" r="0.5"/>
+          {/* India */}
+          <circle cx="68" cy="26" r="0.5"/><circle cx="70" cy="27" r="0.5"/><circle cx="72" cy="26" r="0.5"/>
+          <circle cx="70" cy="30" r="0.5"/><circle cx="72" cy="31" r="0.5"/>
+          {/* China */}
+          <circle cx="74" cy="18" r="0.5"/><circle cx="76" cy="19" r="0.5"/><circle cx="78" cy="18" r="0.5"/>
+          <circle cx="80" cy="19" r="0.5"/><circle cx="82" cy="18" r="0.5"/>
+          <circle cx="76" cy="22" r="0.5"/><circle cx="78" cy="23" r="0.5"/><circle cx="80" cy="22" r="0.5"/>
+          {/* Southeast Asia */}
+          <circle cx="78" cy="30" r="0.5"/><circle cx="80" cy="31" r="0.5"/><circle cx="82" cy="30" r="0.5"/>
+          <circle cx="78" cy="34" r="0.5"/><circle cx="80" cy="35" r="0.5"/><circle cx="82" cy="34" r="0.5"/>
+          {/* Japan */}
+          <circle cx="88" cy="18" r="0.5"/><circle cx="90" cy="19" r="0.5"/><circle cx="88" cy="21" r="0.5"/>
+        </g>
+
+        {/* Australia */}
+        <g fill="rgba(204, 255, 0, 0.35)">
+          <circle cx="84" cy="40" r="0.5"/><circle cx="86" cy="39" r="0.5"/><circle cx="88" cy="40" r="0.5"/>
+          <circle cx="90" cy="39" r="0.5"/>
+          <circle cx="84" cy="43" r="0.5"/><circle cx="86" cy="44" r="0.5"/><circle cx="88" cy="43" r="0.5"/>
+          <circle cx="90" cy="44" r="0.5"/>
+          <circle cx="86" cy="47" r="0.5"/><circle cx="88" cy="46" r="0.5"/>
+        </g>
+
+        {/* Connection lines - aligned to node coordinates */}
+        <g stroke="rgba(204, 255, 0, 0.2)" strokeWidth="0.3" fill="none">
+          {/* Amsterdam (51,17) - Frankfurt (52,19) */}
+          <path id="line-1" d="M 51 17 L 52 19" />
+          {/* Frankfurt (52,19) - Munich (53,20) */}
+          <path id="line-2" d="M 52 19 L 53 20" />
+          {/* Munich (53,20) - Helsinki (56,14) */}
+          <path id="line-3" d="M 53 20 Q 54 17 56 14" />
+          {/* Amsterdam (51,17) - New York (24,22) */}
+          <path id="line-4" d="M 51 17 Q 38 18 24 22" />
+          {/* Munich (53,20) - Singapore (80,35) */}
+          <path id="line-5" d="M 53 20 Q 66 27 80 35" />
+          {/* Frankfurt (52,19) - Helsinki (56,14) */}
+          <path id="line-6" d="M 52 19 Q 54 16 56 14" />
+        </g>
+
+        {/* Animated fireflies */}
+        <circle r="0.12" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="1.5s" repeatCount="indefinite"><mpath href="#line-1" /></animateMotion>
+          <animate attributeName="r" values="0.08;0.15;0.08" dur="0.3s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 2: Frankfurt to Munich */}
-        <circle r="0.12" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.5s">
-            <mpath href="#path-de1-de2" />
-          </animateMotion>
-          <animate attributeName="r" values="0.1;0.15;0.1" dur="0.4s" repeatCount="indefinite" />
+        <circle r="0.1" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="1.2s" repeatCount="indefinite" begin="0.3s"><mpath href="#line-2" /></animateMotion>
+          <animate attributeName="r" values="0.06;0.12;0.06" dur="0.25s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 3: Munich to Helsinki */}
-        <circle r="0.15" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
-          <animateMotion dur="2.5s" repeatCount="indefinite" begin="1s">
-            <mpath href="#path-de2-fi" />
-          </animateMotion>
-          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.6s" repeatCount="indefinite" />
+        <circle r="0.12" fill="hsl(36, 100%, 50%)" filter="url(#glowOrangeNew)">
+          <animateMotion dur="2s" repeatCount="indefinite" begin="0.5s"><mpath href="#line-3" /></animateMotion>
+          <animate attributeName="r" values="0.08;0.15;0.08" dur="0.35s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 4: Amsterdam to New York */}
-        <circle r="0.18" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="4s" repeatCount="indefinite">
-            <mpath href="#path-nl-us" />
-          </animateMotion>
-          <animate attributeName="r" values="0.15;0.22;0.15" dur="0.7s" repeatCount="indefinite" />
+        <circle r="0.14" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="3s" repeatCount="indefinite"><mpath href="#line-4" /></animateMotion>
+          <animate attributeName="r" values="0.1;0.18;0.1" dur="0.4s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.14" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
-          <animateMotion dur="4s" repeatCount="indefinite" begin="2s">
-            <mpath href="#path-nl-us" />
-          </animateMotion>
-          <animate attributeName="r" values="0.1;0.18;0.1" dur="0.5s" repeatCount="indefinite" />
+        <circle r="0.12" fill="hsl(36, 100%, 50%)" filter="url(#glowOrangeNew)">
+          <animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#line-4" /></animateMotion>
+          <animate attributeName="r" values="0.08;0.14;0.08" dur="0.35s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 5: Munich to Singapore */}
-        <circle r="0.16" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="5s" repeatCount="indefinite">
-            <mpath href="#path-de2-sg" />
-          </animateMotion>
-          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.6s" repeatCount="indefinite" />
+        <circle r="0.12" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="4s" repeatCount="indefinite"><mpath href="#line-5" /></animateMotion>
+          <animate attributeName="r" values="0.08;0.15;0.08" dur="0.4s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.12" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
-          <animateMotion dur="5s" repeatCount="indefinite" begin="1.5s">
-            <mpath href="#path-de2-sg" />
-          </animateMotion>
-          <animate attributeName="r" values="0.1;0.16;0.1" dur="0.4s" repeatCount="indefinite" />
+        <circle r="0.1" fill="hsl(36, 100%, 50%)" filter="url(#glowOrangeNew)">
+          <animateMotion dur="4s" repeatCount="indefinite" begin="2s"><mpath href="#line-5" /></animateMotion>
+          <animate attributeName="r" values="0.06;0.12;0.06" dur="0.3s" repeatCount="indefinite" />
         </circle>
-        <circle r="0.1" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="5s" repeatCount="indefinite" begin="3s">
-            <mpath href="#path-de2-sg" />
-          </animateMotion>
-          <animate attributeName="r" values="0.08;0.14;0.08" dur="0.5s" repeatCount="indefinite" />
+        <circle r="0.1" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="4s" repeatCount="indefinite" begin="1s" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#line-5" /></animateMotion>
+          <animate attributeName="r" values="0.06;0.12;0.06" dur="0.35s" repeatCount="indefinite" />
         </circle>
         
-        {/* Path 6: Frankfurt to Helsinki */}
-        <circle r="0.12" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="3s" repeatCount="indefinite" begin="0.7s">
-            <mpath href="#path-de1-fi" />
-          </animateMotion>
-          <animate attributeName="r" values="0.1;0.16;0.1" dur="0.45s" repeatCount="indefinite" />
+        <circle r="0.1" fill="hsl(75, 100%, 55%)" filter="url(#glowGreen)">
+          <animateMotion dur="2.5s" repeatCount="indefinite" begin="0.8s"><mpath href="#line-6" /></animateMotion>
+          <animate attributeName="r" values="0.06;0.12;0.06" dur="0.3s" repeatCount="indefinite" />
         </circle>
-        
-        {/* Reverse direction packets */}
-        {/* New York to Amsterdam */}
-        <circle r="0.16" fill="hsl(75, 100%, 50%)" filter="url(#glow)">
-          <animateMotion dur="4s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
-            <mpath href="#path-nl-us" />
-          </animateMotion>
-          <animate attributeName="r" values="0.12;0.2;0.12" dur="0.55s" repeatCount="indefinite" />
-        </circle>
-        
-        {/* Singapore to Munich */}
-        <circle r="0.14" fill="hsl(36, 100%, 50%)" filter="url(#glowOrange)">
-          <animateMotion dur="5s" repeatCount="indefinite" begin="2.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
-            <mpath href="#path-de2-sg" />
-          </animateMotion>
-          <animate attributeName="r" values="0.1;0.18;0.1" dur="0.5s" repeatCount="indefinite" />
-        </circle>
+
+        {/* Active node markers in SVG */}
+        {mapNodes.map((node) => (
+          <g key={node.node}>
+            {/* Outer pulse */}
+            <circle cx={node.x} cy={node.y} r="1" fill="none" stroke="rgba(204, 255, 0, 0.4)" strokeWidth="0.2">
+              <animate attributeName="r" values="1;3;1" dur="2s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" />
+            </circle>
+            {/* Inner glow */}
+            <circle cx={node.x} cy={node.y} r="0.8" fill="rgba(204, 255, 0, 0.3)">
+              <animate attributeName="r" values="0.8;1.2;0.8" dur="1.5s" repeatCount="indefinite" />
+            </circle>
+            {/* Core dot */}
+            <circle cx={node.x} cy={node.y} r="0.6" fill="hsl(75, 100%, 50%)" filter="url(#glowGreen)" />
+          </g>
+        ))}
       </svg>
 
-      {/* Active Node Locations */}
-      {mapDots.map((dot) => (
-        <motion.div
-          key={dot.node}
+      {/* Interactive hover zones */}
+      {mapNodes.map((dot) => (
+        <div
+          key={`hover-${dot.node}`}
           className="absolute cursor-pointer z-10"
           style={{ 
             left: `${dot.x}%`, 
-            top: `${dot.y}%`,
+            top: `${dot.y * 2}%`,
+            width: '30px',
+            height: '30px',
             transform: 'translate(-50%, -50%)',
           }}
           onMouseEnter={() => setHoveredDot(dot.node)}
           onMouseLeave={() => setHoveredDot(null)}
         >
-          {/* Outer pulse ring */}
-          <motion.div
-            className="absolute rounded-full border border-primary/40"
-            style={{ 
-              width: '24px', 
-              height: '24px', 
-              left: '-10px', 
-              top: '-10px' 
-            }}
-            animate={{ 
-              scale: [1, 2, 1], 
-              opacity: [0.6, 0, 0.6] 
-            }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          />
-          
-          {/* Inner pulse ring */}
-          <motion.div
-            className="absolute rounded-full bg-primary/20"
-            style={{ 
-              width: '16px', 
-              height: '16px', 
-              left: '-6px', 
-              top: '-6px' 
-            }}
-            animate={{ 
-              scale: [1, 1.5, 1], 
-              opacity: [0.4, 0.1, 0.4] 
-            }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
-          />
-          
-          {/* Main Dot */}
-          <motion.div
-            className="w-3 h-3 rounded-full bg-primary relative z-10"
-            style={{ 
-              boxShadow: '0 0 20px 6px rgba(204, 255, 0, 0.6), 0 0 40px 10px rgba(204, 255, 0, 0.3)' 
-            }}
-            animate={{ 
-              scale: hoveredDot === dot.node ? 1.8 : 1,
-              boxShadow: hoveredDot === dot.node 
-                ? '0 0 30px 10px rgba(204, 255, 0, 0.8), 0 0 60px 20px rgba(204, 255, 0, 0.4)'
-                : '0 0 20px 6px rgba(204, 255, 0, 0.6), 0 0 40px 10px rgba(204, 255, 0, 0.3)'
-            }}
-            transition={{ duration: 0.2 }}
-          />
-
           {/* Tooltip */}
           {hoveredDot === dot.node && (
             <motion.div
               initial={{ opacity: 0, y: 5, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-card/95 backdrop-blur-sm border border-primary/40 whitespace-nowrap z-20"
-              style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)' }}
+              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 rounded-lg bg-card/95 backdrop-blur-sm border border-primary/40 whitespace-nowrap z-20"
+              style={{ boxShadow: '0 0 20px rgba(204, 255, 0, 0.2)' }}
             >
-              <div className="font-mono text-sm text-foreground font-bold">{dot.label}</div>
-              <div className="font-mono text-xs text-primary mt-1">PING: {dot.ping}</div>
-              <div className="font-mono text-[10px] text-muted-foreground">NODE-{dot.node}</div>
-              <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-primary/40" />
+              <div className="font-mono text-xs text-foreground font-bold">{dot.label}</div>
+              <div className="font-mono text-[10px] text-primary">PING: {dot.ping}</div>
+              <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-primary/40" />
             </motion.div>
           )}
-        </motion.div>
+        </div>
       ))}
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-primary" style={{ boxShadow: '0 0 10px rgba(204, 255, 0, 0.6)' }} />
-            <span className="font-mono text-[10px] text-muted-foreground">ACTIVE NODE</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary/30" />
-            <span className="font-mono text-[10px] text-muted-foreground">COVERAGE</span>
-          </div>
+      <div className="absolute bottom-3 left-3 flex items-center gap-4 font-mono text-[10px] text-muted-foreground">
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-primary" style={{ boxShadow: '0 0 8px rgba(204, 255, 0, 0.6)' }} />
+          <span>ACTIVE NODE</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Activity className="w-3.5 h-3.5 text-primary" />
-          <span className="font-mono text-xs text-primary font-bold">{serverNodes.length} NODES</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-primary/40" />
+          <span>COVERAGE</span>
         </div>
+      </div>
+
+      {/* Node counter */}
+      <div className="absolute bottom-3 right-3 font-mono text-xs text-primary flex items-center gap-1.5">
+        <Activity className="w-3 h-3" />
+        <span>{mapNodes.length} NODES</span>
       </div>
     </div>
   );
 };
+
 
 const Infrastructure = () => {
   return (
