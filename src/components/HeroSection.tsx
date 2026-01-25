@@ -107,7 +107,7 @@ export const HeroSection = () => {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]"
     >
-      {/* 3D Perspective Grid - Tactical HUD with Running Light Effect */}
+      {/* 3D Perspective Grid - Tactical HUD */}
       <div 
         className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{ perspective: '1000px' }}
@@ -124,38 +124,97 @@ export const HeroSection = () => {
             backgroundSize: '80px 80px',
           }}
         />
+      </div>
+      
+      {/* Electric Pulse Lines - Running in different directions */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ perspective: '1000px' }}>
+        {/* Horizontal pulses - left to right */}
+        {[20, 35, 55, 75].map((top, i) => (
+          <div
+            key={`h-pulse-${i}`}
+            className="absolute h-px left-0 right-0"
+            style={{
+              top: `${top}%`,
+              transform: 'rotateX(60deg)',
+              transformOrigin: 'center',
+            }}
+          >
+            <div 
+              className="absolute h-full w-32 animate-electric-pulse-h"
+              style={{
+                background: 'linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 1), rgba(204, 255, 0, 0.8), transparent)',
+                boxShadow: '0 0 20px 2px rgba(204, 255, 0, 0.6), 0 0 40px 4px rgba(204, 255, 0, 0.3)',
+                animationDelay: `${i * 1.5}s`,
+                animationDuration: `${3 + i * 0.5}s`,
+              }}
+            />
+          </div>
+        ))}
         
-        {/* Horizontal Running Light */}
-        <div 
-          className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%] animate-grid-pulse-h"
-          style={{
-            transform: 'rotateX(60deg)',
-            backgroundImage: `
-              linear-gradient(rgba(204, 255, 0, 0.4) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-            maskImage: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 15%, transparent 25%)',
-            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 15%, transparent 25%)',
-            maskSize: '400% 100%',
-            WebkitMaskSize: '400% 100%',
-          }}
-        />
+        {/* Horizontal pulses - right to left */}
+        {[28, 48, 68].map((top, i) => (
+          <div
+            key={`h-pulse-rev-${i}`}
+            className="absolute h-px left-0 right-0"
+            style={{
+              top: `${top}%`,
+              transform: 'rotateX(60deg)',
+              transformOrigin: 'center',
+            }}
+          >
+            <div 
+              className="absolute h-full w-24 animate-electric-pulse-h-rev"
+              style={{
+                background: 'linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.8), rgba(255, 153, 0, 1), rgba(255, 153, 0, 0.8), transparent)',
+                boxShadow: '0 0 20px 2px rgba(255, 153, 0, 0.6), 0 0 40px 4px rgba(255, 153, 0, 0.3)',
+                animationDelay: `${i * 2 + 0.5}s`,
+                animationDuration: `${4 + i * 0.3}s`,
+              }}
+            />
+          </div>
+        ))}
         
-        {/* Vertical Running Light */}
-        <div 
-          className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%] animate-grid-pulse-v"
-          style={{
-            transform: 'rotateX(60deg)',
-            backgroundImage: `
-              linear-gradient(90deg, rgba(204, 255, 0, 0.4) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-            maskImage: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 30%, transparent 50%)',
-            WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 30%, transparent 50%)',
-            maskSize: '100% 300%',
-            WebkitMaskSize: '100% 300%',
-          }}
-        />
+        {/* Vertical pulses - top to bottom */}
+        {[20, 40, 60, 80].map((left, i) => (
+          <div
+            key={`v-pulse-${i}`}
+            className="absolute w-px top-0 bottom-0"
+            style={{
+              left: `${left}%`,
+            }}
+          >
+            <div 
+              className="absolute w-full h-24 animate-electric-pulse-v"
+              style={{
+                background: 'linear-gradient(180deg, transparent, rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 1), rgba(204, 255, 0, 0.8), transparent)',
+                boxShadow: '0 0 15px 2px rgba(204, 255, 0, 0.5), 0 0 30px 4px rgba(204, 255, 0, 0.2)',
+                animationDelay: `${i * 1.2 + 0.3}s`,
+                animationDuration: `${2.5 + i * 0.4}s`,
+              }}
+            />
+          </div>
+        ))}
+        
+        {/* Vertical pulses - bottom to top */}
+        {[30, 50, 70].map((left, i) => (
+          <div
+            key={`v-pulse-rev-${i}`}
+            className="absolute w-px top-0 bottom-0"
+            style={{
+              left: `${left}%`,
+            }}
+          >
+            <div 
+              className="absolute w-full h-20 animate-electric-pulse-v-rev"
+              style={{
+                background: 'linear-gradient(180deg, transparent, rgba(255, 153, 0, 0.7), rgba(255, 153, 0, 0.9), rgba(255, 153, 0, 0.7), transparent)',
+                boxShadow: '0 0 15px 2px rgba(255, 153, 0, 0.5), 0 0 30px 4px rgba(255, 153, 0, 0.2)',
+                animationDelay: `${i * 1.8 + 1}s`,
+                animationDuration: `${3 + i * 0.5}s`,
+              }}
+            />
+          </div>
+        ))}
       </div>
 
       {/* Mouse Follow Glow */}
@@ -545,21 +604,42 @@ export const HeroSection = () => {
           animation: line-expand 0.8s ease-out forwards;
         }
         
-        /* Grid Running Light Animations */
-        @keyframes grid-pulse-h {
-          0% { mask-position: -100% 0; -webkit-mask-position: -100% 0; }
-          100% { mask-position: 200% 0; -webkit-mask-position: 200% 0; }
+        /* Electric Pulse Animations */
+        @keyframes electric-pulse-h {
+          0% { left: -15%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { left: 105%; opacity: 0; }
         }
-        @keyframes grid-pulse-v {
-          0% { mask-position: 0 -50%; -webkit-mask-position: 0 -50%; }
-          100% { mask-position: 0 150%; -webkit-mask-position: 0 150%; }
+        @keyframes electric-pulse-h-rev {
+          0% { right: -15%; left: auto; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { right: 105%; left: auto; opacity: 0; }
         }
-        .animate-grid-pulse-h {
-          animation: grid-pulse-h 4s linear infinite;
+        @keyframes electric-pulse-v {
+          0% { top: -15%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 105%; opacity: 0; }
         }
-        .animate-grid-pulse-v {
-          animation: grid-pulse-v 6s linear infinite;
-          animation-delay: 2s;
+        @keyframes electric-pulse-v-rev {
+          0% { bottom: -15%; top: auto; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { bottom: 105%; top: auto; opacity: 0; }
+        }
+        .animate-electric-pulse-h {
+          animation: electric-pulse-h 3s linear infinite;
+        }
+        .animate-electric-pulse-h-rev {
+          animation: electric-pulse-h-rev 4s linear infinite;
+        }
+        .animate-electric-pulse-v {
+          animation: electric-pulse-v 2.5s linear infinite;
+        }
+        .animate-electric-pulse-v-rev {
+          animation: electric-pulse-v-rev 3s linear infinite;
         }
         
         .perspective-1000 { perspective: 1000px; }
