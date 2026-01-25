@@ -170,11 +170,11 @@ export const VPNSection = () => {
                   </div>
                   <div>
                     {protocol.gradient === 'amnezia' ? (
-                      <div className="h-10 flex items-center">
+                      <div className="h-14 flex items-center">
                         <img 
                           src={amneziaWgLogo} 
                           alt="AmneziaWG" 
-                          className="h-8 w-auto object-contain"
+                          className="h-12 w-auto object-contain"
                         />
                       </div>
                     ) : (
