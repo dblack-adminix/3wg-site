@@ -403,14 +403,123 @@ const DotMap = () => {
           />
         ))}
         
-        {/* Connection lines between nodes */}
-        <g stroke="rgba(204, 255, 0, 0.1)" strokeWidth="0.15" fill="none">
-          <line x1="48" y1="20" x2="50" y2="21" strokeDasharray="1,1" />
-          <line x1="50" y1="21" x2="51" y2="22" strokeDasharray="1,1" />
-          <line x1="51" y1="22" x2="53" y2="16" strokeDasharray="1,1" />
-          <line x1="48" y1="20" x2="22" y2="24" strokeDasharray="1,1" />
-          <line x1="51" y1="22" x2="78" y2="34" strokeDasharray="1,1" />
+        {/* Connection paths between nodes with data flow animation */}
+        <defs>
+          {/* Gradient for data packets */}
+          <linearGradient id="dataFlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgba(204, 255, 0, 0)" />
+            <stop offset="40%" stopColor="rgba(204, 255, 0, 0.8)" />
+            <stop offset="50%" stopColor="rgba(204, 255, 0, 1)" />
+            <stop offset="60%" stopColor="rgba(204, 255, 0, 0.8)" />
+            <stop offset="100%" stopColor="rgba(204, 255, 0, 0)" />
+          </linearGradient>
+          
+          <linearGradient id="dataFlowOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgba(255, 153, 0, 0)" />
+            <stop offset="40%" stopColor="rgba(255, 153, 0, 0.8)" />
+            <stop offset="50%" stopColor="rgba(255, 153, 0, 1)" />
+            <stop offset="60%" stopColor="rgba(255, 153, 0, 0.8)" />
+            <stop offset="100%" stopColor="rgba(255, 153, 0, 0)" />
+          </linearGradient>
+          
+          {/* Glow filter */}
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="0.5" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        
+        {/* Static connection lines */}
+        <g stroke="rgba(204, 255, 0, 0.15)" strokeWidth="0.2" fill="none">
+          {/* Amsterdam - Frankfurt */}
+          <path id="path-nl-de1" d="M 48 20 Q 49 20.5 50 21" />
+          {/* Frankfurt - Munich */}
+          <path id="path-de1-de2" d="M 50 21 Q 50.5 21.5 51 22" />
+          {/* Munich - Helsinki */}
+          <path id="path-de2-fi" d="M 51 22 Q 52 19 53 16" />
+          {/* Amsterdam - New York */}
+          <path id="path-nl-us" d="M 48 20 Q 35 22 22 24" />
+          {/* Munich - Singapore */}
+          <path id="path-de2-sg" d="M 51 22 Q 65 28 78 34" />
+          {/* Frankfurt - Helsinki */}
+          <path id="path-de1-fi" d="M 50 21 Q 51.5 18.5 53 16" />
         </g>
+        
+        {/* Animated data packets */}
+        {/* Path 1: Amsterdam to Frankfurt */}
+        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="2s" repeatCount="indefinite">
+            <mpath href="#path-nl-de1" />
+          </animateMotion>
+        </circle>
+        
+        {/* Path 2: Frankfurt to Munich */}
+        <circle r="0.6" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="1.5s" repeatCount="indefinite" begin="0.5s">
+            <mpath href="#path-de1-de2" />
+          </animateMotion>
+        </circle>
+        
+        {/* Path 3: Munich to Helsinki */}
+        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+          <animateMotion dur="2.5s" repeatCount="indefinite" begin="1s">
+            <mpath href="#path-de2-fi" />
+          </animateMotion>
+        </circle>
+        
+        {/* Path 4: Amsterdam to New York - larger packet for transatlantic */}
+        <circle r="1" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="4s" repeatCount="indefinite">
+            <mpath href="#path-nl-us" />
+          </animateMotion>
+        </circle>
+        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+          <animateMotion dur="4s" repeatCount="indefinite" begin="2s">
+            <mpath href="#path-nl-us" />
+          </animateMotion>
+        </circle>
+        
+        {/* Path 5: Munich to Singapore - multiple packets */}
+        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="5s" repeatCount="indefinite">
+            <mpath href="#path-de2-sg" />
+          </animateMotion>
+        </circle>
+        <circle r="0.6" fill="url(#dataFlowOrange)" filter="url(#glow)">
+          <animateMotion dur="5s" repeatCount="indefinite" begin="1.5s">
+            <mpath href="#path-de2-sg" />
+          </animateMotion>
+        </circle>
+        <circle r="0.5" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="5s" repeatCount="indefinite" begin="3s">
+            <mpath href="#path-de2-sg" />
+          </animateMotion>
+        </circle>
+        
+        {/* Path 6: Frankfurt to Helsinki */}
+        <circle r="0.6" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="3s" repeatCount="indefinite" begin="0.7s">
+            <mpath href="#path-de1-fi" />
+          </animateMotion>
+        </circle>
+        
+        {/* Reverse direction packets */}
+        {/* New York to Amsterdam */}
+        <circle r="0.8" fill="url(#dataFlowGradient)" filter="url(#glow)">
+          <animateMotion dur="4s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+            <mpath href="#path-nl-us" />
+          </animateMotion>
+        </circle>
+        
+        {/* Singapore to Munich */}
+        <circle r="0.7" fill="url(#dataFlowOrange)" filter="url(#glow)">
+          <animateMotion dur="5s" repeatCount="indefinite" begin="2.5s" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+            <mpath href="#path-de2-sg" />
+          </animateMotion>
+        </circle>
       </svg>
 
       {/* Active Node Locations */}
