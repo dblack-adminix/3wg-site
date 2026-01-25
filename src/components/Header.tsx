@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Cpu, Shield, Server, Router, HelpCircle, Rocket, User, DollarSign, Building2 } from 'lucide-react';
+import { Menu, X, Cpu, Shield, Server, Router, HelpCircle, Rocket, User, DollarSign, Building2, Box } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
   { label: 'Главная', href: '/', icon: null },
   { label: 'Тарифы', href: '/pricing', icon: DollarSign },
+  { label: 'NODE-1', href: '/node-1', icon: Box },
   { label: 'Hardware', href: '/hardware', icon: Router },
   { label: 'Инфраструктура', href: '/infrastructure', icon: Building2 },
   { label: 'FAQ', href: '/faq', icon: HelpCircle },

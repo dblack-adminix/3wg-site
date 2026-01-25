@@ -11,6 +11,7 @@ import Infrastructure from "./pages/Infrastructure";
 import FAQ from "./pages/FAQ";
 import AmneziaWG from "./pages/AmneziaWG";
 import Dashboard from "./pages/Dashboard";
+import Node1 from "./pages/Node1";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/node-1" element={<Node1 />} />
         <Route path="/hardware" element={<Hardware />} />
         <Route path="/infrastructure" element={<Infrastructure />} />
         <Route path="/faq" element={<FAQ />} />
