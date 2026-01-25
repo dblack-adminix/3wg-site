@@ -129,7 +129,7 @@ export const HeroSection = () => {
       {/* Electric Pulse Lines - Running in different directions */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ perspective: '1000px' }}>
         {/* Horizontal pulses - left to right */}
-        {[20, 35, 55, 75].map((top, i) => (
+        {[30, 60].map((top, i) => (
           <div
             key={`h-pulse-${i}`}
             className="absolute h-px left-0 right-0"
@@ -140,81 +140,71 @@ export const HeroSection = () => {
             }}
           >
             <div 
-              className="absolute h-full w-32 animate-electric-pulse-h"
+              className="absolute h-full w-16 animate-electric-pulse-h"
               style={{
-                background: 'linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 1), rgba(204, 255, 0, 0.8), transparent)',
-                boxShadow: '0 0 20px 2px rgba(204, 255, 0, 0.6), 0 0 40px 4px rgba(204, 255, 0, 0.3)',
-                animationDelay: `${i * 1.5}s`,
-                animationDuration: `${3 + i * 0.5}s`,
+                background: 'linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.6), rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 0.6), transparent)',
+                boxShadow: '0 0 10px 1px rgba(204, 255, 0, 0.4)',
+                animationDelay: `${i * 2}s`,
+                animationDuration: `${4 + i}s`,
               }}
             />
           </div>
         ))}
         
-        {/* Horizontal pulses - right to left */}
-        {[28, 48, 68].map((top, i) => (
-          <div
-            key={`h-pulse-rev-${i}`}
-            className="absolute h-px left-0 right-0"
+        {/* Horizontal pulse - right to left */}
+        <div
+          className="absolute h-px left-0 right-0"
+          style={{
+            top: '45%',
+            transform: 'rotateX(60deg)',
+            transformOrigin: 'center',
+          }}
+        >
+          <div 
+            className="absolute h-full w-12 animate-electric-pulse-h-rev"
             style={{
-              top: `${top}%`,
-              transform: 'rotateX(60deg)',
-              transformOrigin: 'center',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.6), rgba(255, 153, 0, 0.8), rgba(255, 153, 0, 0.6), transparent)',
+              boxShadow: '0 0 10px 1px rgba(255, 153, 0, 0.4)',
+              animationDelay: '1s',
+              animationDuration: '5s',
             }}
-          >
-            <div 
-              className="absolute h-full w-24 animate-electric-pulse-h-rev"
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.8), rgba(255, 153, 0, 1), rgba(255, 153, 0, 0.8), transparent)',
-                boxShadow: '0 0 20px 2px rgba(255, 153, 0, 0.6), 0 0 40px 4px rgba(255, 153, 0, 0.3)',
-                animationDelay: `${i * 2 + 0.5}s`,
-                animationDuration: `${4 + i * 0.3}s`,
-              }}
-            />
-          </div>
-        ))}
+          />
+        </div>
         
         {/* Vertical pulses - top to bottom */}
-        {[20, 40, 60, 80].map((left, i) => (
+        {[25, 75].map((left, i) => (
           <div
             key={`v-pulse-${i}`}
             className="absolute w-px top-0 bottom-0"
-            style={{
-              left: `${left}%`,
-            }}
+            style={{ left: `${left}%` }}
           >
             <div 
-              className="absolute w-full h-24 animate-electric-pulse-v"
+              className="absolute w-full h-12 animate-electric-pulse-v"
               style={{
-                background: 'linear-gradient(180deg, transparent, rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 1), rgba(204, 255, 0, 0.8), transparent)',
-                boxShadow: '0 0 15px 2px rgba(204, 255, 0, 0.5), 0 0 30px 4px rgba(204, 255, 0, 0.2)',
-                animationDelay: `${i * 1.2 + 0.3}s`,
-                animationDuration: `${2.5 + i * 0.4}s`,
+                background: 'linear-gradient(180deg, transparent, rgba(204, 255, 0, 0.6), rgba(204, 255, 0, 0.8), rgba(204, 255, 0, 0.6), transparent)',
+                boxShadow: '0 0 8px 1px rgba(204, 255, 0, 0.3)',
+                animationDelay: `${i * 1.5 + 0.5}s`,
+                animationDuration: `${3 + i}s`,
               }}
             />
           </div>
         ))}
         
-        {/* Vertical pulses - bottom to top */}
-        {[30, 50, 70].map((left, i) => (
-          <div
-            key={`v-pulse-rev-${i}`}
-            className="absolute w-px top-0 bottom-0"
+        {/* Vertical pulse - bottom to top */}
+        <div
+          className="absolute w-px top-0 bottom-0"
+          style={{ left: '50%' }}
+        >
+          <div 
+            className="absolute w-full h-10 animate-electric-pulse-v-rev"
             style={{
-              left: `${left}%`,
+              background: 'linear-gradient(180deg, transparent, rgba(255, 153, 0, 0.5), rgba(255, 153, 0, 0.7), rgba(255, 153, 0, 0.5), transparent)',
+              boxShadow: '0 0 8px 1px rgba(255, 153, 0, 0.3)',
+              animationDelay: '2s',
+              animationDuration: '4s',
             }}
-          >
-            <div 
-              className="absolute w-full h-20 animate-electric-pulse-v-rev"
-              style={{
-                background: 'linear-gradient(180deg, transparent, rgba(255, 153, 0, 0.7), rgba(255, 153, 0, 0.9), rgba(255, 153, 0, 0.7), transparent)',
-                boxShadow: '0 0 15px 2px rgba(255, 153, 0, 0.5), 0 0 30px 4px rgba(255, 153, 0, 0.2)',
-                animationDelay: `${i * 1.8 + 1}s`,
-                animationDuration: `${3 + i * 0.5}s`,
-              }}
-            />
-          </div>
-        ))}
+          />
+        </div>
       </div>
 
       {/* Mouse Follow Glow */}
