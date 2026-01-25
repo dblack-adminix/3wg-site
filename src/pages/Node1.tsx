@@ -12,6 +12,7 @@ import {
   Zap,
   Server
 } from 'lucide-react';
+import node1Internal from '@/assets/node1-internal.jpg';
 
 const techSpecs = [
   { label: 'CPU', value: 'Custom ARM Core @ 1.8 GHz (optimized for encryption)' },
@@ -98,53 +99,45 @@ const Node1 = () => {
               </div>
             </AnimatedSection>
             
-            {/* Right: Router Visualization */}
+            {/* Right: NODE-1 3D Image */}
             <AnimatedSection delay={0.2} direction="right">
               <div className="relative flex items-center justify-center">
                 {/* Glow Effect */}
                 <div 
-                  className="absolute w-[400px] h-[400px] rounded-full opacity-40"
+                  className="absolute w-[500px] h-[500px] rounded-full opacity-50"
                   style={{
-                    background: 'radial-gradient(circle, hsl(73 100% 50% / 0.3) 0%, transparent 60%)',
-                    filter: 'blur(40px)',
+                    background: 'radial-gradient(circle, hsl(73 100% 50% / 0.25) 0%, hsl(180 100% 50% / 0.1) 40%, transparent 70%)',
+                    filter: 'blur(50px)',
                   }}
                 />
                 
-                {/* Router Body */}
-                <div className="relative w-[320px] h-[200px] bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-lg border border-zinc-700/50 shadow-2xl">
-                  {/* Top Panel */}
-                  <div className="absolute inset-x-4 top-4 h-[60px] bg-zinc-950 rounded border border-zinc-800 flex items-center px-4 gap-3">
-                    <div className="flex flex-col gap-1">
-                      <div className="w-8 h-1 bg-zinc-700 rounded" />
-                      <div className="w-6 h-1 bg-zinc-700 rounded" />
-                    </div>
-                    <div className="ml-auto flex gap-2">
-                      <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_hsl(73_100%_50%)]" />
-                      <div className="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_hsl(33_100%_50%)]" />
-                    </div>
-                  </div>
-                  
-                  {/* Brand */}
-                  <div className="absolute left-4 bottom-4">
-                    <span className="font-mono-tech text-xs text-zinc-500">3LAB</span>
-                    <span className="font-mono-tech text-xs text-primary">.NODE-1</span>
-                  </div>
-                  
-                  {/* Ports */}
-                  <div className="absolute right-4 bottom-4 flex gap-2">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-4 h-3 bg-zinc-950 rounded-sm border border-zinc-700" />
-                    ))}
-                  </div>
-                  
-                  {/* Side LED Strip */}
-                  <div 
-                    className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-20 rounded-full"
+                {/* Circuit background pattern */}
+                <div 
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(90deg, hsl(73 100% 50% / 0.1) 1px, transparent 1px),
+                      linear-gradient(hsl(73 100% 50% / 0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '30px 30px',
+                  }}
+                />
+                
+                {/* 3D Image */}
+                <div className="relative">
+                  <img 
+                    src={node1Internal} 
+                    alt="NODE-1 Internal Architecture" 
+                    className="w-full max-w-[450px] h-auto relative z-10"
                     style={{
-                      background: 'linear-gradient(180deg, hsl(73 100% 50%) 0%, hsl(33 100% 50%) 100%)',
-                      boxShadow: '0 0 15px hsl(73 100% 50% / 0.5)',
+                      filter: 'drop-shadow(0 0 30px hsl(73 100% 50% / 0.3)) drop-shadow(0 0 60px hsl(180 100% 50% / 0.2))',
                     }}
                   />
+                  
+                  {/* Label */}
+                  <div className="absolute bottom-4 left-4 font-mono-tech text-xs text-primary/80 tracking-widest">
+                    NODE-1 INTERNAL
+                  </div>
                 </div>
               </div>
             </AnimatedSection>
