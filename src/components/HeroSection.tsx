@@ -284,41 +284,32 @@ export const HeroSection = () => {
               <span className="text-sm font-medium text-primary font-mono-tech">MANIFESTO_2024</span>
             </div>
 
-            {/* Main Heading with AuthKit-style Glow */}
+            {/* Main Heading with AuthKit-style Ignite Animation */}
             <div className="relative">
-              {/* Background Glow for Text */}
+              {/* Background Glow for Text - Animated */}
               <div 
-                className="absolute -inset-8 opacity-30 blur-3xl pointer-events-none"
+                className="absolute -inset-8 blur-3xl pointer-events-none animate-text-glow-in"
                 style={{
-                  background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.3) 0%, transparent 70%)',
+                  background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.4) 0%, transparent 70%)',
                 }}
               />
               
               <h1 className="relative text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 font-['Montserrat']">
-                <span className="text-gradient-primary">3LAB.PRO</span>
-                <span className="text-foreground"> — Ваш</span>
+                <span className="text-gradient-primary animate-text-reveal" style={{ animationDelay: '0.1s' }}>3LAB.PRO</span>
+                <span className="text-foreground animate-text-reveal" style={{ animationDelay: '0.2s' }}> — Ваш</span>
                 <br />
                 <span 
-                  className="text-foreground inline-block relative"
-                  style={{
-                    textShadow: '0 0 60px rgba(204, 255, 0, 0.5), 0 0 100px rgba(204, 255, 0, 0.3), 0 0 140px rgba(204, 255, 0, 0.2)',
-                  }}
+                  className="text-foreground inline-block relative animate-text-ignite"
+                  style={{ animationDelay: '0.4s' }}
                 >
                   ЦИФРОВОЙ
-                  {/* Underline Glow */}
-                  <span 
-                    className="absolute -bottom-2 left-0 right-0 h-px"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.6), transparent)',
-                    }}
-                  />
+                  {/* Animated Underline */}
+                  <span className="absolute -bottom-2 left-0 right-0 h-px animate-line-expand" style={{ animationDelay: '0.8s' }} />
                 </span>
                 <br />
                 <span 
-                  className="text-gradient-accent inline-block"
-                  style={{
-                    textShadow: '0 0 60px rgba(255, 153, 0, 0.5), 0 0 100px rgba(255, 153, 0, 0.3)',
-                  }}
+                  className="inline-block animate-text-ignite-orange"
+                  style={{ animationDelay: '0.6s' }}
                 >
                   СУВЕРЕНИТЕТ.
                 </span>
@@ -440,6 +431,101 @@ export const HeroSection = () => {
           0%, 100% { opacity: 0.3; box-shadow: 0 0 4px 1px rgba(204, 255, 0, 0.3); }
           50% { opacity: 1; box-shadow: 0 0 12px 4px rgba(204, 255, 0, 0.8), 0 0 24px 8px rgba(204, 255, 0, 0.4); }
         }
+        
+        /* Text Ignite Animations */
+        @keyframes text-glow-in {
+          0% { opacity: 0; transform: scale(0.8); }
+          50% { opacity: 0.6; }
+          100% { opacity: 0.4; transform: scale(1); }
+        }
+        @keyframes text-reveal {
+          0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes text-ignite {
+          0% { 
+            opacity: 0; 
+            transform: translateY(20px); 
+            filter: blur(8px);
+            text-shadow: none;
+          }
+          50% { 
+            opacity: 1;
+            text-shadow: 0 0 80px rgba(204, 255, 0, 0.8), 0 0 120px rgba(204, 255, 0, 0.6), 0 0 160px rgba(204, 255, 0, 0.4);
+          }
+          100% { 
+            opacity: 1; 
+            transform: translateY(0); 
+            filter: blur(0);
+            text-shadow: 0 0 40px rgba(204, 255, 0, 0.4), 0 0 80px rgba(204, 255, 0, 0.2);
+          }
+        }
+        @keyframes text-ignite-orange {
+          0% { 
+            opacity: 0; 
+            transform: translateY(20px); 
+            filter: blur(8px);
+            text-shadow: none;
+            background: linear-gradient(90deg, #666, #888);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+          }
+          50% { 
+            opacity: 1;
+            text-shadow: 0 0 80px rgba(255, 153, 0, 0.8), 0 0 120px rgba(255, 153, 0, 0.6);
+            background: linear-gradient(90deg, #FF9900, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+          }
+          100% { 
+            opacity: 1; 
+            transform: translateY(0); 
+            filter: blur(0);
+            text-shadow: 0 0 40px rgba(255, 153, 0, 0.4), 0 0 80px rgba(255, 153, 0, 0.2);
+            background: linear-gradient(90deg, #FF9900, #FFB347, #FF9900);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+          }
+        }
+        @keyframes line-expand {
+          0% { 
+            transform: scaleX(0); 
+            opacity: 0;
+            background: linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.8), transparent);
+          }
+          50% {
+            opacity: 1;
+            background: linear-gradient(90deg, transparent, rgba(204, 255, 0, 1), transparent);
+          }
+          100% { 
+            transform: scaleX(1); 
+            opacity: 1;
+            background: linear-gradient(90deg, transparent, rgba(204, 255, 0, 0.6), transparent);
+          }
+        }
+        
+        .animate-text-glow-in {
+          animation: text-glow-in 1.5s ease-out forwards;
+        }
+        .animate-text-reveal {
+          opacity: 0;
+          animation: text-reveal 0.8s ease-out forwards;
+        }
+        .animate-text-ignite {
+          opacity: 0;
+          animation: text-ignite 1.2s ease-out forwards;
+        }
+        .animate-text-ignite-orange {
+          opacity: 0;
+          animation: text-ignite-orange 1.2s ease-out forwards;
+        }
+        .animate-line-expand {
+          transform: scaleX(0);
+          animation: line-expand 0.8s ease-out forwards;
+        }
+        
         .perspective-1000 { perspective: 1000px; }
         .rotateX-60 { transform: rotateX(60deg); }
       `}</style>
