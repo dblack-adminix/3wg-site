@@ -3,7 +3,8 @@ import { ArrowRight, Shield, Zap, Lock, Server, ExternalLink } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { OrderForm } from '@/components/OrderForm';
 import { motion } from 'framer-motion';
-
+import wireguardLogo from '@/assets/wireguard-dark.svg';
+import amneziaSymbol from '@/assets/amnezia-symbol.svg';
 // Blinking Node positions (fixed for consistency)
 const blinkingNodes = [
   { x: 15, y: 20 }, { x: 45, y: 35 }, { x: 75, y: 15 },
@@ -196,20 +197,98 @@ const ServerRack3D = () => {
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Animated Labels */}
+      {/* Animated Logo - WireGuard (Top Right) */}
       <motion.div
-        className="absolute top-[15%] right-0 font-mono text-[10px] text-primary/70 tracking-widest"
-        animate={{ opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 3, repeat: Infinity }}
+        className="absolute top-[8%] right-[-10%] flex items-center gap-2"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
       >
-        WireGuard
+        <motion.div
+          className="relative"
+          animate={{ 
+            y: [0, -5, 0],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          {/* Logo Glow */}
+          <motion.div
+            className="absolute inset-0 blur-xl pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(136, 23, 26, 0.5) 0%, transparent 70%)' }}
+            animate={{ 
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.img
+            src={wireguardLogo}
+            alt="WireGuard"
+            className="h-8 w-auto relative z-10"
+            style={{ 
+              filter: 'drop-shadow(0 0 10px rgba(136, 23, 26, 0.6))',
+            }}
+            animate={{
+              filter: [
+                'drop-shadow(0 0 8px rgba(136, 23, 26, 0.4))',
+                'drop-shadow(0 0 20px rgba(136, 23, 26, 0.8))',
+                'drop-shadow(0 0 8px rgba(136, 23, 26, 0.4))',
+              ],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </motion.div>
       </motion.div>
+
+      {/* Animated Logo - AmneziaWG (Bottom Left) */}
       <motion.div
-        className="absolute bottom-[20%] left-0 font-mono text-[10px] text-accent/70 tracking-widest"
-        animate={{ opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+        className="absolute bottom-[12%] left-[-5%] flex items-center gap-2"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.7 }}
       >
-        AmneziaWG
+        <motion.div
+          className="relative"
+          animate={{ 
+            y: [0, 5, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          {/* Logo Glow */}
+          <motion.div
+            className="absolute inset-0 blur-2xl pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(255, 153, 0, 0.5) 0%, transparent 70%)' }}
+            animate={{ 
+              scale: [1, 1.4, 1],
+              opacity: [0.4, 0.7, 0.4],
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+          />
+          <motion.img
+            src={amneziaSymbol}
+            alt="AmneziaWG"
+            className="h-14 w-auto relative z-10"
+            style={{ 
+              filter: 'drop-shadow(0 0 12px rgba(255, 153, 0, 0.6))',
+            }}
+            animate={{
+              filter: [
+                'drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
+                'drop-shadow(0 0 25px rgba(255, 153, 0, 0.9))',
+                'drop-shadow(0 0 10px rgba(255, 153, 0, 0.4))',
+              ],
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+          />
+        </motion.div>
+        <motion.span
+          className="font-mono text-xs text-accent font-semibold tracking-widest"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+        >
+          AWG
+        </motion.span>
       </motion.div>
 
       {/* Multi-layer Ambient Glows */}
