@@ -107,11 +107,12 @@ export const HeroSection = () => {
       ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]"
     >
-      {/* 3D Perspective Grid - Tactical HUD */}
+      {/* 3D Perspective Grid - Tactical HUD with Running Light Effect */}
       <div 
         className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{ perspective: '1000px' }}
       >
+        {/* Base Grid */}
         <div 
           className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%]"
           style={{
@@ -121,6 +122,38 @@ export const HeroSection = () => {
               linear-gradient(90deg, rgba(204, 255, 0, 0.05) 1px, transparent 1px)
             `,
             backgroundSize: '80px 80px',
+          }}
+        />
+        
+        {/* Horizontal Running Light */}
+        <div 
+          className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%] animate-grid-pulse-h"
+          style={{
+            transform: 'rotateX(60deg)',
+            backgroundImage: `
+              linear-gradient(rgba(204, 255, 0, 0.4) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+            maskImage: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 15%, transparent 25%)',
+            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 15%, transparent 25%)',
+            maskSize: '400% 100%',
+            WebkitMaskSize: '400% 100%',
+          }}
+        />
+        
+        {/* Vertical Running Light */}
+        <div 
+          className="absolute w-[200%] h-[200%] left-[-50%] top-[-20%] animate-grid-pulse-v"
+          style={{
+            transform: 'rotateX(60deg)',
+            backgroundImage: `
+              linear-gradient(90deg, rgba(204, 255, 0, 0.4) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+            maskImage: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 30%, transparent 50%)',
+            WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 30%, transparent 50%)',
+            maskSize: '100% 300%',
+            WebkitMaskSize: '100% 300%',
           }}
         />
       </div>
@@ -510,6 +543,23 @@ export const HeroSection = () => {
         .animate-line-expand {
           transform: scaleX(0);
           animation: line-expand 0.8s ease-out forwards;
+        }
+        
+        /* Grid Running Light Animations */
+        @keyframes grid-pulse-h {
+          0% { mask-position: -100% 0; -webkit-mask-position: -100% 0; }
+          100% { mask-position: 200% 0; -webkit-mask-position: 200% 0; }
+        }
+        @keyframes grid-pulse-v {
+          0% { mask-position: 0 -50%; -webkit-mask-position: 0 -50%; }
+          100% { mask-position: 0 150%; -webkit-mask-position: 0 150%; }
+        }
+        .animate-grid-pulse-h {
+          animation: grid-pulse-h 4s linear infinite;
+        }
+        .animate-grid-pulse-v {
+          animation: grid-pulse-v 6s linear infinite;
+          animation-delay: 2s;
         }
         
         .perspective-1000 { perspective: 1000px; }
