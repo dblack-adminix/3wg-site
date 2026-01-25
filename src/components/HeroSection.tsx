@@ -252,20 +252,6 @@ export const HeroSection = () => {
         />
       </div>
 
-      {/* X-shaped Decorative Lines */}
-      <div className="absolute inset-0 pointer-events-none z-[4] overflow-hidden">
-        {/* Left X Line */}
-        <svg className="absolute left-[15%] top-[10%] w-32 h-32 opacity-20" viewBox="0 0 100 100">
-          <line x1="0" y1="0" x2="100" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
-          <line x1="100" y1="0" x2="0" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
-        </svg>
-        {/* Right X Line */}
-        <svg className="absolute right-[15%] top-[10%] w-32 h-32 opacity-20" viewBox="0 0 100 100">
-          <line x1="0" y1="0" x2="100" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
-          <line x1="100" y1="0" x2="0" y2="100" stroke="#CCFF00" strokeWidth="0.5" />
-        </svg>
-      </div>
-
       {/* Horizontal Accent Lines */}
       <div className="absolute top-[12%] left-1/2 -translate-x-1/2 flex items-center gap-4 z-[5]">
         <div className="w-24 md:w-40 h-px bg-gradient-to-r from-transparent via-primary/40 to-primary/20" />
