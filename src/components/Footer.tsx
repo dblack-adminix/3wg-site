@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Cpu, Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer = () => {
@@ -9,13 +10,13 @@ export const Footer = () => {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-4">
-              <Cpu className="h-8 w-8 text-primary" />
+            <Link to="/" className="flex items-center gap-2 mb-4">
+              <Cpu className="h-8 w-8 text-primary drop-shadow-[0_0_10px_hsl(73_100%_50%/0.5)]" />
               <span className="text-xl font-bold font-['Montserrat']">
                 <span className="text-primary">3LAB</span>
                 <span className="text-muted-foreground">.PRO</span>
               </span>
-            </a>
+            </Link>
             <p className="text-sm text-muted-foreground mb-4">
               Профессиональная IT-инфраструктура для бизнеса любого масштаба.
             </p>
@@ -25,11 +26,16 @@ export const Footer = () => {
           <div>
             <h4 className="font-bold text-foreground mb-4 font-['Montserrat']">Сервисы</h4>
             <ul className="space-y-2">
-              {['Colocation', 'Dedicated', 'Cloud VDS', 'Network', 'Security'].map((item) => (
-                <li key={item}>
-                  <a href="#services" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    {item}
-                  </a>
+              {[
+                { label: 'VPN-серверы', href: '/pricing' },
+                { label: 'Hardware', href: '/hardware' },
+                { label: 'Colocation', href: '/infrastructure' },
+                { label: 'Dedicated', href: '/infrastructure' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -39,11 +45,16 @@ export const Footer = () => {
           <div>
             <h4 className="font-bold text-foreground mb-4 font-['Montserrat']">Компания</h4>
             <ul className="space-y-2">
-              {['О нас', 'Вакансии', 'Блог', 'Партнерам', 'SLA'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                    {item}
-                  </a>
+              {[
+                { label: 'О нас', href: '/' },
+                { label: 'FAQ', href: '/faq' },
+                { label: 'Инфраструктура', href: '/infrastructure' },
+                { label: 'SLA', href: '/faq' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link to={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -78,7 +89,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 3LAB.PRO. Все права защищены.
+            © 2024 3LAB.PRO. Свобода, подкрепленная железом.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -91,11 +102,17 @@ export const Footer = () => {
         </div>
         
         {/* Network Status */}
-        <div className="pt-4 text-center">
-          <p className="text-[10px] text-muted-foreground/60 font-mono-tech flex items-center justify-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            Network Status: All Systems Operational [99.98% Uptime]
-          </p>
+        <div className="pt-6 text-center">
+          <div className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-card/50 border border-primary/20">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary pulse-indicator" />
+              <span className="text-sm text-muted-foreground font-mono-tech">Network Status: <span className="text-primary">Online</span></span>
+            </div>
+            <span className="text-sm text-muted-foreground font-mono-tech">|</span>
+            <span className="text-sm text-muted-foreground font-mono-tech">Nodes active: <span className="text-primary">14</span></span>
+            <span className="text-sm text-muted-foreground font-mono-tech">|</span>
+            <span className="text-sm text-muted-foreground font-mono-tech">Uptime: <span className="text-primary">99.98%</span></span>
+          </div>
         </div>
       </div>
     </footer>
