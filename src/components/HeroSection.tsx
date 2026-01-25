@@ -13,7 +13,11 @@ const blinkingNodes = [
 ];
 
 // 3D Grid Server Rack Component with Advanced Effects
-const ServerRack3D = () => {
+const ServerRack3D = ({ mousePos }: { mousePos: { x: number; y: number } }) => {
+  // Calculate parallax offsets based on mouse position (center is 50,50)
+  const parallaxX = (mousePos.x - 50) / 50; // -1 to 1
+  const parallaxY = (mousePos.y - 50) / 50; // -1 to 1
+
   return (
     <div className="relative w-full max-w-lg mx-auto h-96" style={{ perspective: '1200px' }}>
       
@@ -197,20 +201,31 @@ const ServerRack3D = () => {
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Animated Logo - WireGuard (Top Right) - Behind servers */}
+      {/* Animated Logo - WireGuard (Top Right) - Behind servers with parallax */}
       <motion.div
         className="absolute top-[15%] right-[5%] z-[-1]"
         initial={{ opacity: 0, x: 40, scale: 0.8 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1,
+          x: parallaxX * 25,
+          y: parallaxY * 15,
+        }}
+        transition={{ 
+          opacity: { duration: 1, delay: 0.5 },
+          scale: { duration: 1, delay: 0.5 },
+          x: { duration: 0.3, ease: 'easeOut' },
+          y: { duration: 0.3, ease: 'easeOut' },
+        }}
       >
         <motion.div
           className="relative"
           animate={{ 
-            y: [0, -10, 0],
-            x: [0, 5, 0],
+            rotateX: parallaxY * -8,
+            rotateY: parallaxX * 8,
           }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          style={{ transformStyle: 'preserve-3d' }}
         >
           {/* Large Logo Glow */}
           <motion.div
@@ -242,20 +257,32 @@ const ServerRack3D = () => {
         </motion.div>
       </motion.div>
 
-      {/* Animated Logo - AmneziaWG (Bottom Left) - Behind servers, smaller */}
+      {/* Animated Logo - AmneziaWG (Bottom Left) - Behind servers with parallax */}
       <motion.div
         className="absolute bottom-[10%] left-[15%] z-[-1]"
         initial={{ opacity: 0, x: -40, scale: 0.8 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ duration: 1, delay: 0.7 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1,
+          x: parallaxX * -30,
+          y: parallaxY * -20,
+        }}
+        transition={{ 
+          opacity: { duration: 1, delay: 0.7 },
+          scale: { duration: 1, delay: 0.7 },
+          x: { duration: 0.4, ease: 'easeOut' },
+          y: { duration: 0.4, ease: 'easeOut' },
+        }}
       >
         <motion.div
           className="relative"
           animate={{ 
-            y: [0, 10, 0],
-            rotate: [0, 8, 0],
+            rotateX: parallaxY * 10,
+            rotateY: parallaxX * -10,
+            rotate: parallaxX * 5,
           }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          style={{ transformStyle: 'preserve-3d' }}
         >
           {/* Large Logo Glow */}
           <motion.div
@@ -673,7 +700,7 @@ export const HeroSection = () => {
 
           {/* Right - 3D Server Rack */}
           <div className="hidden lg:block">
-            <ServerRack3D />
+            <ServerRack3D mousePos={mousePos} />
           </div>
         </div>
 
