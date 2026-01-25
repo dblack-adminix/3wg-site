@@ -199,7 +199,116 @@ const Node1 = () => {
                           <feMergeNode in="SourceGraphic"/>
                         </feMerge>
                       </filter>
+                      <filter id="pulseGlow">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
                     </defs>
+                    
+                    {/* Animated pulse paths - define motion paths */}
+                    <style>
+                      {`
+                        @keyframes pulse-left-right {
+                          0% { offset-distance: 0%; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { offset-distance: 100%; opacity: 0; }
+                        }
+                        @keyframes pulse-right-left {
+                          0% { offset-distance: 100%; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { offset-distance: 0%; opacity: 0; }
+                        }
+                        @keyframes pulse-top-bottom {
+                          0% { offset-distance: 0%; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { offset-distance: 100%; opacity: 0; }
+                        }
+                        @keyframes pulse-bottom-top {
+                          0% { offset-distance: 100%; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { offset-distance: 0%; opacity: 0; }
+                        }
+                        .data-pulse-h1 {
+                          offset-path: path('M 50 100 L 120 100');
+                          animation: pulse-left-right 2s ease-in-out infinite;
+                        }
+                        .data-pulse-h2 {
+                          offset-path: path('M 280 100 L 350 100');
+                          animation: pulse-right-left 2.5s ease-in-out infinite;
+                          animation-delay: 0.5s;
+                        }
+                        .data-pulse-h3 {
+                          offset-path: path('M 50 300 L 120 300');
+                          animation: pulse-left-right 2.2s ease-in-out infinite;
+                          animation-delay: 1s;
+                        }
+                        .data-pulse-h4 {
+                          offset-path: path('M 280 300 L 350 300');
+                          animation: pulse-right-left 2.3s ease-in-out infinite;
+                          animation-delay: 0.3s;
+                        }
+                        .data-pulse-v1 {
+                          offset-path: path('M 100 50 L 100 100');
+                          animation: pulse-top-bottom 1.8s ease-in-out infinite;
+                          animation-delay: 0.2s;
+                        }
+                        .data-pulse-v2 {
+                          offset-path: path('M 150 50 L 150 120');
+                          animation: pulse-top-bottom 2.1s ease-in-out infinite;
+                          animation-delay: 0.7s;
+                        }
+                        .data-pulse-v3 {
+                          offset-path: path('M 250 50 L 250 120');
+                          animation: pulse-top-bottom 1.9s ease-in-out infinite;
+                          animation-delay: 1.2s;
+                        }
+                        .data-pulse-v4 {
+                          offset-path: path('M 100 300 L 100 350');
+                          animation: pulse-bottom-top 2s ease-in-out infinite;
+                          animation-delay: 0.4s;
+                        }
+                        .data-pulse-v5 {
+                          offset-path: path('M 150 280 L 150 350');
+                          animation: pulse-bottom-top 2.4s ease-in-out infinite;
+                          animation-delay: 0.9s;
+                        }
+                        .data-pulse-cpu-left {
+                          offset-path: path('M 95 200 L 120 200');
+                          animation: pulse-left-right 1.5s ease-in-out infinite;
+                          animation-delay: 0.6s;
+                        }
+                        .data-pulse-cpu-right {
+                          offset-path: path('M 280 200 L 305 200');
+                          animation: pulse-right-left 1.5s ease-in-out infinite;
+                          animation-delay: 0.8s;
+                        }
+                        .data-pulse-green1 {
+                          offset-path: path('M 85 330 L 120 280');
+                          animation: pulse-left-right 2.5s ease-in-out infinite;
+                          animation-delay: 0.3s;
+                        }
+                        .data-pulse-green2 {
+                          offset-path: path('M 75 210 L 95 200 L 120 200');
+                          animation: pulse-left-right 2.8s ease-in-out infinite;
+                          animation-delay: 1.1s;
+                        }
+                        @keyframes node-pulse {
+                          0%, 100% { opacity: 0.4; r: 3; }
+                          50% { opacity: 1; r: 5; }
+                        }
+                        .connection-node {
+                          animation: node-pulse 2s ease-in-out infinite;
+                        }
+                      `}
+                    </style>
                     
                     {/* Background circuit traces - Cyan */}
                     <g stroke="#00b4d8" strokeWidth="1" fill="none" opacity="0.4">
@@ -224,6 +333,23 @@ const Node1 = () => {
                       <path d="M 250 280 L 250 350" />
                       <path d="M 300 300 L 300 350" />
                     </g>
+                    
+                    {/* Animated Data Pulses - Cyan */}
+                    <circle className="data-pulse-h1" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-h2" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-h3" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-h4" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-v1" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-v2" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-v3" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-v4" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-v5" r="4" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-cpu-left" r="5" fill="#00ffff" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-cpu-right" r="5" fill="#00ffff" filter="url(#pulseGlow)" />
+                    
+                    {/* Animated Data Pulses - Green (AmneziaWG flow) */}
+                    <circle className="data-pulse-green1" r="4" fill="#CCFF00" filter="url(#pulseGlow)" />
+                    <circle className="data-pulse-green2" r="4" fill="#CCFF00" filter="url(#pulseGlow)" />
                     
                     {/* Center CPU Frame */}
                     <rect 
@@ -306,14 +432,6 @@ const Node1 = () => {
                     
                     {/* Shield Icon - Left Side (representing security) */}
                     <path 
-                      d="M 60 200 L 60 230 Q 60 250 75 260 L 60 270 L 60 200 Z" 
-                      fill="none" 
-                      stroke="#CCFF00" 
-                      strokeWidth="1.5"
-                      transform="translate(-10, -35)"
-                      filter="url(#glow)"
-                    />
-                    <path 
                       d="M 55 180 L 75 165 L 95 180 L 95 210 Q 95 230 75 245 Q 55 230 55 210 Z" 
                       fill="rgba(204,255,0,0.1)" 
                       stroke="#CCFF00" 
@@ -325,34 +443,34 @@ const Node1 = () => {
                     <rect x="40" y="310" width="90" height="30" fill="rgba(0,40,50,0.8)" stroke="#CCFF00" strokeWidth="1" rx="2" />
                     <text x="85" y="330" textAnchor="middle" fill="#CCFF00" fontSize="10" fontFamily="JetBrains Mono">AmneziaWG</text>
                     
-                    {/* Connection dots */}
+                    {/* Connection dots with pulse animation */}
                     <g fill="#00ffff" filter="url(#glow)">
-                      <circle cx="50" cy="100" r="3" />
-                      <circle cx="50" cy="150" r="3" />
-                      <circle cx="50" cy="300" r="3" />
-                      <circle cx="350" cy="100" r="3" />
-                      <circle cx="350" cy="150" r="3" />
-                      <circle cx="350" cy="300" r="3" />
-                      <circle cx="100" cy="50" r="3" />
-                      <circle cx="300" cy="50" r="3" />
-                      <circle cx="100" cy="350" r="3" />
-                      <circle cx="300" cy="350" r="3" />
+                      <circle className="connection-node" cx="50" cy="100" r="3" style={{ animationDelay: '0s' }} />
+                      <circle className="connection-node" cx="50" cy="150" r="3" style={{ animationDelay: '0.3s' }} />
+                      <circle className="connection-node" cx="50" cy="300" r="3" style={{ animationDelay: '0.6s' }} />
+                      <circle className="connection-node" cx="350" cy="100" r="3" style={{ animationDelay: '0.9s' }} />
+                      <circle className="connection-node" cx="350" cy="150" r="3" style={{ animationDelay: '1.2s' }} />
+                      <circle className="connection-node" cx="350" cy="300" r="3" style={{ animationDelay: '1.5s' }} />
+                      <circle className="connection-node" cx="100" cy="50" r="3" style={{ animationDelay: '0.2s' }} />
+                      <circle className="connection-node" cx="300" cy="50" r="3" style={{ animationDelay: '0.5s' }} />
+                      <circle className="connection-node" cx="100" cy="350" r="3" style={{ animationDelay: '0.8s' }} />
+                      <circle className="connection-node" cx="300" cy="350" r="3" style={{ animationDelay: '1.1s' }} />
                     </g>
                     
-                    {/* Data flow paths - animated glow lines */}
+                    {/* Data flow paths - static reference lines */}
                     <path 
                       d="M 85 330 L 120 280" 
                       stroke="#CCFF00" 
-                      strokeWidth="1.5" 
+                      strokeWidth="1" 
                       strokeDasharray="4 4"
-                      opacity="0.6"
+                      opacity="0.4"
                     />
                     <path 
                       d="M 75 210 L 95 200 L 120 200" 
                       stroke="#CCFF00" 
-                      strokeWidth="1.5" 
+                      strokeWidth="1" 
                       strokeDasharray="4 4"
-                      opacity="0.6"
+                      opacity="0.4"
                     />
                   </svg>
                   
