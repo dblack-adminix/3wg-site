@@ -2,7 +2,7 @@ import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -46,6 +46,57 @@ const Node1 = () => {
   const [wireGuardOn, setWireGuardOn] = useState(true);
   const [amneziaOn, setAmneziaOn] = useState(true);
   const [tiltStyle, setTiltStyle] = useState({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)' });
+  
+  // Animated network graph data
+  const [graphPoints, setGraphPoints] = useState<number[]>([40, 35, 30, 25, 20, 28, 15, 22, 18, 12, 20, 10]);
+  const [networkSpeed, setNetworkSpeed] = useState(847);
+  
+  // Generate new random point for the graph
+  const generateNewPoint = useCallback(() => {
+    return Math.floor(Math.random() * 35) + 5; // Random value between 5 and 40
+  }, []);
+  
+  // Update graph data periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGraphPoints(prev => {
+        const newPoints = [...prev.slice(1), generateNewPoint()];
+        return newPoints;
+      });
+      // Update speed with slight variation
+      setNetworkSpeed(prev => {
+        const variation = Math.floor(Math.random() * 100) - 50;
+        const newSpeed = prev + variation;
+        return Math.max(500, Math.min(950, newSpeed)); // Keep between 500-950
+      });
+    }, 800); // Update every 800ms
+    
+    return () => clearInterval(interval);
+  }, [generateNewPoint]);
+  
+  // Generate SVG path from points
+  const graphPath = useMemo(() => {
+    const width = 400;
+    const segmentWidth = width / (graphPoints.length - 1);
+    
+    let path = `M 0 ${graphPoints[0]}`;
+    
+    for (let i = 1; i < graphPoints.length; i++) {
+      const x = i * segmentWidth;
+      const y = graphPoints[i];
+      const prevX = (i - 1) * segmentWidth;
+      const prevY = graphPoints[i - 1];
+      const cpX = (prevX + x) / 2;
+      
+      path += ` Q ${cpX} ${prevY}, ${x} ${y}`;
+    }
+    
+    return path;
+  }, [graphPoints]);
+  
+  const graphFillPath = useMemo(() => {
+    return `${graphPath} L 400 48 L 0 48 Z`;
+  }, [graphPath]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -761,35 +812,84 @@ const Node1 = () => {
                     </div>
                   </div>
                   
-                  {/* Network Activity Graph */}
+                  {/* Network Activity Graph - Animated */}
                   <div className="pt-2">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-mono-tech text-xs text-muted-foreground flex items-center gap-2">
                         <Activity className="w-3 h-3" />
                         Network Activity
                       </span>
-                      <span className="font-mono-tech text-xs text-primary">847 Mbps</span>
+                      <motion.span 
+                        className="font-mono-tech text-xs text-primary"
+                        key={networkSpeed}
+                        initial={{ opacity: 0.5, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {networkSpeed} Mbps
+                      </motion.span>
                     </div>
                     
                     <div className="h-12 relative rounded overflow-hidden bg-muted/20">
-                      <svg className="w-full h-full" preserveAspectRatio="none">
+                      <svg className="w-full h-full" viewBox="0 0 400 48" preserveAspectRatio="none">
                         <defs>
                           <linearGradient id="graphGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
                             <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
                           </linearGradient>
+                          <filter id="graphGlow">
+                            <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+                            <feMerge>
+                              <feMergeNode in="coloredBlur"/>
+                              <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                          </filter>
                         </defs>
-                        <path 
-                          d="M 0 40 Q 20 35, 40 30 T 80 25 T 120 20 T 160 28 T 200 15 T 240 22 T 280 18 T 320 12 T 360 20 T 400 10" 
+                        {/* Animated fill */}
+                        <motion.path 
+                          d={graphFillPath}
+                          fill="url(#graphGrad2)"
+                          initial={false}
+                          animate={{ d: graphFillPath }}
+                          transition={{ duration: 0.5, ease: "easeInOut" }}
+                        />
+                        {/* Animated line */}
+                        <motion.path 
+                          d={graphPath}
                           fill="none" 
                           stroke="hsl(var(--primary))" 
                           strokeWidth="2"
+                          filter="url(#graphGlow)"
+                          initial={false}
+                          animate={{ d: graphPath }}
+                          transition={{ duration: 0.5, ease: "easeInOut" }}
                         />
-                        <path 
-                          d="M 0 40 Q 20 35, 40 30 T 80 25 T 120 20 T 160 28 T 200 15 T 240 22 T 280 18 T 320 12 T 360 20 T 400 10 L 400 48 L 0 48 Z" 
-                          fill="url(#graphGrad2)"
+                        {/* Current point indicator */}
+                        <motion.circle
+                          cx="400"
+                          cy={graphPoints[graphPoints.length - 1]}
+                          r="4"
+                          fill="hsl(var(--primary))"
+                          filter="url(#graphGlow)"
+                          initial={false}
+                          animate={{ 
+                            cy: graphPoints[graphPoints.length - 1],
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{ 
+                            cy: { duration: 0.5, ease: "easeInOut" },
+                            opacity: { duration: 1, repeat: Infinity }
+                          }}
                         />
                       </svg>
+                      
+                      {/* Scanline effect */}
+                      <div 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--primary) / 0.03) 2px, hsl(var(--primary) / 0.03) 4px)',
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
