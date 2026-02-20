@@ -1,7 +1,43 @@
 import { Wifi, Activity, Users, Settings, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 export const MiniAppShowcase = () => {
+  const { content } = useBlockContent('services_section', {
+    section_title: 'Управляйте сервером прямо из Telegram',
+    section_subtitle: 'Наше мини-приложение превращает мессенджер в полноценную админ-панель. Мониторинг нагрузки, управление устройствами, смена протокола — всё в одном клике.',
+    feature_1_title: 'Мониторинг в реальном времени',
+    feature_1_description: 'cpu_load • bandwidth • latency',
+    feature_2_title: 'Управление устройствами',
+    feature_2_description: 'add_device • revoke_access • qr_invite',
+    feature_3_title: 'Настройка протоколов',
+    feature_3_description: 'wireguard • amnezia • shadowsocks',
+    button_text: 'Открыть Mini App',
+    button_url: 'https://t.me/your_bot',
+  });
+
+  const features = [
+    {
+      icon: Activity,
+      title: content.feature_1_title,
+      description: content.feature_1_description,
+      color: 'primary',
+    },
+    {
+      icon: Users,
+      title: content.feature_2_title,
+      description: content.feature_2_description,
+      color: 'accent',
+    },
+    {
+      icon: Settings,
+      title: content.feature_3_title,
+      description: content.feature_3_description,
+      color: 'red',
+    },
+  ];
+
   return (
     <section id="mini-app" className="py-24 relative overflow-hidden">
       {/* Background */}
@@ -126,55 +162,52 @@ export const MiniAppShowcase = () => {
             </span>
             
             <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-6">
-              Управляйте сервером
-              <br />
-              <span className="text-gradient-primary">прямо из Telegram</span>
+              {highlightUppercase(content.section_title)}
             </h2>
             
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Наше мини-приложение превращает мессенджер в полноценную админ-панель. 
-              Мониторинг нагрузки, управление устройствами, смена протокола — всё в одном клике.
+              {highlightUppercase(content.section_subtitle)}
             </p>
             
             <div className="space-y-4 mb-8">
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-white/10">
-                <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-primary" />
+              {features.map((feature, index) => (
+                <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-white/10">
+                  <div 
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      feature.color === 'primary' 
+                        ? 'bg-primary/20' 
+                        : feature.color === 'accent'
+                        ? 'bg-accent/20'
+                        : 'bg-[#B10000]/20'
+                    }`}
+                  >
+                    <feature.icon 
+                      className={`h-5 w-5 ${
+                        feature.color === 'primary' 
+                          ? 'text-primary' 
+                          : feature.color === 'accent'
+                          ? 'text-accent'
+                          : 'text-[#FF3333]'
+                      }`}
+                    />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-semibold text-sm">{feature.title}</h4>
+                    <p className="text-xs text-muted-foreground font-mono-tech">{feature.description}</p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-sm">Мониторинг в реальном времени</h4>
-                  <p className="text-xs text-muted-foreground font-mono-tech">cpu_load • bandwidth • latency</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-white/10">
-                <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
-                  <Users className="h-5 w-5 text-accent" />
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-sm">Управление устройствами</h4>
-                  <p className="text-xs text-muted-foreground font-mono-tech">add_device • revoke_access • qr_invite</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-white/10">
-                <div className="w-10 h-10 rounded-lg bg-[#B10000]/20 flex items-center justify-center">
-                  <Settings className="h-5 w-5 text-[#FF3333]" />
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-sm">Настройка протоколов</h4>
-                  <p className="text-xs text-muted-foreground font-mono-tech">wireguard • amnezia • shadowsocks</p>
-                </div>
-              </div>
+              ))}
             </div>
             
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold group transition-all duration-300 hover:scale-105"
-            >
-              Открыть Mini App
-              <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <a href={content.button_url} target="_blank" rel="noopener noreferrer">
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold group transition-all duration-300 hover:scale-105"
+              >
+                {content.button_text}
+                <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
           </div>
         </div>
       </div>

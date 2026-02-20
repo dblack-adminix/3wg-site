@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Server, Globe, Cpu, HardDrive, Terminal, ArrowRight } from 'lucide-react';
+import { Server, Globe, Cpu, HardDrive, Terminal, ArrowRight, Zap, Shield, Wifi, Thermometer, Lock } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
@@ -251,7 +251,7 @@ const LiveTerminal = () => {
   };
 
   return (
-    <div className="rounded-xl border border-primary/20 bg-[#0a0a0a] overflow-hidden">
+    <div className="rounded-xl border border-primary/20 bg-background overflow-hidden">
       {/* Terminal Header */}
       <div className="flex items-center gap-2 px-4 py-2 border-b border-primary/20 bg-card/50">
         <Terminal className="w-4 h-4 text-primary" />
@@ -323,7 +323,7 @@ const WorldMap = () => {
   const getNodePos = (id: string) => nodes.find(n => n.id === id);
 
   return (
-    <div className="relative w-full aspect-[2.33/1] min-h-[340px] rounded-xl border border-primary/30 bg-[#080808] overflow-hidden">
+    <div className="relative w-full aspect-[2.33/1] min-h-[340px] rounded-xl border border-primary/30 bg-background overflow-hidden">
       {/* Tactical corner frames */}
       <div className="absolute top-0 left-0 w-10 h-10 border-l-2 border-t-2 border-primary/60 z-10" />
       <div className="absolute top-0 right-0 w-10 h-10 border-r-2 border-t-2 border-primary/60 z-10" />
@@ -455,7 +455,7 @@ const WorldMap = () => {
             <motion.div
               initial={{ opacity: 0, y: 5, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-[#0a0a0a]/95 backdrop-blur-sm border border-primary/50 whitespace-nowrap z-30"
+              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-4 px-4 py-3 rounded-lg bg-background/95 backdrop-blur-sm border border-primary/50 whitespace-nowrap z-30"
               style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.4)' }}
             >
               <div className="font-mono text-sm text-foreground font-bold">{node.label}</div>
@@ -480,7 +480,7 @@ const WorldMap = () => {
       </div>
 
       {/* Status overlay */}
-      <div className="absolute bottom-5 right-5 font-mono text-xs flex items-center gap-2 bg-[#0a0a0a]/90 px-4 py-2 rounded border border-primary/40 z-10">
+      <div className="absolute bottom-5 right-5 font-mono text-xs flex items-center gap-2 bg-background/90 px-4 py-2 rounded border border-primary/40 z-10">
         <span className="text-primary font-bold">{nodes.length} NODES ACTIVE</span>
         <span className="text-muted-foreground">/</span>
         <span className="text-primary">GLOBAL COVERAGE INITIATED</span>
@@ -511,7 +511,7 @@ const Infrastructure = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden bg-[#080808]">
+      <section className="pt-32 pb-16 relative overflow-hidden bg-background">
         {/* Grid Background */}
         <div 
           className="absolute inset-0"
@@ -547,8 +547,143 @@ const Infrastructure = () => {
         </div>
       </section>
 
+      {/* Tier III Infrastructure Section */}
+      <section className="py-24 pb-32 relative overflow-hidden bg-background">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-muted/20 via-transparent to-muted/20" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+            {/* Left Content */}
+            <AnimatedSection>
+              <div>
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-accent/30 bg-accent/5 text-accent text-sm font-medium mb-4">
+                  <Server className="h-4 w-4" />
+                  Дата-центр
+                </span>
+                <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-6">
+                  Инфраструктура <span className="text-gradient-accent">Tier III.</span>
+                </h2>
+                <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
+                  Бесперебойное питание, охрана 24/7 и каналы связи с резервированием.
+                </p>
+                <p className="text-xl text-foreground font-medium mb-8 border-l-4 border-accent pl-4">
+                  Размещайте проекты там, где о них заботятся.
+                </p>
+
+                {/* Features Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    {
+                      icon: Zap,
+                      title: '2N Питание',
+                      description: 'Бесперебойное электроснабжение с полным резервированием',
+                    },
+                    {
+                      icon: Shield,
+                      title: 'Охрана 24/7',
+                      description: 'Биометрический контроль доступа и видеонаблюдение',
+                    },
+                    {
+                      icon: Wifi,
+                      title: 'Резервные каналы',
+                      description: 'Множественные магистральные каналы с автопереключением',
+                    },
+                    {
+                      icon: Thermometer,
+                      title: 'Климат N+1',
+                      description: 'Прецизионное охлаждение с резервированием',
+                    },
+                    {
+                      icon: Lock,
+                      title: 'Физическая защита',
+                      description: 'Клетки Фарадея и защита от проникновения',
+                    },
+                    {
+                      icon: Cpu,
+                      title: 'DCIM мониторинг',
+                      description: 'Контроль всех параметров в реальном времени',
+                    },
+                  ].map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-start gap-3 p-4 rounded-xl border border-border bg-card/50 hover:border-accent/30 transition-all duration-300 group"
+                    >
+                      <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                        <feature.icon className="h-5 w-5 text-accent" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">{feature.title}</h4>
+                        <p className="text-xs text-muted-foreground">{feature.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
+
+            {/* Right Visual - Server Rack */}
+            <AnimatedSection delay={0.2}>
+              <div className="relative">
+                {/* Decorative Elements */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-3xl blur-3xl opacity-30" />
+                
+                <div className="relative rounded-2xl border border-border bg-card/80 backdrop-blur-sm p-6 overflow-hidden">
+                  {/* Grid Pattern */}
+                  <div 
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage: `
+                        linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(204, 255, 0, 0.1) 1px, transparent 1px)
+                      `,
+                      backgroundSize: '20px 20px',
+                    }}
+                  />
+                  
+                  {/* Server Rack Visualization */}
+                  <div className="relative z-10 space-y-2">
+                    {[...Array(8)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        viewport={{ once: true }}
+                        className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 border border-border group hover:border-primary/30 transition-all"
+                      >
+                        <div className="flex gap-1">
+                          <div className={`w-1.5 h-1.5 rounded-full ${i < 7 ? 'bg-primary pulse-indicator' : 'bg-muted-foreground'}`} />
+                          <div className={`w-1.5 h-1.5 rounded-full ${i < 7 ? 'bg-primary' : 'bg-muted-foreground'}`} />
+                        </div>
+                        <div className="flex-1 h-1.5 bg-muted rounded overflow-hidden">
+                          <motion.div 
+                            className="h-full bg-gradient-to-r from-primary to-accent"
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${Math.random() * 40 + 40}%` }}
+                            transition={{ delay: i * 0.1 + 0.5, duration: 1 }}
+                            viewport={{ once: true }}
+                          />
+                        </div>
+                        <span className="font-mono text-[9px] text-muted-foreground">
+                          SRV-{i + 1}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
       {/* Interactive World Map */}
-      <section className="py-12 relative bg-[#080808]">
+      <section className="py-12 relative bg-background">
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="max-w-6xl mx-auto">
@@ -568,7 +703,7 @@ const Infrastructure = () => {
       </section>
 
       {/* Main Content: Server Grid + Terminal */}
-      <section className="py-16 relative bg-[#080808]">
+      <section className="py-16 relative bg-background">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {/* Server Nodes Grid */}
@@ -609,7 +744,7 @@ const Infrastructure = () => {
       </section>
 
       {/* Hardware Specs Link Block */}
-      <section className="py-16 relative bg-[#080808]">
+      <section className="py-16 relative bg-background">
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <motion.div 
@@ -651,7 +786,7 @@ const Infrastructure = () => {
       </section>
 
       {/* Stats Footer */}
-      <section className="py-16 relative bg-[#080808] border-t border-primary/10">
+      <section className="py-16 relative bg-background border-t border-primary/10">
         <div className="container mx-auto px-4">
           <AnimatedSection>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">

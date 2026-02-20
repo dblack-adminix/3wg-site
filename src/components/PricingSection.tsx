@@ -1,80 +1,150 @@
 import { Check, ArrowRight, User, Home, Users, Sparkles, Router, Wifi, Tv, Gamepad2, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const plans = [
-  {
-    icon: User,
-    name: 'SOLO',
-    subtitle: 'Личный сервер',
-    price: '300',
-    period: '/мес',
-    description: 'Для тех, кому нужна приватность в кармане.',
-    features: [
-      { value: 'до 3-х устройств' },
-      { value: 'WireGuard' },
-      { value: 'Выделенный IP' },
-      { value: 'Работа с зарубежными банками' },
-      { value: 'Базовая поддержка (тикеты)' },
-    ],
-    accent: false,
-    gradient: 'wireguard',
-  },
-  {
-    icon: Home,
-    name: 'FAMILY',
-    subtitle: 'Семейный сервер',
-    price: '650',
-    period: '/мес',
-    description: 'Один сервер на весь дом. Никакой платы за каждого члена семьи.',
-    features: [
-      { value: 'до 10 устройств + Smart TV' },
-      { value: 'AmneziaWG + WireGuard' },
-      { value: 'Обход блокировок DPI' },
-      { value: 'Настройка на роутер' },
-      { value: 'Приоритетная поддержка' },
-    ],
-    accent: true,
-    badge: 'ХИТ',
-    gradient: 'primary',
-  },
-  {
-    icon: Users,
-    name: 'COMMUNITY',
-    subtitle: 'Для своих',
-    price: '1200',
-    period: '/мес',
-    description: 'Свой узел связи для компании друзей или малого офиса.',
-    features: [
-      { value: 'до 25 устройств' },
-      { value: 'Amnezia + WireGuard + SS' },
-      { value: 'Усиленный CPU' },
-      { value: '4K стриминг, игры без лагов' },
-      { value: 'Персональный инженер' },
-    ],
-    accent: false,
-    gradient: 'amnezia',
-  },
-];
-
-const hardwarePlan = {
-  icon: Router,
-  name: 'HARDWARE',
-  subtitle: 'Готовый роутер',
-  price: '1500',
-  period: '/мес',
-  priceNote: '+ оборудование',
-  description: 'VPN на уровне всей домашней сети. Просто включите роутер в розетку.',
-  features: [
-    { icon: Wifi, value: 'VPN на уровне Wi-Fi сети' },
-    { icon: Package, value: 'Plug & Play: Включил и работает' },
-    { icon: Tv, value: 'Поддержка 4K стриминга на ТВ' },
-    { icon: Gamepad2, value: 'Обход блокировок для PS5/Xbox' },
-  ],
-  gradient: 'hardware',
-  badge: 'PREMIUM',
-};
+import { Link } from 'react-router-dom';
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 export const PricingSection = () => {
+  const { content } = useBlockContent('pricing_section', {
+    section_title: 'Тарифная сетка 3LAB',
+    section_subtitle: 'Личный виртуальный сервер — вы владеете ресурсами, а не делите их с тысячами пользователей.',
+    
+    solo_name: 'SOLO',
+    solo_subtitle: 'Личный сервер',
+    solo_price: '300',
+    solo_description: 'Для тех, кому нужна приватность в кармане.',
+    solo_feature_1: 'до 3-х устройств',
+    solo_feature_2: 'WireGuard',
+    solo_feature_3: 'Выделенный IP',
+    solo_feature_4: 'Работа с зарубежными банками',
+    solo_feature_5: 'Базовая поддержка (тикеты)',
+    solo_button: 'Купить',
+    solo_button_url: '/generator',
+    
+    family_name: 'FAMILY',
+    family_subtitle: 'Семейный сервер',
+    family_price: '650',
+    family_description: 'Один сервер на весь дом. Никакой платы за каждого члена семьи.',
+    family_feature_1: 'до 10 устройств + Smart TV',
+    family_feature_2: 'AmneziaWG + WireGuard',
+    family_feature_3: 'Обход блокировок DPI',
+    family_feature_4: 'Настройка на роутер',
+    family_feature_5: 'Приоритетная поддержка',
+    family_button: 'Купить',
+    family_button_url: '/generator',
+    
+    community_name: 'COMMUNITY',
+    community_subtitle: 'Для своих',
+    community_price: '1200',
+    community_description: 'Свой узел связи для компании друзей или малого офиса.',
+    community_feature_1: 'до 25 устройств',
+    community_feature_2: 'Amnezia + WireGuard + SS',
+    community_feature_3: 'Усиленный CPU',
+    community_feature_4: '4K стриминг, игры без лагов',
+    community_feature_5: 'Персональный инженер',
+    community_button: 'Купить',
+    community_button_url: '/generator',
+    
+    hardware_name: 'HARDWARE',
+    hardware_subtitle: 'Готовый роутер',
+    hardware_price: '1500',
+    hardware_price_note: '+ оборудование',
+    hardware_description: 'VPN на уровне всей домашней сети. Просто включите роутер в розетку.',
+    hardware_feature_1: 'VPN на уровне Wi-Fi сети',
+    hardware_feature_2: 'Plug & Play: Включил и работает',
+    hardware_feature_3: 'Поддержка 4K стриминга на ТВ',
+    hardware_feature_4: 'Обход блокировок для PS5/Xbox',
+    hardware_button: 'Заказать комплект',
+    hardware_button_url: '/generator',
+    
+    router_article_title: 'Забудьте про настройку VPN на каждом устройстве',
+    router_article_text: 'Устали объяснять бабушке, как включать VPN на планшете, или воевать с телевизором, который не открывает YouTube? Тариф 3LAB HARDWARE решает это раз и навсегда. Мы берём надёжный роутер, прошиваем его нашими алгоритмами и привозим вам. Весь трафик внутри вашего дома автоматически шифруется и проходит через ваш личный сервер в нашем дата-центре. Это максимально безопасный и удобный способ вернуть привычный интернет в каждую комнату.',
+    
+    why_better_title: 'Почему наши тарифы выгоднее?',
+    why_better_text: 'В обычном VPN вы платите за каждый аккаунт отдельно. В 3LAB вы арендуете мощность сервера. Это как аренда квартиры: сколько людей там будет жить — решать вам. Мы не ограничиваем количество девайсов технически, мы подбираем мощность сервера так, чтобы всем было комфортно.',
+  });
+
+  const plans = [
+    {
+      icon: User,
+      name: content.solo_name,
+      subtitle: content.solo_subtitle,
+      price: content.solo_price,
+      period: '/мес',
+      description: content.solo_description,
+      features: [
+        { value: content.solo_feature_1 },
+        { value: content.solo_feature_2 },
+        { value: content.solo_feature_3 },
+        { value: content.solo_feature_4 },
+        { value: content.solo_feature_5 },
+      ],
+      button: content.solo_button,
+      buttonUrl: content.solo_button_url || '/generator',
+      accent: false,
+      gradient: 'wireguard',
+    },
+    {
+      icon: Home,
+      name: content.family_name,
+      subtitle: content.family_subtitle,
+      price: content.family_price,
+      period: '/мес',
+      description: content.family_description,
+      features: [
+        { value: content.family_feature_1 },
+        { value: content.family_feature_2 },
+        { value: content.family_feature_3 },
+        { value: content.family_feature_4 },
+        { value: content.family_feature_5 },
+      ],
+      button: content.family_button,
+      buttonUrl: content.family_button_url || '/generator',
+      accent: true,
+      badge: 'ХИТ',
+      gradient: 'primary',
+    },
+    {
+      icon: Users,
+      name: content.community_name,
+      subtitle: content.community_subtitle,
+      price: content.community_price,
+      period: '/мес',
+      description: content.community_description,
+      features: [
+        { value: content.community_feature_1 },
+        { value: content.community_feature_2 },
+        { value: content.community_feature_3 },
+        { value: content.community_feature_4 },
+        { value: content.community_feature_5 },
+      ],
+      button: content.community_button,
+      buttonUrl: content.community_button_url || '/generator',
+      accent: false,
+      gradient: 'amnezia',
+    },
+  ];
+
+  const hardwarePlan = {
+    icon: Router,
+    name: content.hardware_name,
+    subtitle: content.hardware_subtitle,
+    price: content.hardware_price,
+    period: '/мес',
+    priceNote: content.hardware_price_note,
+    description: content.hardware_description,
+    features: [
+      { icon: Wifi, value: content.hardware_feature_1 },
+      { icon: Package, value: content.hardware_feature_2 },
+      { icon: Tv, value: content.hardware_feature_3 },
+      { icon: Gamepad2, value: content.hardware_feature_4 },
+    ],
+    button: content.hardware_button,
+    buttonUrl: content.hardware_button_url || '/generator',
+    gradient: 'hardware',
+    badge: 'PREMIUM',
+  };
+
   return (
     <section id="pricing" className="py-24 relative">
       <div className="absolute inset-0 cyber-grid opacity-30" />
@@ -86,10 +156,12 @@ export const PricingSection = () => {
             <span className="font-mono-tech text-xs">PRICING_GRID</span>
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
-            Тарифная сетка <span className="text-gradient-primary">3LAB</span>
+            {content.section_title?.split('3LAB')[0]}
+            <span className="text-gradient-primary">3LAB</span>
+            {content.section_title?.split('3LAB')[1]}
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Личный виртуальный сервер — вы владеете ресурсами, а не делите их с тысячами пользователей.
+            {content.section_subtitle}
           </p>
         </div>
 
@@ -213,18 +285,20 @@ export const PricingSection = () => {
                 </div>
 
                 {/* CTA */}
-                <Button
-                  className={`w-full font-semibold transition-all duration-300 text-base py-6 ${
-                    plan.gradient === 'amnezia'
-                      ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30 hover:shadow-accent/50'
-                      : plan.gradient === 'primary'
-                      ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50'
-                      : 'bg-gradient-to-r from-[#B10000] to-primary hover:from-[#B10000]/90 hover:to-primary/90 text-white shadow-lg shadow-[#B10000]/30 hover:shadow-[#B10000]/50'
-                  }`}
-                >
-                  Купить
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to={plan.buttonUrl}>
+                  <Button
+                    className={`w-full font-semibold transition-all duration-300 text-base py-6 ${
+                      plan.gradient === 'amnezia'
+                        ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30 hover:shadow-accent/50'
+                        : plan.gradient === 'primary'
+                        ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50'
+                        : 'bg-gradient-to-r from-[#B10000] to-primary hover:from-[#B10000]/90 hover:to-primary/90 text-white shadow-lg shadow-[#B10000]/30 hover:shadow-[#B10000]/50'
+                    }`}
+                  >
+                    {plan.button}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}
@@ -279,13 +353,15 @@ export const PricingSection = () => {
                     {hardwarePlan.description}
                   </p>
 
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-gray-300 via-primary to-gray-400 hover:from-gray-200 hover:via-primary/90 hover:to-gray-300 text-background font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300"
-                  >
-                    Заказать комплект
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <Link to={hardwarePlan.buttonUrl}>
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-gray-300 via-primary to-gray-400 hover:from-gray-200 hover:via-primary/90 hover:to-gray-300 text-background font-semibold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300"
+                    >
+                      {hardwarePlan.button}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
                 </div>
 
                 {/* Right Side - Features */}
@@ -316,10 +392,10 @@ export const PricingSection = () => {
             
             <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
               <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
-                Забудьте про настройку VPN <span className="text-primary">на каждом устройстве</span>
+                {highlightUppercase(content.router_article_title)}
               </h3>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                Устали объяснять бабушке, как включать VPN на планшете, или воевать с телевизором, который не открывает YouTube? Тариф <span className="text-primary font-semibold">3LAB HARDWARE</span> решает это раз и навсегда. Мы берём надёжный роутер, прошиваем его нашими алгоритмами и привозим вам. Весь трафик внутри вашего дома автоматически шифруется и проходит через ваш личный сервер в нашем дата-центре. Это <span className="text-accent font-semibold">максимально безопасный и удобный способ</span> вернуть привычный интернет в каждую комнату.
+                {highlightUppercase(content.router_article_text)}
               </p>
             </div>
           </div>
@@ -332,10 +408,10 @@ export const PricingSection = () => {
             
             <div className="relative p-8 md:p-10 rounded-2xl backdrop-blur-xl bg-background/90 border border-white/5">
               <h3 className="text-xl md:text-2xl font-bold font-['Montserrat'] mb-4 text-foreground">
-                Почему наши тарифы <span className="text-gradient-primary">выгоднее</span>?
+                {highlightUppercase(content.why_better_title)}
               </h3>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                В обычном VPN вы платите за каждый аккаунт отдельно. В <span className="text-primary font-semibold">3LAB</span> вы арендуете мощность сервера. Это как аренда квартиры: сколько людей там будет жить — <span className="text-accent font-semibold">решать вам</span>. Мы не ограничиваем количество девайсов технически, мы подбираем мощность сервера так, чтобы всем было комфортно.
+                {highlightUppercase(content.why_better_text)}
               </p>
               
               <div className="mt-6 pt-6 border-t border-border">

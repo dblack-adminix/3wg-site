@@ -2,17 +2,117 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://3lab.pro
 
-## How can I edit this code?
+## Описание
 
-There are several ways of editing your application.
+Киберпанк веб-сайт для 3LAB.PRO - провайдера VPN-серверов на базе Amnezia и WireGuard.
 
-**Use Lovable**
+### Технологии
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+#### Frontend
+- React + TypeScript
+- Vite
+- TailwindCSS
+- Framer Motion
+- React Simple Maps
+- Recharts
 
-Changes made via Lovable will be committed automatically to this repo.
+#### Backend
+- Go (Golang)
+- Gin Web Framework
+- PostgreSQL
+- GORM
+- JWT Authentication
+- WGDashboard Integration
+
+### Особенности
+- Интерактивная карта мира с серверами
+- Личный кабинет с статистикой
+- Блог с статьями
+- Киберпанк дизайн с кислотно-зелёными акцентами
+- **Полная интеграция с WGDashboard**
+- **Управление WireGuard пирами через API**
+- **Админ-панель для управления серверами**
+- **💳 Система платежей через Cryptomus**
+- **🔄 Автоматическое зачисление средств**
+- **📊 Аналитика и статистика платежей**
+
+## 🚀 WGDashboard Integration
+
+Реализована полная интеграция с WGDashboard для управления WireGuard серверами:
+
+### Возможности
+- ✅ Управление серверами (создание, редактирование, удаление)
+- ✅ Подключение к WGDashboard API
+- ✅ Получение конфигураций WireGuard
+- ✅ Управление пирами (добавление, удаление, просмотр)
+- ✅ Тестирование подключения
+- ✅ UI для администраторов
+
+### Быстрый старт
+```powershell
+# Запуск бэкенда
+cd backend
+.\run.ps1
+
+# Тестирование пиров
+.\test-wgdashboard-peers.ps1
+```
+
+## 💳 Payment System
+
+Интегрированная система платежей с поддержкой криптовалют через Cryptomus API:
+
+### Возможности
+- ✅ Платежи в рублях (RUB)
+- ✅ Криптовалютные платежи (USDT TRC20, TON, BTC)
+- ✅ Автоматическое зачисление средств
+- ✅ Webhook уведомления
+- ✅ История транзакций
+- ✅ Веб и мобильный интерфейс
+- ✅ Статистика и аналитика
+
+### Быстрый старт
+```powershell
+# Полное тестирование системы платежей
+.\scripts\testing\test-payments-full.ps1
+
+# Только API тесты
+.\scripts\testing\test-payments.ps1
+
+# Только UI тесты
+.\scripts\testing\test-payments-ui.ps1
+```
+
+### Настройка
+```bash
+# В backend/.env
+CRYPTOMUS_API_KEY=your_api_key
+CRYPTOMUS_MERCHANT_ID=your_merchant_id
+BASE_URL=http://localhost:8080
+API_URL=http://localhost:3000
+```
+
+### Документация
+- 📚 [**Полная документация платежей**](PAYMENTS_SYSTEM.md)
+- 🔧 [API эндпоинты](PAYMENTS_SYSTEM.md#api-endpoints)
+- 🎨 [Интерфейсы](PAYMENTS_SYSTEM.md#интерфейсы)
+- 🔍 [Troubleshooting](PAYMENTS_SYSTEM.md#troubleshooting)
+
+### Документация
+- 📚 [**Главный индекс документации**](docs/INDEX.md) - навигатор по всей документации
+- 🛠️ [**Скрипты**](scripts/README.md) - коллекция PowerShell скриптов
+- 📋 [Список задач](TASKS.md) - текущие задачи и прогресс
+- 🗺️ [Roadmap](ROADMAP.md) - план развития проекта
+
+#### Быстрые ссылки
+- [Полная документация WGDashboard](docs/wgdashboard/WGDASHBOARD_README.md)
+- [Быстрый старт с пирами](docs/guides/QUICK_START_PEERS.md)
+- [Руководство по пирам](docs/guides/WGDASHBOARD_PEERS_GUIDE.md)
+- [API эндпоинты](docs/wgdashboard/WGDASHBOARD_API_ENDPOINTS.md)
+- [Генерация VPN ключей](docs/features/KEY_GENERATION_FEATURE.md)
+- [QR коды](docs/features/QR_CODE_FEATURE.md)
 
 **Use your preferred IDE**
 
@@ -60,14 +160,30 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Разработка
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```bash
+# Установка зависимостей
+npm install
 
-## Can I connect a custom domain to my Lovable project?
+# Запуск dev сервера
+npm run dev
 
-Yes, you can!
+# Сборка для продакшена
+npm run build
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# Превью продакшен сборки
+npm run preview
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Деплой
+
+Проект можно задеплоить на любой статический хостинг:
+- Vercel
+- Netlify
+- GitHub Pages
+- Cloudflare Pages
+
+## Домен
+
+Основной домен: **3lab.pro**

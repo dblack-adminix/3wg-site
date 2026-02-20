@@ -74,7 +74,7 @@ const NotFound = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#050505] overflow-hidden flex items-center justify-center">
+    <div className="relative min-h-screen bg-background overflow-hidden flex items-center justify-center">
       {/* CRT Scanlines */}
       <div 
         className="absolute inset-0 pointer-events-none z-20"
@@ -228,7 +228,7 @@ const NotFound = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
         >
-          <div className="rounded-xl border border-[#B10000]/30 bg-[#0a0a0a]/90 overflow-hidden">
+          <div className="rounded-xl border border-[#B10000]/30 bg-background/90 overflow-hidden">
             {/* Terminal header */}
             <div className="flex items-center gap-2 px-4 py-2 border-b border-[#B10000]/20 bg-[#B10000]/5">
               <div className="flex gap-1.5">

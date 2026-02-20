@@ -1,5 +1,8 @@
 import { Shield, Zap, Lock, Tv, Smartphone, Router, Globe, EyeOff, Check, ArrowRight, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { Link } from 'react-router-dom';
+import { highlightUppercase } from '@/lib/textHighlight';
 import amneziaWgLogo from '@/assets/amneziawg-logo.webp';
 import wireguardLogo from '@/assets/wireguard-logo.svg';
 
@@ -44,6 +47,70 @@ const protocols = [
 ];
 
 export const VPNSection = () => {
+  const { content } = useBlockContent('vpn_section', {
+    section_title: 'Ваш личный сервер — интернет без границ',
+    section_subtitle: 'для всей семьи.',
+    pitch_text: 'Забудьте о подписках на каждого пользователя. Вы арендуете мощность личного сервера в 3LAB, а сколько устройств подключить — решаете сами. Это ваш приватный цифровой дом, который невозможно вычислить.',
+    advantage_1_title: 'Чистый IP',
+    advantage_1_description: 'Ваш адрес не забанен в Google, Netflix или банках.',
+    advantage_2_title: 'Один сервер на 10+ девайсов',
+    advantage_2_description: 'ТВ, смартфоны, консоли и роутер — всё на одном тарифе.',
+    advantage_3_title: 'Полная маскировка трафика',
+    advantage_3_description: 'AmneziaWG — работает даже через самые жёсткие фильтры.',
+    wireguard_tagline: 'Максимальная скорость',
+    wireguard_description: 'Мы используем оригинальные протоколы в фирменном стиле, гарантируя надёжность на уровне ядра Linux.',
+    wireguard_button: 'Подключить WireGuard',
+    wireguard_button_url: '/generator',
+    amnezia_tagline: 'Обход любых блокировок',
+    amnezia_description: 'Модифицированный протокол, невидимый для DPI-систем. Работает в России, Китае, Иране.',
+    amnezia_button: 'Подключить AmneziaWG',
+    amnezia_button_url: '/generator',
+  });
+
+  const advantages = [
+    {
+      icon: Globe,
+      title: content.advantage_1_title,
+      description: content.advantage_1_description,
+      gradient: 'wireguard',
+    },
+    {
+      icon: Tv,
+      title: content.advantage_2_title,
+      description: content.advantage_2_description,
+      gradient: 'amnezia',
+    },
+    {
+      icon: EyeOff,
+      title: content.advantage_3_title,
+      description: content.advantage_3_description,
+      gradient: 'wireguard',
+    },
+  ];
+
+  const protocols = [
+    {
+      name: 'WireGuard',
+      tagline: content.wireguard_tagline,
+      description: content.wireguard_description,
+      button: content.wireguard_button,
+      buttonUrl: content.wireguard_button_url || '/generator',
+      features: ['kernel-level integration', 'latency < 5ms', 'throughput 1 Gbit/s', 'cryptokey routing'],
+      gradient: 'wireguard',
+      icon: Zap,
+    },
+    {
+      name: 'AmneziaWG',
+      tagline: content.amnezia_tagline,
+      description: content.amnezia_description,
+      button: content.amnezia_button,
+      buttonUrl: content.amnezia_button_url || '/generator',
+      features: ['DPI-resistant protocol', 'traffic obfuscation', 'signature morphing', 'CDN tunneling'],
+      gradient: 'amnezia',
+      icon: Shield,
+    },
+  ];
+
   return (
     <section id="vpn" className="py-24 relative overflow-hidden">
       {/* Background Effects */}
@@ -60,11 +127,11 @@ export const VPNSection = () => {
           </span>
           
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-['Montserrat'] mb-6 leading-tight">
-            Ваш личный сервер —
+            {content.section_title?.split('—')[0]}—
             <br />
-            <span className="text-gradient-primary">интернет без границ</span>
+            <span className="text-gradient-primary">{content.section_title?.split('—')[1]}</span>
             <br />
-            <span className="text-muted-foreground text-2xl md:text-3xl font-normal">для всей семьи.</span>
+            <span className="text-muted-foreground text-2xl md:text-3xl font-normal">{content.section_subtitle}</span>
           </h2>
         </div>
 
@@ -92,7 +159,7 @@ export const VPNSection = () => {
               </div>
               
               <p className="text-lg md:text-xl text-foreground leading-relaxed">
-                Забудьте о подписках на каждого пользователя. Вы арендуете мощность личного сервера в <span className="text-primary font-semibold">3LAB</span>, а сколько устройств подключить — решаете сами. Это ваш <span className="text-accent font-semibold">приватный цифровой дом</span>, который невозможно вычислить.
+                {highlightUppercase(content.pitch_text)}
               </p>
             </div>
           </div>
@@ -215,16 +282,18 @@ export const VPNSection = () => {
                 </div>
 
                 {/* CTA */}
-                <Button
-                  className={`w-full font-semibold transition-all duration-300 ${
-                    protocol.gradient === 'amnezia'
-                      ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30'
-                      : 'bg-gradient-to-r from-primary to-[#B10000] hover:from-primary/90 hover:to-[#B10000]/90 text-primary-foreground shadow-lg shadow-[#B10000]/30'
-                  }`}
-                >
-                  Подключить {protocol.name}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to={protocol.buttonUrl}>
+                  <Button
+                    className={`w-full font-semibold transition-all duration-300 ${
+                      protocol.gradient === 'amnezia'
+                        ? 'bg-gradient-to-r from-accent to-purple-500 hover:from-accent/90 hover:to-purple-500/90 text-white shadow-lg shadow-accent/30'
+                        : 'bg-gradient-to-r from-primary to-[#B10000] hover:from-primary/90 hover:to-[#B10000]/90 text-primary-foreground shadow-lg shadow-[#B10000]/30'
+                    }`}
+                  >
+                    {protocol.button}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}

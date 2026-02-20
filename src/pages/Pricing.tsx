@@ -35,10 +35,7 @@ const Pricing = () => {
         
         {/* Vignette */}
         <div 
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.6) 100%)',
-          }}
+          className="absolute inset-0 pointer-events-none pricing-gradient"
         />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -73,7 +70,7 @@ const Pricing = () => {
               >
                 <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-muted-foreground/30 to-muted-foreground/10 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
                 
-                <div className="relative h-full p-6 md:p-8 rounded-2xl bg-[#0a0a0a] border border-muted-foreground/20 group-hover:border-muted-foreground/40 transition-all duration-500">
+                <div className="relative h-full p-6 md:p-8 rounded-2xl bg-background border border-muted-foreground/20 group-hover:border-muted-foreground/40 transition-all duration-500">
                   {/* Terminal header */}
                   <div className="flex items-center gap-2 mb-6 pb-4 border-b border-muted-foreground/20">
                     <div className="flex gap-1.5">
@@ -145,10 +142,7 @@ const Pricing = () => {
                 />
                 
                 <div 
-                  className="relative h-full p-6 md:p-8 rounded-2xl border border-primary/50 backdrop-blur-xl"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.08) 0%, rgba(10, 10, 10, 0.95) 30%)',
-                  }}
+                  className="relative h-full p-6 md:p-8 rounded-2xl border border-primary/50 backdrop-blur-xl pricing-card-pro"
                 >
                   {/* Recommended badge */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -233,10 +227,7 @@ const Pricing = () => {
                 />
                 
                 <div 
-                  className="relative h-full p-6 md:p-8 rounded-2xl border border-accent/50"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255, 153, 0, 0.08) 0%, rgba(10, 10, 10, 0.98) 30%)',
-                  }}
+                  className="relative h-full p-6 md:p-8 rounded-2xl border border-accent/50 pricing-card-sovereign"
                 >
                   {/* Badge */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -309,7 +300,7 @@ const Pricing = () => {
               <div className="relative">
                 <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-50" />
                 
-                <div className="relative p-8 md:p-10 rounded-2xl bg-[#0a0a0a] border border-primary/20">
+                <div className="relative p-8 md:p-10 rounded-2xl bg-background border border-primary/20">
                   {/* Header */}
                   <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 mb-4">

@@ -2,20 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
-import { Download, Copy, Check, Shield, Zap, Globe, Terminal, Lock, Radio } from 'lucide-react';
+import { Download, Copy, Check, Shield, Zap, Globe, Terminal, Lock, Radio, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useServers } from '@/hooks/useServers';
+import { api } from '@/lib/api';
+import { toast } from 'sonner';
 import wireguardLogo from '@/assets/wireguard-logo.svg';
 import amneziaLogo from '@/assets/amneziawg-logo.webp';
-
-// Location data with simulated latency
-const locations = [
-  { code: 'AMS', name: 'Amsterdam', country: 'NL', flag: '🇳🇱', latency: 24 },
-  { code: 'FRA', name: 'Frankfurt', country: 'DE', flag: '🇩🇪', latency: 18 },
-  { code: 'HEL', name: 'Helsinki', country: 'FI', flag: '🇫🇮', latency: 32 },
-  { code: 'IST', name: 'Istanbul', country: 'TR', flag: '🇹🇷', latency: 45 },
-  { code: 'NYC', name: 'New York', country: 'US', flag: '🇺🇸', latency: 85 },
-  { code: 'SIN', name: 'Singapore', country: 'SG', flag: '🇸🇬', latency: 120 },
-];
 
 // Terminal generation messages
 const generationSteps = [
@@ -29,37 +22,31 @@ const generationSteps = [
   { text: '[ CONFIG_READY ]', delay: 300 },
 ];
 
-// Mock config output
-const generateMockConfig = (protocol: 'wireguard' | 'amnezia', location: typeof locations[0]) => `[Interface]
-PrivateKey = ${btoa(Math.random().toString()).slice(0, 44)}=
-Address = 10.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}/32
-DNS = 1.1.1.1, 8.8.8.8
-${protocol === 'amnezia' ? `
-# AmneziaWG Stealth Settings
-Jc = 4
-Jmin = 40
-Jmax = 70
-S1 = 0
-S2 = 0
-H1 = 1
-H2 = 2
-H3 = 3
-H4 = 4
-` : ''}
-[Peer]
-PublicKey = ${btoa(Math.random().toString()).slice(0, 44)}=
-AllowedIPs = 0.0.0.0/0, ::/0
-Endpoint = ${location.code.toLowerCase()}.3lab.pro:51820
-PersistentKeepalive = 25`;
+// Country flags mapping
+const countryFlags: Record<string, string> = {
+  'NL': '🇳🇱',
+  'DE': '🇩🇪',
+  'FI': '🇫🇮',
+  'TR': '🇹🇷',
+  'US': '🇺🇸',
+  'SG': '🇸🇬',
+  'RU': '🇷🇺',
+  'FR': '🇫🇷',
+  'GB': '🇬🇧',
+  'JP': '🇯🇵',
+};
 
 const Generator = () => {
-  const { toast } = useToast();
-  const [protocol, setProtocol] = useState<'wireguard' | 'amnezia'>('wireguard');
-  const [selectedLocation, setSelectedLocation] = useState<typeof locations[0] | null>(null);
+  const { toast: toastHook } = useToast();
+  const { servers, isLoading: serversLoading } = useServers();
+  const [protocol, setProtocol] = useState<'wireguard' | 'amneziawg'>('wireguard');
+  const [selectedServer, setSelectedServer] = useState<any | null>(null);
+  const [keyName, setKeyName] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [generatedConfig, setGeneratedConfig] = useState<string | null>(null);
+  const [generatedKeyId, setGeneratedKeyId] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
   const [screenFlicker, setScreenFlicker] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -70,34 +57,64 @@ const Generator = () => {
     setTimeout(() => setScreenFlicker(false), 100);
   };
 
+  // Auto-generate key name
+  useEffect(() => {
+    if (selectedServer && !keyName) {
+      const timestamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+      setKeyName(`${selectedServer.name}_${protocol}_${timestamp}`);
+    }
+  }, [selectedServer, protocol]);
+
   // Handle generation
   const handleGenerate = async () => {
-    if (!selectedLocation) return;
+    if (!selectedServer) {
+      toast.error('Выберите сервер');
+      return;
+    }
     
+    if (!keyName.trim()) {
+      toast.error('Введите имя ключа');
+      return;
+    }
+
     triggerFlicker();
     setIsGenerating(true);
     setGenerationProgress(0);
     setTerminalLines([]);
     setGeneratedConfig(null);
+    setGeneratedKeyId(null);
 
-    // Simulate terminal output
-    for (let i = 0; i < generationSteps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, generationSteps[i].delay));
-      setTerminalLines(prev => [...prev, generationSteps[i].text]);
-      setGenerationProgress(((i + 1) / generationSteps.length) * 100);
+    try {
+      // Simulate terminal output
+      for (let i = 0; i < generationSteps.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, generationSteps[i].delay));
+        setTerminalLines(prev => [...prev, generationSteps[i].text]);
+        setGenerationProgress(((i + 1) / generationSteps.length) * 100);
+      }
+
+      // Create key via API
+      const response = await api.createUserKey({
+        server_id: selectedServer.id,
+        name: keyName,
+        protocol: protocol,
+      });
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Get config
+      const config = await api.downloadKeyConfig(response.id);
+      setGeneratedConfig(config);
+      setGeneratedKeyId(response.id);
+      
+      toast.success('Ключ успешно создан!');
+    } catch (error: any) {
+      console.error('Failed to generate key:', error);
+      toast.error(error.message || 'Ошибка создания ключа');
+      setTerminalLines(prev => [...prev, '[ ERROR: GENERATION_FAILED ]']);
+    } finally {
+      setIsGenerating(false);
     }
-
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setGeneratedConfig(generateMockConfig(protocol, selectedLocation));
-    setIsGenerating(false);
   };
-
-  // Auto-scroll terminal
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [terminalLines]);
 
   // Copy to clipboard
   const handleCopy = () => {
@@ -105,29 +122,64 @@ const Generator = () => {
       navigator.clipboard.writeText(generatedConfig);
       setCopied(true);
       triggerFlicker();
-      toast({
-        title: "SUCCESS: COPIED TO SECURE BUFFER",
-        description: "Configuration has been copied to clipboard",
-      });
+      toast.success('Конфигурация скопирована!');
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
   // Download config
   const handleDownload = () => {
-    if (generatedConfig && selectedLocation) {
+    if (generatedConfig && selectedServer) {
       triggerFlicker();
       const blob = new Blob([generatedConfig], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `3lab_${protocol}_${selectedLocation.code.toLowerCase()}.conf`;
+      a.download = `${keyName.toLowerCase()}.conf`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      toast.success('Конфигурация загружена!');
     }
   };
 
-  const isAmnezia = protocol === 'amnezia';
+  const isAmnezia = protocol === 'amneziawg';
+
+  // Get server flag
+  const getServerFlag = (country: string) => {
+    return countryFlags[country] || '🌍';
+  };
+
+  // Calculate simulated latency based on location
+  const getSimulatedLatency = (location: string) => {
+    const latencies: Record<string, number> = {
+      'Amsterdam': 24,
+      'Frankfurt': 18,
+      'Helsinki': 32,
+      'Istanbul': 45,
+      'New York': 85,
+      'Singapore': 120,
+      'Moscow': 15,
+      'Paris': 28,
+      'London': 35,
+      'Tokyo': 140,
+    };
+    return latencies[location] || 50;
+  };
+
+  if (serversLoading) {
+    return (
+      <Layout>
+        <div className="min-h-screen pt-28 pb-20 flex items-center justify-center bg-background">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
+            <div className="text-sm text-muted-foreground font-mono">Загрузка серверов...</div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -265,24 +317,24 @@ const Generator = () => {
 
                     {/* AmneziaWG Option */}
                     <motion.button
-                      onClick={() => { setProtocol('amnezia'); triggerFlicker(); }}
+                      onClick={() => { setProtocol('amneziawg'); triggerFlicker(); }}
                       className={`relative flex-1 p-5 rounded-xl border-2 transition-all duration-300 ${
-                        protocol === 'amnezia' 
+                        protocol === 'amneziawg' 
                           ? 'border-accent bg-accent/10' 
                           : 'border-white/10 bg-white/5 hover:border-white/20'
                       }`}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       style={{
-                        boxShadow: protocol === 'amnezia' ? '0 0 30px rgba(255, 153, 0, 0.3)' : 'none',
+                        boxShadow: protocol === 'amneziawg' ? '0 0 30px rgba(255, 153, 0, 0.3)' : 'none',
                       }}
                     >
                       <img src={amneziaLogo} alt="AmneziaWG" className="h-8 mx-auto mb-3 opacity-90" />
                       <div className="font-mono text-xs text-center">
-                        <div className={protocol === 'amnezia' ? 'text-accent' : 'text-foreground'}>AmneziaWG</div>
+                        <div className={protocol === 'amneziawg' ? 'text-accent' : 'text-foreground'}>AmneziaWG</div>
                         <div className="text-muted-foreground text-[10px] mt-1">Deep Stealth / Zero Visibility</div>
                       </div>
-                      {protocol === 'amnezia' && (
+                      {protocol === 'amneziawg' && (
                         <motion.div
                           layoutId="protocolIndicator"
                           className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent flex items-center justify-center"
@@ -294,48 +346,85 @@ const Generator = () => {
                   </div>
                 </div>
 
-                {/* Step 2: Location Selection */}
+                {/* Step 2: Server Selection */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
                     <span className={isAmnezia ? 'text-accent' : 'text-primary'}>02</span>
-                    <span>SELECT_LOCATION</span>
+                    <span>SELECT_SERVER</span>
                   </div>
 
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                    {locations.map((loc) => (
-                      <motion.button
-                        key={loc.code}
-                        onClick={() => { setSelectedLocation(loc); triggerFlicker(); }}
-                        className={`relative p-3 rounded-lg border transition-all duration-300 ${
-                          selectedLocation?.code === loc.code
-                            ? isAmnezia 
-                              ? 'border-accent bg-accent/10' 
-                              : 'border-primary bg-primary/10'
-                            : 'border-white/10 bg-white/5 hover:border-white/20'
-                        }`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{
-                          boxShadow: selectedLocation?.code === loc.code 
-                            ? `0 0 20px ${isAmnezia ? 'rgba(255, 153, 0, 0.3)' : 'rgba(204, 255, 0, 0.3)'}` 
-                            : 'none',
-                        }}
-                      >
-                        <div className="text-xl mb-1">{loc.flag}</div>
-                        <div className={`font-mono text-sm font-bold ${
-                          selectedLocation?.code === loc.code 
-                            ? isAmnezia ? 'text-accent' : 'text-primary' 
-                            : 'text-foreground'
-                        }`}>
-                          {loc.code}
-                        </div>
-                      </motion.button>
-                    ))}
-                  </div>
+                  {servers.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground font-mono text-sm">
+                      NO_SERVERS_AVAILABLE
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {servers.map((server) => (
+                        <motion.button
+                          key={server.id}
+                          onClick={() => { setSelectedServer(server); triggerFlicker(); }}
+                          className={`relative p-4 rounded-lg border transition-all duration-300 text-left ${
+                            selectedServer?.id === server.id
+                              ? isAmnezia 
+                                ? 'border-accent bg-accent/10' 
+                                : 'border-primary bg-primary/10'
+                              : 'border-white/10 bg-white/5 hover:border-white/20'
+                          }`}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          style={{
+                            boxShadow: selectedServer?.id === server.id 
+                              ? `0 0 20px ${isAmnezia ? 'rgba(255, 153, 0, 0.3)' : 'rgba(204, 255, 0, 0.3)'}` 
+                              : 'none',
+                          }}
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-2xl">{getServerFlag(server.country)}</span>
+                              <div>
+                                <div className={`font-mono text-sm font-bold ${
+                                  selectedServer?.id === server.id 
+                                    ? isAmnezia ? 'text-accent' : 'text-primary' 
+                                    : 'text-foreground'
+                                }`}>
+                                  {server.name}
+                                </div>
+                                <div className="font-mono text-xs text-muted-foreground">
+                                  {server.location}
+                                </div>
+                              </div>
+                            </div>
+                            {server.status === 'active' && (
+                              <motion.div
+                                className="w-2 h-2 rounded-full bg-green-500"
+                                animate={{
+                                  boxShadow: [
+                                    '0 0 4px rgba(34, 197, 94, 0.4)',
+                                    '0 0 12px rgba(34, 197, 94, 0.8)',
+                                    '0 0 4px rgba(34, 197, 94, 0.4)',
+                                  ],
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                              />
+                            )}
+                          </div>
+                          
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground font-mono">
+                              Load: {server.current_peers || 0}/{server.max_users || 100}
+                            </span>
+                            <span className={`font-mono font-bold ${isAmnezia ? 'text-accent' : 'text-primary'}`}>
+                              ~{getSimulatedLatency(server.location)}ms
+                            </span>
+                          </div>
+                        </motion.button>
+                      ))}
+                    </div>
+                  )}
 
-                  {/* Latency Display */}
+                  {/* Server Details */}
                   <AnimatePresence>
-                    {selectedLocation && (
+                    {selectedServer && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -344,34 +433,54 @@ const Generator = () => {
                       >
                         <Globe className="w-4 h-4 text-muted-foreground" />
                         <span className="font-mono text-xs text-muted-foreground">
-                          {selectedLocation.name}, {selectedLocation.country}
+                          {selectedServer.location}, {selectedServer.country}
                         </span>
                         <span className="text-muted-foreground">•</span>
                         <span className={`font-mono text-xs font-bold ${isAmnezia ? 'text-accent' : 'text-primary'}`}>
-                          LATENCY: {selectedLocation.latency}ms
+                          {selectedServer.ip_address}
                         </span>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
-                {/* Step 3: Generate Button */}
+                {/* Step 3: Key Name */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
                     <span className={isAmnezia ? 'text-accent' : 'text-primary'}>03</span>
+                    <span>KEY_NAME</span>
+                  </div>
+
+                  <input
+                    type="text"
+                    value={keyName}
+                    onChange={(e) => setKeyName(e.target.value)}
+                    placeholder="my_vpn_key"
+                    className={`w-full px-4 py-3 rounded-lg border-2 bg-background/60 font-mono text-sm transition-all duration-300 ${
+                      isAmnezia
+                        ? 'border-accent/30 focus:border-accent'
+                        : 'border-primary/30 focus:border-primary'
+                    } focus:outline-none`}
+                  />
+                </div>
+
+                {/* Step 4: Generate Button */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                    <span className={isAmnezia ? 'text-accent' : 'text-primary'}>04</span>
                     <span>GENERATE_CONFIG</span>
                   </div>
 
                   <motion.button
                     onClick={handleGenerate}
-                    disabled={!selectedLocation || isGenerating}
+                    disabled={!selectedServer || !keyName.trim() || isGenerating}
                     className={`w-full py-4 rounded-xl font-mono text-sm font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
                       isAmnezia
                         ? 'bg-accent text-black hover:shadow-[0_0_40px_rgba(255,153,0,0.4)]'
                         : 'bg-primary text-black hover:shadow-[0_0_40px_rgba(204,255,0,0.4)]'
                     }`}
-                    whileHover={{ scale: selectedLocation && !isGenerating ? 1.02 : 1 }}
-                    whileTap={{ scale: selectedLocation && !isGenerating ? 0.98 : 1 }}
+                    whileHover={{ scale: selectedServer && keyName.trim() && !isGenerating ? 1.02 : 1 }}
+                    whileTap={{ scale: selectedServer && keyName.trim() && !isGenerating ? 0.98 : 1 }}
                   >
                     {isGenerating ? (
                       <span className="flex items-center justify-center gap-2">
@@ -406,7 +515,7 @@ const Generator = () => {
                         <div className="space-y-3">
                           <div 
                             ref={terminalRef}
-                            className="h-40 overflow-y-auto rounded-lg bg-black/80 border border-white/10 p-4 font-mono text-xs space-y-1"
+                            className="h-40 overflow-y-auto rounded-lg bg-background/80 border border-white/10 p-4 font-mono text-xs space-y-1"
                           >
                             {terminalLines.map((line, idx) => (
                               <motion.div

@@ -132,7 +132,7 @@ export const OrderForm = ({ isOpen, onClose, defaultTariff }: OrderFormProps) =>
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-background/90 backdrop-blur-md z-[100]"
           />
           
           {/* Modal */}
@@ -141,8 +141,9 @@ export const OrderForm = ({ isOpen, onClose, defaultTariff }: OrderFormProps) =>
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[90vh] overflow-y-auto z-50 p-4"
+            className="fixed inset-0 z-[101] flex items-center justify-center p-4"
           >
+            <div className="w-full max-w-lg max-h-[85vh] overflow-y-auto">
             <div className="relative rounded-2xl border border-primary/20 bg-background/95 backdrop-blur-xl shadow-2xl shadow-primary/10">
               {/* Close button */}
               <button
@@ -301,6 +302,7 @@ export const OrderForm = ({ isOpen, onClose, defaultTariff }: OrderFormProps) =>
                   )}
                 </AnimatePresence>
               </div>
+            </div>
             </div>
           </motion.div>
         </>

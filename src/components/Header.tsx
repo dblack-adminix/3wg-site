@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Cpu, Shield, Server, Router, HelpCircle, Rocket, User, DollarSign, Building2, Box } from 'lucide-react';
+import { Menu, X, Cpu, Shield, Server, Download, HelpCircle, Rocket, User, DollarSign, Building2, Box, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/Logo';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navItems = [
   { label: 'Главная', href: '/', icon: null },
   { label: 'Тарифы', href: '/pricing', icon: DollarSign },
   { label: 'NODE-1', href: '/node-1', icon: Box },
-  { label: 'Hardware', href: '/hardware', icon: Router },
+  { label: 'Софт', href: '/software', icon: Download },
   { label: 'Инфраструктура', href: '/infrastructure', icon: Building2 },
+  { label: 'Блог', href: '/blog', icon: BookOpen },
   { label: 'FAQ', href: '/faq', icon: HelpCircle },
 ];
 
@@ -25,15 +28,8 @@ export const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <Cpu className="h-8 w-8 text-primary transition-all duration-300 group-hover:drop-shadow-[0_0_10px_hsl(73_100%_50%)]" />
-              <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <span className="text-xl font-bold tracking-tight font-['Montserrat']">
-              <span className="text-primary drop-shadow-[0_0_10px_hsl(73_100%_50%/0.5)]">3LAB</span>
-              <span className="text-muted-foreground">.PRO</span>
-            </span>
+          <Link to="/" className="flex items-center group">
+            <Logo animated={false} />
           </Link>
 
           {/* Desktop Nav */}
@@ -61,7 +57,8 @@ export const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/dashboard">
+            <ThemeToggle />
+            <Link to="/account">
               <Button 
                 variant="outline" 
                 className="border-muted-foreground/30 text-muted-foreground hover:text-foreground hover:bg-muted/50 font-medium group transition-all duration-300"
@@ -108,7 +105,11 @@ export const Header = () => {
               ))}
               
               <div className="pt-2 space-y-2">
-                <Link to="/dashboard" className="block" onClick={() => setIsOpen(false)}>
+                <div className="flex items-center justify-between px-3 py-2">
+                  <span className="text-sm font-medium text-muted-foreground">Тема</span>
+                  <ThemeToggle />
+                </div>
+                <Link to="/account" className="block" onClick={() => setIsOpen(false)}>
                   <Button 
                     variant="outline" 
                     className="w-full border-muted-foreground/30 text-muted-foreground hover:text-foreground font-medium"

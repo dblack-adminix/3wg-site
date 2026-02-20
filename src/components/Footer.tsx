@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Cpu, ExternalLink, Send, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/Logo';
 
 // Network nodes status
 const networkNodes = [
@@ -31,7 +32,7 @@ const secureChannels = [
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-[#050505] border-t border-border/50">
+    <footer className="relative bg-background border-t border-border/50">
       {/* Running light top border */}
       <div className="absolute top-0 left-0 right-0 h-[1px] overflow-hidden">
         <motion.div
@@ -57,12 +58,8 @@ export const Footer = () => {
           
           {/* Column 1: System Branding */}
           <div className="lg:pr-8 lg:border-r lg:border-white/10">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <Cpu className="h-6 w-6 text-primary drop-shadow-[0_0_10px_hsl(73_100%_50%/0.5)]" />
-              <span className="text-lg font-bold font-['Montserrat']">
-                <span className="text-primary">3LAB</span>
-                <span className="text-muted-foreground">.PRO</span>
-              </span>
+            <Link to="/" className="flex items-center mb-4">
+              <Logo animated={false} />
             </Link>
             
             <p className="font-mono text-[10px] text-muted-foreground/60 mb-4 leading-relaxed">
@@ -71,7 +68,7 @@ export const Footer = () => {
             </p>
             
             <p className="font-mono text-[10px] text-muted-foreground/40">
-              © 3LAB.PRO [ENCRYPTED]
+              © 3wG.ru [ENCRYPTED]
             </p>
           </div>
 

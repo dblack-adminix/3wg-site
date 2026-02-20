@@ -1,4 +1,6 @@
 import { Activity, CheckCircle, Server, Database, Globe } from 'lucide-react';
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 const systems = [
   { name: 'Серверы', status: 'operational', icon: Server },
@@ -8,6 +10,13 @@ const systems = [
 ];
 
 export const StatusWidget = () => {
+  const { content } = useBlockContent('status_widget', {
+    widget_title: 'Статус систем',
+    status_text: 'РАБОТАЕТ ШТАТНО',
+    uptime_label: 'Uptime за 30 дней',
+    uptime_value: '99.98%',
+  });
+
   return (
     <section className="py-16 relative">
       <div className="container mx-auto px-4">
@@ -27,10 +36,10 @@ export const StatusWidget = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold font-['Montserrat'] text-foreground">
-                      Статус систем
+                      {content.widget_title}
                     </h3>
                     <p className="text-primary font-semibold text-lg">
-                      РАБОТАЕТ ШТАТНО
+                      {highlightUppercase(content.status_text)}
                     </p>
                   </div>
                 </div>
@@ -56,13 +65,13 @@ export const StatusWidget = () => {
               {/* Uptime Bar */}
               <div className="mt-8">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Uptime за 30 дней</span>
-                  <span className="text-sm font-bold text-primary">99.98%</span>
+                  <span className="text-sm text-muted-foreground">{content.uptime_label}</span>
+                  <span className="text-sm font-bold text-primary">{content.uptime_value}</span>
                 </div>
                 <div className="h-2 bg-muted rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full"
-                    style={{ width: '99.98%' }}
+                    style={{ width: content.uptime_value }}
                   />
                 </div>
                 <div className="flex justify-between mt-2">

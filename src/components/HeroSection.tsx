@@ -3,6 +3,9 @@ import { ArrowRight, Shield, Zap, Lock, Server, ExternalLink } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { OrderForm } from '@/components/OrderForm';
 import { motion } from 'framer-motion';
+import { FloatingParticles } from '@/components/FloatingParticles';
+import { HolographicEffect } from '@/components/HolographicEffect';
+import { useBlockContent } from '@/hooks/useBlockContent';
 import wireguardLogo from '@/assets/wireguard-dark.svg';
 import amneziaSymbol from '@/assets/amnezia-symbol.svg';
 // Blinking Node positions (fixed for consistency)
@@ -336,7 +339,7 @@ const ServerRack3D = ({ mousePos }: { mousePos: { x: number; y: number } }) => {
 
       {/* Dynamic Shadow */}
       <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-6 rounded-[100%] bg-black/60 blur-xl"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-6 rounded-[100%] bg-background/60 blur-xl"
         animate={{ 
           scaleX: [1, 1.1, 1],
           opacity: [0.4, 0.6, 0.4],
@@ -351,6 +354,56 @@ export const HeroSection = () => {
   const [isOrderOpen, setIsOrderOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [activePainPoint, setActivePainPoint] = useState(0);
+
+  const { content } = useBlockContent('hero_section', {
+    badge_text: 'MANIFESTO_2024',
+    main_title: '3LAB.PRO — Ваш ЦИФРОВОЙ СУВЕРЕНИТЕТ.',
+    main_subtitle: 'ВАШ ТРАФИК — ВАШЕ ПРАВО.',
+    manifesto_title: 'Остальное — иллюзия.',
+    manifesto_subtitle: 'Пока другие обещают «анонимность», мы даем инструменты суверенитета.',
+    why_3lab_title: 'Почему 3LAB?',
+    pain_point_1_title: 'Устали от блокировок?',
+    pain_point_1_text: 'Обычные VPN определяются за секунды. Наш AmneziaWG мимикрирует под обычный веб-серфинг. Для цензоров вы просто читаете новости.',
+    pain_point_2_title: 'Медленный интернет?',
+    pain_point_2_text: 'Мы не перепродаем чужие сервера. Наши узлы в Нидерландах и США работают на 10Gbps каналах.',
+    pain_point_3_title: 'Боитесь сливов?',
+    pain_point_3_text: 'Мы не просим почту. Мы не храним логи. Ваша личность заканчивается там, где начинается наш шифр.',
+    pain_point_4_title: 'Свой домен — свои правила',
+    pain_point_4_text: 'Домены amzwg.ru и wire3.ru — это ваша гарантия стабильного коннекта без посредников.',
+    cta_button_text: 'Получить VPN-сервер',
+    cta_button_secondary: 'ИТ-аутсорсинг',
+    stat_uptime: '99.9%',
+    stat_latency: '5ms',
+    stat_encryption: '256-bit',
+  });
+
+  const painPoints = [
+    {
+      title: content.pain_point_1_title,
+      text: content.pain_point_1_text,
+      highlight: 'AmneziaWG',
+      color: 'primary',
+    },
+    {
+      title: content.pain_point_2_title,
+      text: content.pain_point_2_text,
+      highlight: '10Gbps',
+      color: 'accent',
+    },
+    {
+      title: content.pain_point_3_title,
+      text: content.pain_point_3_text,
+      highlight: 'шифр',
+      color: 'primary',
+    },
+    {
+      title: content.pain_point_4_title,
+      text: content.pain_point_4_text,
+      highlight: 'amzwg.ru',
+      color: 'accent',
+    },
+  ];
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -366,11 +419,23 @@ export const HeroSection = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Auto-rotate pain points every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActivePainPoint((prev) => (prev + 1) % painPoints.length);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [painPoints.length]);
+
   return (
     <section 
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#080808]"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-background"
     >
+      {/* Floating Particles */}
+      <FloatingParticles />
+      
       {/* 3D Perspective Grid - Tactical HUD */}
       <div 
         className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -475,7 +540,7 @@ export const HeroSection = () => {
       <div 
         className="absolute inset-0 pointer-events-none z-[1] transition-opacity duration-300"
         style={{
-          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(204, 255, 0, 0.12) 0%, transparent 50%)`,
+          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(204, 255, 0, 0.08) 0%, transparent 25%)`,
         }}
       />
 
@@ -524,44 +589,41 @@ export const HeroSection = () => {
 
       {/* Vignette Overlay */}
       <div 
-        className="absolute inset-0 pointer-events-none z-[3]"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(8, 8, 8, 0.6) 70%, #080808 100%)',
-        }}
+        className="absolute inset-0 pointer-events-none z-[3] hero-gradient"
       />
 
       {/* Terminal Elements - Left Bottom */}
       <div className="absolute bottom-6 left-6 z-10 hidden md:block">
-        <div className="font-mono text-[10px] text-white/20 tracking-wider space-y-1">
+        <div className="font-mono text-[10px] text-muted-foreground tracking-wider space-y-1">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse" />
-            <span>LATENCY: <span className="text-primary/40">12ms</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse" />
+            <span>LATENCY: <span className="text-primary">12ms</span></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-            <span>PACKET_LOSS: <span className="text-primary/40">0.00%</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+            <span>PACKET_LOSS: <span className="text-primary">0.00%</span></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-            <span>ENCRYPTION: <span className="text-primary/40">AES-256-GCM</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+            <span>ENCRYPTION: <span className="text-primary">AES-256-GCM</span></span>
           </div>
         </div>
       </div>
 
       {/* Terminal Elements - Right Bottom */}
       <div className="absolute bottom-6 right-6 z-10 hidden md:block text-right">
-        <div className="font-mono text-[10px] text-white/20 tracking-wider space-y-1">
+        <div className="font-mono text-[10px] text-muted-foreground tracking-wider space-y-1">
           <div className="flex items-center justify-end gap-2">
-            <span>NODE-1 STATUS: <span className="text-primary/40">ACTIVE</span></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse" />
+            <span>NODE-1 STATUS: <span className="text-primary">ACTIVE</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse" />
           </div>
           <div className="flex items-center justify-end gap-2">
-            <span>UPLINK: <span className="text-primary/40">1000Mbps</span></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+            <span>UPLINK: <span className="text-primary">1000Mbps</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-accent/60" />
           </div>
           <div className="flex items-center justify-end gap-2">
-            <span>LOCATION: <span className="text-white/30">[55.7558, 37.6173]</span></span>
-            <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+            <span>LOCATION: <span className="text-muted-foreground">[55.7558, 37.6173]</span></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
           </div>
         </div>
       </div>
@@ -611,30 +673,34 @@ export const HeroSection = () => {
           {/* Left - Text Content */}
           <div className="text-center lg:text-left">
             {/* Badge - Glassmorphism */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-md mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/10 bg-card/40 backdrop-blur-md mb-8">
               <span className="w-2 h-2 rounded-full bg-primary pulse-indicator" />
-              <span className="text-sm font-medium text-primary font-mono-tech">MANIFESTO_2024</span>
+              <span className="text-sm font-medium text-primary font-mono-tech">{content.badge_text}</span>
             </div>
 
             {/* Main Heading with AuthKit-style Ignite Animation */}
             <div className="relative">
-              {/* Background Glow for Text - Animated */}
+              {/* Background Glow for Text - Static */}
               <div 
-                className="absolute -inset-8 blur-3xl pointer-events-none animate-text-glow-in"
+                className="absolute -inset-8 blur-3xl pointer-events-none opacity-30"
                 style={{
-                  background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.4) 0%, transparent 70%)',
+                  background: 'radial-gradient(ellipse at center, rgba(204, 255, 0, 0.3) 0%, transparent 70%)',
                 }}
               />
               
               <h1 className="relative text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight mb-6 font-['Montserrat']">
-                <span className="text-gradient-primary animate-text-reveal" style={{ animationDelay: '0.1s' }}>3LAB.PRO</span>
-                <span className="text-foreground animate-text-reveal" style={{ animationDelay: '0.2s' }}> — Ваш</span>
+                <span className="text-gradient-primary animate-text-reveal" style={{ animationDelay: '0.1s' }}>
+                  {content.main_title?.split(' ')[0] || '3LAB.PRO'}
+                </span>
+                <span className="text-foreground animate-text-reveal" style={{ animationDelay: '0.2s' }}>
+                  {' — ' + (content.main_title?.split(' ').slice(2, 3).join(' ') || 'Ваш')}
+                </span>
                 <br />
                 <span 
                   className="text-foreground inline-block relative animate-text-ignite"
                   style={{ animationDelay: '0.4s' }}
                 >
-                  ЦИФРОВОЙ
+                  {content.main_title?.split(' ')[3] || 'ЦИФРОВОЙ'}
                   {/* Animated Underline */}
                   <span className="absolute -bottom-2 left-0 right-0 h-px animate-line-expand" style={{ animationDelay: '0.8s' }} />
                 </span>
@@ -643,21 +709,84 @@ export const HeroSection = () => {
                   className="inline-block animate-text-ignite-orange"
                   style={{ animationDelay: '0.6s' }}
                 >
-                  СУВЕРЕНИТЕТ.
+                  {content.main_title?.split(' ')[4] || 'СУВЕРЕНИТЕТ.'}
                 </span>
               </h1>
             </div>
 
-            {/* Manifesto Text */}
-            <div className="space-y-4 mb-10">
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Мы верим, что <span className="text-primary font-semibold">доступ к информации</span> — 
-                базовое право. Пока другие строят заборы, мы строим <span className="text-accent font-semibold">мосты</span>.
-              </p>
-              <p className="text-base text-muted-foreground leading-relaxed font-mono-tech">
-                // Персональные VPN-серверы. Железо в надёжном дата-центре. 
-                Ноль логов. Ваши данные — только ваши.
-              </p>
+            {/* Manifesto Text - Убойный текст */}
+            <div className="space-y-6 mb-10">
+              <div className="space-y-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                  {content.main_subtitle}
+                  <br />
+                  <span className="text-muted-foreground">{content.manifesto_title}</span>
+                </h2>
+                <p className="text-lg text-primary font-semibold">
+                  {content.manifesto_subtitle}
+                </p>
+              </div>
+
+              {/* Блок "Почему 3LAB?" - Боли */}
+              <div className="space-y-4 pt-4">
+                <h3 className="text-sm font-bold text-accent uppercase tracking-wider">
+                  {content.why_3lab_title || 'Почему 3LAB?'}
+                </h3>
+                
+                {/* Carousel Container */}
+                <div className="relative min-h-[140px]">
+                  {painPoints.map((point, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{
+                        opacity: activePainPoint === index ? 1 : 0,
+                        x: activePainPoint === index ? 0 : -50,
+                        display: activePainPoint === index ? 'block' : 'none',
+                      }}
+                      transition={{ duration: 0.5 }}
+                      className={`border-l-2 ${point.color === 'primary' ? 'border-primary' : 'border-accent'} pl-4 absolute inset-0`}
+                    >
+                      <h4 className="text-base font-bold text-white mb-1">
+                        {point.title}
+                      </h4>
+                      <p 
+                        className="text-sm text-muted-foreground leading-relaxed" 
+                        dangerouslySetInnerHTML={{ 
+                          __html: point.text?.replace(
+                            new RegExp(point.highlight, 'g'), 
+                            `<span class="text-${point.color} font-semibold">${point.highlight}</span>`
+                          ).replace(/wire3\.ru/g, '<span class="text-accent font-semibold">wire3.ru</span>') || '' 
+                        }} 
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Progress Indicators */}
+                <div className="flex items-center gap-2 pt-2">
+                  {painPoints.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActivePainPoint(index)}
+                      className="relative h-1 flex-1 bg-muted/30 rounded-full overflow-hidden"
+                    >
+                      <motion.div
+                        className={`absolute inset-0 ${index % 2 === 0 ? 'bg-primary' : 'bg-accent'}`}
+                        initial={{ scaleX: 0 }}
+                        animate={{
+                          scaleX: activePainPoint === index ? 1 : 0,
+                        }}
+                        transition={{
+                          duration: activePainPoint === index ? 10 : 0.3,
+                          ease: 'linear',
+                        }}
+                        style={{ transformOrigin: 'left' }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* CTA Buttons */}
@@ -665,19 +794,19 @@ export const HeroSection = () => {
               <Button 
                 size="lg" 
                 onClick={() => setIsOrderOpen(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg px-8 py-6 glow-primary group transition-all duration-300 hover:scale-105"
+                className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 glow-primary group transition-all duration-300 hover:scale-105 min-h-[48px]"
               >
                 <Shield className="mr-2 h-5 w-5" />
-                Получить VPN-сервер
+                {content.cta_button_text}
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-accent text-accent hover:bg-accent/10 font-semibold text-lg px-8 py-6 transition-all duration-300 hover:scale-105"
+                className="w-full sm:w-auto border-accent text-accent hover:bg-accent/10 font-semibold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 transition-all duration-300 hover:scale-105 min-h-[48px]"
               >
                 <Server className="mr-2 h-5 w-5" />
-                ИТ-аутсорсинг
+                {content.cta_button_secondary}
               </Button>
             </div>
 
@@ -685,15 +814,15 @@ export const HeroSection = () => {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm font-mono-tech">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-primary pulse-indicator" />
-                <span className="text-muted-foreground">uptime: <span className="text-primary">99.9%</span></span>
+                <span className="text-muted-foreground">uptime: <span className="text-primary">{content.stat_uptime}</span></span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#B10000]" />
-                <span className="text-muted-foreground">latency: <span className="text-[#FF3333]">5ms</span></span>
+                <div className="w-2 h-2 rounded-full bg-destructive" />
+                <span className="text-muted-foreground">latency: <span className="text-destructive">{content.stat_latency}</span></span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-accent" />
-                <span className="text-muted-foreground">encryption: <span className="text-accent">256-bit</span></span>
+                <span className="text-muted-foreground">encryption: <span className="text-accent">{content.stat_encryption}</span></span>
               </div>
             </div>
           </div>
@@ -706,17 +835,17 @@ export const HeroSection = () => {
 
         {/* Protocol Cards - Mobile Only - Glassmorphism Style */}
         <div className="lg:hidden mt-12 grid grid-cols-3 gap-4 max-w-md mx-auto">
-          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+          <div className="flex flex-col items-center p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border/10 shadow-lg">
             <Shield className="h-6 w-6 text-primary mb-2" />
             <span className="text-sm font-bold text-foreground">Amnezia</span>
             <span className="text-[10px] text-muted-foreground">DPI bypass</span>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
-            <Zap className="h-6 w-6 text-[#FF3333] mb-2" />
+          <div className="flex flex-col items-center p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border/10 shadow-lg">
+            <Zap className="h-6 w-6 text-destructive mb-2" />
             <span className="text-sm font-bold text-foreground">WireGuard</span>
             <span className="text-[10px] text-muted-foreground">5ms ping</span>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+          <div className="flex flex-col items-center p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border/10 shadow-lg">
             <Lock className="h-6 w-6 text-accent mb-2" />
             <span className="text-sm font-bold text-foreground">Zero Logs</span>
             <span className="text-[10px] text-muted-foreground">privacy</span>
