@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Blog</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+        button { padding: 20px 40px; margin: 10px; cursor: pointer; font-size: 18px; }
+        pre { background: #111; padding: 10px; overflow: auto; color: #0f0; }
+    </style>
+</head>
+<body>
+    <h1>Blog Storage Manager</h1>
+    
+    <button onclick="clearAndReload()" style="background: red; color: white;">ОЧИСТИТЬ И ПЕРЕЗАГРУЗИТЬ</button>
+    
+    <div id="output"></div>
+    
+    <script>
+        function clearAndReload() {
+            localStorage.removeItem('blog_posts');
+            alert('blog_posts удален! Страница перезагрузится.');
+            window.location.href = 'http://localhost:8080/blog';
+        }
+        
+        // Показываем что в localStorage
+        const posts = localStorage.getItem('blog_posts');
+        const output = document.getElementById('output');
+        
+        if (posts) {
+            const parsed = JSON.parse(posts);
+            output.innerHTML = `
+                <h2>В localStorage найдено статей: ${parsed.length}</h2>
+                <pre>${JSON.stringify(parsed, null, 2)}</pre>
+            `;
+        } else {
+            output.innerHTML = '<h2>localStorage ПУСТОЙ (blog_posts = null)</h2>';
+        }
+    </script>
+</body>
+</html>

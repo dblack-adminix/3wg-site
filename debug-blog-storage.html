@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Blog Storage</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+        pre { background: #111; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Blog Storage Debug</h1>
+    
+    <button onclick="showStorage()">Показать localStorage</button>
+    <button onclick="clearStorage()">Очистить blog_posts</button>
+    <button onclick="loadDefaults()">Загрузить дефолтные статьи</button>
+    
+    <div id="output"></div>
+    
+    <script>
+        function showStorage() {
+            const posts = localStorage.getItem('blog_posts');
+            const output = document.getElementById('output');
+            
+            if (posts) {
+                const parsed = JSON.parse(posts);
+                output.innerHTML = `
+                    <h2>Найдено статей: ${parsed.length}</h2>
+                    <pre>${JSON.stringify(parsed, null, 2)}</pre>
+                `;
+            } else {
+                output.innerHTML = '<h2>localStorage пустой!</h2>';
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('blog_posts');
+            alert('blog_posts очищен!');
+            showStorage();
+        }
+        
+        function loadDefaults() {
+            const defaultPosts = [
+                {
+                    id: '1',
+                    title: 'VPN в России в 2025 году',
+                    slug: 'vpn-v-rossii-2025',
+                    excerpt: 'Актуальная информация о VPN в России',
+                    content: '<h1>VPN в России</h1><p>Статья о VPN...</p>',
+                    author: 'Admin',
+                    tags: ['VPN', 'Россия'],
+                    published: true,
+                    featured_image: '',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    views: 0
+                },
+                {
+                    id: '2',
+                    title: 'Как настроить AmneziaWG на роутере Keenetic',
+                    slug: 'amneziawg-keenetic-setup',
+                    excerpt: 'Пошаговое руководство',
+                    content: '<h1>Настройка AmneziaWG</h1>',
+                    author: 'Admin',
+                    tags: ['AmneziaWG', 'Keenetic'],
+                    published: true,
+                    featured_image: '',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    views: 0
+                },
+                {
+                    id: '3',
+                    title: 'Сравнение протоколов: WireGuard vs AmneziaWG',
+                    slug: 'wireguard-vs-amneziawg',
+                    excerpt: 'Детальное сравнение',
+                    content: '<h1>Сравнение</h1>',
+                    author: 'Admin',
+                    tags: ['WireGuard', 'AmneziaWG'],
+                    published: true,
+                    featured_image: '',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                    views: 0
+                }
+            ];
+            
+            localStorage.setItem('blog_posts', JSON.stringify(defaultPosts));
+            alert('Загружено 3 дефолтные статьи!');
+            showStorage();
+        }
+        
+        // Автоматически показываем при загрузке
+        showStorage();
+    </script>
+</body>
+</html>

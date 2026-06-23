@@ -1,39 +1,65 @@
 import { Building2, Cpu, Thermometer, Zap, Lock, Wifi, Shield, Server } from 'lucide-react';
-
-const features = [
-  {
-    icon: Zap,
-    title: '2N Питание',
-    description: 'Бесперебойное электроснабжение с полным резервированием',
-  },
-  {
-    icon: Shield,
-    title: 'Охрана 24/7',
-    description: 'Биометрический контроль доступа и видеонаблюдение',
-  },
-  {
-    icon: Wifi,
-    title: 'Резервные каналы',
-    description: 'Множественные магистральные каналы с автопереключением',
-  },
-  {
-    icon: Thermometer,
-    title: 'Климат N+1',
-    description: 'Прецизионное охлаждение с резервированием',
-  },
-  {
-    icon: Lock,
-    title: 'Физическая защита',
-    description: 'Клетки Фарадея и защита от проникновения',
-  },
-  {
-    icon: Cpu,
-    title: 'DCIM мониторинг',
-    description: 'Контроль всех параметров в реальном времени',
-  },
-];
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 export const InfrastructureSection = () => {
+  const { content } = useBlockContent('infrastructure_section', {
+    section_title: 'Инфраструктура Tier III.',
+    section_description: 'Бесперебойное питание, охрана 24/7 и каналы связи с резервированием.',
+    section_quote: 'Размещайте проекты там, где о них заботятся.',
+    feature_1_title: '2N Питание',
+    feature_1_description: 'Бесперебойное электроснабжение с полным резервированием',
+    feature_2_title: 'Охрана 24/7',
+    feature_2_description: 'Биометрический контроль доступа и видеонаблюдение',
+    feature_3_title: 'Резервные каналы',
+    feature_3_description: 'Множественные магистральные каналы с автопереключением',
+    feature_4_title: 'Климат N+1',
+    feature_4_description: 'Прецизионное охлаждение с резервированием',
+    feature_5_title: 'Физическая защита',
+    feature_5_description: 'Клетки Фарадея и защита от проникновения',
+    feature_6_title: 'DCIM мониторинг',
+    feature_6_description: 'Контроль всех параметров в реальном времени',
+    stat_1_label: 'Uptime',
+    stat_1_value: '99.98%',
+    stat_2_label: 'Температура',
+    stat_2_value: '18°C',
+    stat_3_label: 'PUE',
+    stat_3_value: '1.3',
+  });
+
+  const features = [
+    {
+      icon: Zap,
+      title: content.feature_1_title,
+      description: content.feature_1_description,
+    },
+    {
+      icon: Shield,
+      title: content.feature_2_title,
+      description: content.feature_2_description,
+    },
+    {
+      icon: Wifi,
+      title: content.feature_3_title,
+      description: content.feature_3_description,
+    },
+    {
+      icon: Thermometer,
+      title: content.feature_4_title,
+      description: content.feature_4_description,
+    },
+    {
+      icon: Lock,
+      title: content.feature_5_title,
+      description: content.feature_5_description,
+    },
+    {
+      icon: Cpu,
+      title: content.feature_6_title,
+      description: content.feature_6_description,
+    },
+  ];
+
   return (
     <section id="infrastructure" className="py-24 relative overflow-hidden">
       {/* Background */}
@@ -48,13 +74,13 @@ export const InfrastructureSection = () => {
               Дата-центр
             </span>
             <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-6">
-              Инфраструктура <span className="text-gradient-accent">Tier III.</span>
+              {highlightUppercase(content.section_title)}
             </h2>
             <p className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              Бесперебойное питание, охрана 24/7 и каналы связи с резервированием.
+              {content.section_description}
             </p>
             <p className="text-xl text-foreground font-medium mb-8 border-l-4 border-accent pl-4">
-              Размещайте проекты там, где о них заботятся.
+              {content.section_quote}
             </p>
 
             {/* Features Grid */}
@@ -86,7 +112,7 @@ export const InfrastructureSection = () => {
               <div className="absolute inset-0 cyber-grid opacity-30" />
               
               {/* Server Rack Visualization */}
-              <div className="relative z-10 space-y-3">
+              <div className="relative z-10 space-y-3 mb-24">
                 {[...Array(8)].map((_, i) => (
                   <div
                     key={i}
@@ -113,16 +139,16 @@ export const InfrastructureSection = () => {
               <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-background/80 backdrop-blur-sm border border-accent/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-muted-foreground">Uptime</p>
-                    <p className="text-lg font-bold text-primary">99.98%</p>
+                    <p className="text-xs text-muted-foreground">{content.stat_1_label}</p>
+                    <p className="text-lg font-bold text-primary">{content.stat_1_value}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Температура</p>
-                    <p className="text-lg font-bold text-foreground">21°C</p>
+                    <p className="text-xs text-muted-foreground">{content.stat_2_label}</p>
+                    <p className="text-lg font-bold text-foreground">{content.stat_2_value}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">PUE</p>
-                    <p className="text-lg font-bold text-accent">1.3</p>
+                    <p className="text-xs text-muted-foreground">{content.stat_3_label}</p>
+                    <p className="text-lg font-bold text-accent">{content.stat_3_value}</p>
                   </div>
                 </div>
               </div>

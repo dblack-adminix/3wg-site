@@ -3,20 +3,190 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { api } from '@/lib/api';
 
-// Crypto payment icons data
-const cryptoPayments = [
-  { name: 'Bitcoin', symbol: 'BTC', color: '#F7931A' },
-  { name: 'Ethereum', symbol: 'ETH', color: '#627EEA' },
-  { name: 'USDT', symbol: 'USDT', color: '#26A17B' },
-  { name: 'Monero', symbol: 'XMR', color: '#FF6600' },
-  { name: 'Litecoin', symbol: 'LTC', color: '#BFBBBB' },
-];
+interface PricingTier {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  period: string;
+  icon: string;
+  color: string;
+  badge?: string;
+  features: string[];
+  buttonText: string;
+  buttonLink?: string;
+  highlighted?: boolean;
+}
+
+interface CryptoPayment {
+  id: string;
+  name: string;
+  symbol: string;
+  color: string;
+}
+
+interface PricingContent {
+  hero: {
+    badge: string;
+    title: string;
+    subtitle: string;
+  };
+  tiers: PricingTier[];
+  crypto: {
+    title: string;
+    subtitle: string;
+    badge: string;
+    payments: CryptoPayment[];
+  };
+  footer: {
+    note: string;
+  };
+}
+
+// Default content
+const defaultContent: PricingContent = {
+  hero: {
+    badge: 'ACCESS_CONTROL',
+    title: 'ВЫБЕРИТЕ УРОВЕНЬ СУВЕРЕНИТЕТА',
+    subtitle: 'Доступ к узлам 3WG.RU. Никаких логов. Никаких следов.',
+  },
+  tiers: [
+    {
+      id: '1',
+      name: 'LITE',
+      description: 'Базовый доступ',
+      price: '9$',
+      period: '/ mo',
+      icon: 'Shield',
+      color: 'muted',
+      features: ['WireGuard Protocol', 'Standard Speed', '1 Device', 'Location: Netherlands'],
+      buttonText: 'SELECT_TIER',
+      highlighted: false,
+    },
+    {
+      id: '2',
+      name: 'PRO',
+      description: 'Оптимальный выбор',
+      price: '19$',
+      period: '/ mo',
+      icon: 'Zap',
+      color: 'primary',
+      badge: 'OPTIMAL_CHOICE',
+      features: ['WireGuard + AmneziaWG', 'High Speed (1Gbps)', '5 Devices', 'All Locations', 'Priority Support'],
+      buttonText: 'SELECT_TIER',
+      highlighted: true,
+    },
+    {
+      id: '3',
+      name: 'SOVEREIGN',
+      description: 'Железо + Сеть',
+      price: '99$',
+      period: '+ Shipping',
+      icon: 'Server',
+      color: 'accent',
+      badge: 'HARDWARE_BUNDLE',
+      features: ['NODE-1 Hardware Included', 'Lifetime Firmware Updates', 'Personal Node Setup', 'Private Domain Access'],
+      buttonText: 'CONFIGURE_NODE',
+      buttonLink: '/hardware',
+      highlighted: false,
+    },
+  ],
+  crypto: {
+    title: 'Anonymous Settlement',
+    subtitle: 'PAYMENT_METHOD: CRYPTO_ONLY',
+    badge: 'PAYMENT_METHOD: CRYPTO_ONLY',
+    payments: [
+      { id: '1', name: 'Bitcoin', symbol: 'BTC', color: '#F7931A' },
+      { id: '2', name: 'Ethereum', symbol: 'ETH', color: '#627EEA' },
+      { id: '3', name: 'USDT', symbol: 'USDT', color: '#26A17B' },
+      { id: '4', name: 'Monero', symbol: 'XMR', color: '#FF6600' },
+      { id: '5', name: 'Litecoin', symbol: 'LTC', color: '#BFBBBB' },
+    ],
+  },
+  footer: {
+    note: '*Мы не запрашиваем вашу почту или имя. Только хэш транзакции. Только приватность.',
+  },
+};
+
+const iconMap: Record<string, any> = {
+  Shield,
+  Zap,
+  Server,
+  Package,
+  Globe,
+  Cpu,
+  Lock,
+  Terminal,
+};
 
 const Pricing = () => {
   const [hoveredCrypto, setHoveredCrypto] = useState<string | null>(null);
+  const [content, setContent] = useState<PricingContent>(defaultContent);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadContent = async () => {
+      try {
+        const data = await api.request<PricingContent>('/settings/pages/pricing');
+        setContent(data);
+      } catch (error) {
+        console.error('Failed to load pricing content:', error);
+        // Use default content on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadContent();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground font-mono">Загрузка...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  const getColorClasses = (color: string) => {
+    switch (color) {
+      case 'primary':
+        return {
+          glow: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 40%) 50%, hsl(73, 100%, 50%) 100%)',
+          glowOuter: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 30%) 100%)',
+          border: 'border-primary/50',
+          bg: 'bg-primary/10',
+          text: 'text-primary',
+          button: 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50',
+        };
+      case 'accent':
+        return {
+          glow: 'linear-gradient(135deg, #FF9900 0%, #CC7700 50%, #FF9900 100%)',
+          glowOuter: 'linear-gradient(135deg, #FF9900 0%, #FF6600 100%)',
+          border: 'border-accent/50',
+          bg: 'bg-accent/10',
+          text: 'text-accent',
+          button: 'bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/30 hover:shadow-accent/50',
+        };
+      default:
+        return {
+          glow: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%)',
+          glowOuter: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)',
+          border: 'border-muted-foreground/20',
+          bg: 'bg-muted-foreground/10',
+          text: 'text-muted-foreground',
+          button: 'border-muted-foreground/30 text-muted-foreground hover:bg-muted-foreground/10 hover:border-muted-foreground/50',
+        };
+    }
+  };
 
   return (
     <Layout>
@@ -35,10 +205,7 @@ const Pricing = () => {
         
         {/* Vignette */}
         <div 
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(0,0,0,0.6) 100%)',
-          }}
+          className="absolute inset-0 pointer-events-none pricing-gradient"
         />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -47,15 +214,15 @@ const Pricing = () => {
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-6">
                 <Terminal className="h-4 w-4 text-primary" />
-                <span className="font-mono text-xs text-primary tracking-wider">ACCESS_CONTROL</span>
+                <span className="font-mono text-xs text-primary tracking-wider">{content.hero.badge}</span>
               </div>
               
               <h1 className="font-mono text-3xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 tracking-tight">
-                ВЫБЕРИТЕ УРОВЕНЬ СУВЕРЕНИТЕТА
+                {content.hero.title}
               </h1>
               
               <p className="font-mono text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-                Доступ к узлам 3LAB.PRO. Никаких логов. Никаких следов.
+                {content.hero.subtitle}
               </p>
             </div>
           </AnimatedSection>
@@ -63,243 +230,134 @@ const Pricing = () => {
           {/* Pricing Cards */}
           <AnimatedSection delay={0.15}>
             <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-20">
-              
-              {/* LITE Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="relative group"
-              >
-                <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-muted-foreground/30 to-muted-foreground/10 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-                
-                <div className="relative h-full p-6 md:p-8 rounded-2xl bg-[#0a0a0a] border border-muted-foreground/20 group-hover:border-muted-foreground/40 transition-all duration-500">
-                  {/* Terminal header */}
-                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-muted-foreground/20">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
-                    </div>
-                    <span className="font-mono text-[10px] text-muted-foreground ml-2">tier_lite.sh</span>
-                  </div>
+              {content.tiers.map((tier, index) => {
+                const colors = getColorClasses(tier.color);
+                const IconComponent = iconMap[tier.icon] || Shield;
+                const isHighlighted = tier.highlighted;
 
-                  <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-muted-foreground/10 border border-muted-foreground/20 mb-4">
-                      <Shield className="h-7 w-7 text-muted-foreground" />
-                    </div>
-                    
-                    <h3 className="font-mono text-2xl font-bold text-foreground mb-1">LITE</h3>
-                    <p className="font-mono text-xs text-muted-foreground mb-6">Базовый доступ</p>
-                    
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="font-mono text-5xl font-bold text-foreground">9$</span>
-                      <span className="font-mono text-sm text-muted-foreground">/ mo</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    {[
-                      'WireGuard Protocol',
-                      'Standard Speed',
-                      '1 Device',
-                      'Location: Netherlands',
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
-                        <div className="w-4 h-4 rounded-sm bg-muted-foreground/10 flex items-center justify-center">
-                          <Check className="w-3 h-3 text-muted-foreground" />
-                        </div>
-                        <span className="text-muted-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    className="w-full font-mono border-muted-foreground/30 text-muted-foreground hover:bg-muted-foreground/10 hover:border-muted-foreground/50 transition-all"
+                return (
+                  <motion.div
+                    key={tier.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+                    className={`relative group ${isHighlighted ? 'lg:scale-105 z-10' : ''}`}
                   >
-                    <span className="mr-2">&gt;</span> SELECT_TIER
-                  </Button>
-                </div>
-              </motion.div>
-
-              {/* PRO Card - Highlighted */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="relative group lg:scale-105 z-10"
-              >
-                {/* Glow effect */}
-                <div 
-                  className="absolute -inset-[2px] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
-                  style={{
-                    background: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 40%) 50%, hsl(73, 100%, 50%) 100%)',
-                  }}
-                />
-                <div 
-                  className="absolute -inset-[3px] rounded-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-md"
-                  style={{
-                    background: 'linear-gradient(135deg, hsl(73, 100%, 50%) 0%, hsl(73, 100%, 30%) 100%)',
-                  }}
-                />
-                
-                <div 
-                  className="relative h-full p-6 md:p-8 rounded-2xl border border-primary/50 backdrop-blur-xl"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(204, 255, 0, 0.08) 0%, rgba(10, 10, 10, 0.95) 30%)',
-                  }}
-                >
-                  {/* Recommended badge */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold font-mono tracking-wider shadow-lg shadow-primary/40">
-                      <Zap className="h-3 w-3" />
-                      OPTIMAL_CHOICE
-                    </span>
-                  </div>
-
-                  {/* Terminal header */}
-                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-primary/30 pt-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary/60" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary/40" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary/20" />
-                    </div>
-                    <span className="font-mono text-[10px] text-primary ml-2">tier_pro.sh</span>
-                  </div>
-
-                  <div className="text-center mb-8">
+                    {/* Glow effect */}
+                    {isHighlighted ? (
+                      <>
+                        <div 
+                          className="absolute -inset-[2px] rounded-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
+                          style={{ background: colors.glow }}
+                        />
+                        <div 
+                          className="absolute -inset-[3px] rounded-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 blur-md"
+                          style={{ background: colors.glowOuter }}
+                        />
+                      </>
+                    ) : (
+                      <div 
+                        className="absolute -inset-[1px] rounded-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500"
+                        style={{ background: colors.glow }}
+                      />
+                    )}
+                    
                     <div 
-                      className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary/10 border border-primary/30 mb-4"
-                      style={{ boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)' }}
+                      className={`relative h-full p-6 md:p-8 rounded-2xl border ${colors.border} ${
+                        isHighlighted ? 'backdrop-blur-xl pricing-card-pro' : 
+                        tier.color === 'accent' ? 'pricing-card-sovereign' : 'bg-background'
+                      }`}
                     >
-                      <Zap className="h-8 w-8 text-primary" />
-                    </div>
-                    
-                    <h3 className="font-mono text-3xl font-bold text-primary mb-1">PRO</h3>
-                    <p className="font-mono text-xs text-primary/70 mb-6">Оптимальный выбор</p>
-                    
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="font-mono text-6xl font-bold text-primary">19$</span>
-                      <span className="font-mono text-sm text-primary/70">/ mo</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    {[
-                      'WireGuard + AmneziaWG',
-                      'High Speed (1Gbps)',
-                      '5 Devices',
-                      'All Locations',
-                      'Priority Support',
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
-                        <div className="w-4 h-4 rounded-sm bg-primary/20 flex items-center justify-center">
-                          <Check className="w-3 h-3 text-primary" />
+                      {/* Badge */}
+                      {tier.badge && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                          <span className={`inline-flex items-center gap-1.5 px-4 py-1 rounded-full ${
+                            tier.color === 'primary' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/40' :
+                            tier.color === 'accent' ? 'bg-accent text-accent-foreground shadow-lg shadow-accent/40' :
+                            'bg-muted text-muted-foreground'
+                          } text-[10px] font-bold font-mono tracking-wider`}>
+                            <IconComponent className="h-3 w-3" />
+                            {tier.badge}
+                          </span>
                         </div>
-                        <span className="text-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
+                      )}
 
-                  <Button
-                    className="w-full font-mono bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all"
-                  >
-                    <span className="mr-2">&gt;</span> SELECT_TIER
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </motion.div>
-
-              {/* SOVEREIGN Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="relative group"
-              >
-                {/* Orange glow */}
-                <div 
-                  className="absolute -inset-[2px] rounded-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500 blur-sm"
-                  style={{
-                    background: 'linear-gradient(135deg, #FF9900 0%, #CC7700 50%, #FF9900 100%)',
-                  }}
-                />
-                <div 
-                  className="absolute -inset-[3px] rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-md"
-                  style={{
-                    background: 'linear-gradient(135deg, #FF9900 0%, #FF6600 100%)',
-                  }}
-                />
-                
-                <div 
-                  className="relative h-full p-6 md:p-8 rounded-2xl border border-accent/50"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255, 153, 0, 0.08) 0%, rgba(10, 10, 10, 0.98) 30%)',
-                  }}
-                >
-                  {/* Badge */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold font-mono tracking-wider shadow-lg shadow-accent/40">
-                      <Package className="h-3 w-3" />
-                      HARDWARE_BUNDLE
-                    </span>
-                  </div>
-
-                  {/* Terminal header */}
-                  <div className="flex items-center gap-2 mb-6 pb-4 border-b border-accent/30 pt-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-accent/60" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-accent/40" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-accent/20" />
-                    </div>
-                    <span className="font-mono text-[10px] text-accent ml-2">tier_sovereign.sh</span>
-                  </div>
-
-                  <div className="text-center mb-8">
-                    <div 
-                      className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-accent/10 border border-accent/30 mb-4"
-                      style={{ boxShadow: '0 0 30px rgba(255, 153, 0, 0.2)' }}
-                    >
-                      <Server className="h-8 w-8 text-accent" />
-                    </div>
-                    
-                    <h3 className="font-mono text-2xl font-bold text-accent mb-1">SOVEREIGN</h3>
-                    <p className="font-mono text-xs text-accent/70 mb-6">Железо + Сеть</p>
-                    
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="font-mono text-5xl font-bold text-accent">99$</span>
-                      <span className="font-mono text-sm text-accent/70">+ Shipping</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-8">
-                    {[
-                      'NODE-1 Hardware Included',
-                      'Lifetime Firmware Updates',
-                      'Personal Node Setup',
-                      'Private Domain Access',
-                    ].map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-3 font-mono text-sm">
-                        <div className="w-4 h-4 rounded-sm bg-accent/20 flex items-center justify-center">
-                          <Check className="w-3 h-3 text-accent" />
+                      {/* Terminal header */}
+                      <div className={`flex items-center gap-2 mb-6 pb-4 border-b ${
+                        tier.color === 'primary' ? 'border-primary/30' :
+                        tier.color === 'accent' ? 'border-accent/30' :
+                        'border-muted-foreground/20'
+                      } ${tier.badge ? 'pt-2' : ''}`}>
+                        <div className="flex gap-1.5">
+                          <div className={`w-2.5 h-2.5 rounded-full ${colors.bg}`} />
+                          <div className={`w-2.5 h-2.5 rounded-full ${colors.bg} opacity-60`} />
+                          <div className={`w-2.5 h-2.5 rounded-full ${colors.bg} opacity-30`} />
                         </div>
-                        <span className="text-foreground">{feature}</span>
+                        <span className={`font-mono text-[10px] ${colors.text} ml-2`}>
+                          tier_{tier.name.toLowerCase()}.sh
+                        </span>
                       </div>
-                    ))}
-                  </div>
 
-                  <Link to="/hardware">
-                    <Button
-                      className="w-full font-mono bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg shadow-accent/30 hover:shadow-accent/50 transition-all"
-                    >
-                      <span className="mr-2">&gt;</span> CONFIGURE_NODE
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
+                      <div className="text-center mb-8">
+                        <div 
+                          className={`inline-flex items-center justify-center ${
+                            isHighlighted ? 'w-16 h-16' : 'w-14 h-14'
+                          } rounded-xl ${colors.bg} border ${colors.border} mb-4`}
+                          style={isHighlighted ? { boxShadow: `0 0 30px ${tier.color === 'primary' ? 'rgba(204, 255, 0, 0.2)' : 'rgba(255, 153, 0, 0.2)'}` } : {}}
+                        >
+                          <IconComponent className={`${isHighlighted ? 'h-8 w-8' : 'h-7 w-7'} ${colors.text}`} />
+                        </div>
+                        
+                        <h3 className={`font-mono ${isHighlighted ? 'text-3xl' : 'text-2xl'} font-bold ${colors.text} mb-1`}>
+                          {tier.name}
+                        </h3>
+                        <p className={`font-mono text-xs ${colors.text} opacity-70 mb-6`}>
+                          {tier.description}
+                        </p>
+                        
+                        <div className="flex items-baseline justify-center gap-1">
+                          <span className={`font-mono ${isHighlighted ? 'text-6xl' : 'text-5xl'} font-bold ${colors.text}`}>
+                            {tier.price}
+                          </span>
+                          <span className={`font-mono text-sm ${colors.text} opacity-70`}>
+                            {tier.period}
+                          </span>
+                        </div>
+                      </div>
 
+                      <div className="space-y-3 mb-8">
+                        {tier.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-3 font-mono text-sm">
+                            <div className={`w-4 h-4 rounded-sm ${colors.bg} flex items-center justify-center`}>
+                              <Check className={`w-3 h-3 ${colors.text}`} />
+                            </div>
+                            <span className={tier.color === 'muted' ? 'text-muted-foreground' : 'text-foreground'}>
+                              {feature}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {tier.buttonLink ? (
+                        <Link to={tier.buttonLink}>
+                          <Button className={`w-full font-mono ${colors.button} transition-all`}>
+                            <span className="mr-2">&gt;</span> {tier.buttonText}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Button
+                          variant={tier.color === 'muted' ? 'outline' : 'default'}
+                          className={`w-full font-mono ${colors.button} transition-all`}
+                        >
+                          <span className="mr-2">&gt;</span> {tier.buttonText}
+                          {isHighlighted && <ArrowRight className="ml-2 h-4 w-4" />}
+                        </Button>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </AnimatedSection>
 
@@ -309,23 +367,23 @@ const Pricing = () => {
               <div className="relative">
                 <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-50" />
                 
-                <div className="relative p-8 md:p-10 rounded-2xl bg-[#0a0a0a] border border-primary/20">
+                <div className="relative p-8 md:p-10 rounded-2xl bg-background border border-primary/20">
                   {/* Header */}
                   <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 mb-4">
                       <Lock className="h-4 w-4 text-primary" />
-                      <span className="font-mono text-xs text-primary tracking-wider">PAYMENT_METHOD: CRYPTO_ONLY</span>
+                      <span className="font-mono text-xs text-primary tracking-wider">{content.crypto.badge}</span>
                     </div>
                     <h3 className="font-mono text-xl md:text-2xl font-bold text-foreground">
-                      Anonymous Settlement
+                      {content.crypto.title}
                     </h3>
                   </div>
 
                   {/* Crypto Icons */}
                   <div className="flex items-center justify-center gap-4 md:gap-8 flex-wrap">
-                    {cryptoPayments.map((crypto) => (
+                    {content.crypto.payments.map((crypto) => (
                       <motion.div
-                        key={crypto.symbol}
+                        key={crypto.id}
                         className="relative cursor-pointer"
                         onMouseEnter={() => setHoveredCrypto(crypto.symbol)}
                         onMouseLeave={() => setHoveredCrypto(null)}
@@ -381,7 +439,7 @@ const Pricing = () => {
           <AnimatedSection delay={0.4}>
             <div className="text-center">
               <p className="font-mono text-xs text-muted-foreground/60 max-w-lg mx-auto">
-                *Мы не запрашиваем вашу почту или имя. Только хэш транзакции. Только приватность.
+                {content.footer.note}
               </p>
             </div>
           </AnimatedSection>

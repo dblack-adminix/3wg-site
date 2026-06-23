@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/accordion';
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { useBlockContent } from '@/hooks/useBlockContent';
 
 const categories = [
   {
@@ -88,7 +89,7 @@ AmneziaWG — это модифицированный WireGuard, который 
       {
         icon: Server,
         question: 'Что значит "личный сервер"?',
-        answer: `В отличие от массовых VPN-сервисов (NordVPN, ExpressVPN), где тысячи пользователей делят один IP-адрес, в 3LAB вы получаете:
+        answer: `В отличие от массовых VPN-сервисов (NordVPN, ExpressVPN), где тысячи пользователей делят один IP-адрес, в 3WG вы получаете:
 
 • **Выделенный IP** — не в спам-листах, не забанен
 • **Изолированные ресурсы** — никто не влияет на вашу скорость
@@ -108,7 +109,7 @@ AmneziaWG — это модифицированный WireGuard, который 
       {
         icon: Router,
         question: 'Зачем нужен аппаратный роутер?',
-        answer: `Аппаратный роутер 3LAB NODE-1 решает несколько проблем:
+        answer: `Аппаратный роутер 3WG NODE-1 решает несколько проблем:
 
 • **Smart TV и консоли** — не поддерживают VPN-приложения
 • **Вся сеть защищена** — не нужно настраивать каждое устройство
@@ -159,6 +160,39 @@ Plug & Play — достали из коробки, подключили, раб
 ];
 
 const FAQ = () => {
+  // Load content from API
+  const { content } = useBlockContent('faq_page', {
+    hero: {
+      badge: 'FAQ_DATABASE',
+      title: 'Частые',
+      subtitle: 'вопросы',
+      description: 'Техническая документация для любопытных',
+    },
+    categories,
+    footer: {
+      text: 'Не нашли ответ?',
+      email: 'support@3wg.ru',
+    },
+  });
+
+  // Icon mapping for categories
+  const iconMap: Record<string, any> = {
+    security: Shield,
+    protocols: Zap,
+    billing: CreditCard,
+    hardware: Router,
+    setup: Smartphone,
+  };
+
+  // Color mapping for categories
+  const colorMap: Record<string, string> = {
+    security: 'primary',
+    protocols: 'wireguard',
+    billing: 'accent',
+    hardware: 'primary',
+    setup: 'accent',
+  };
+
   return (
     <Layout>
       <section className="pt-32 pb-24 relative">
@@ -169,14 +203,14 @@ const FAQ = () => {
           <AnimatedSection>
             <div className="text-center mb-16">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium mb-6">
-                <span className="font-mono-tech text-xs">FAQ_DATABASE</span>
+                <span className="font-mono-tech text-xs">{content.hero.badge}</span>
               </span>
               
               <h1 className="text-4xl md:text-6xl font-bold font-['Montserrat'] mb-4">
-                Частые <span className="text-gradient-primary">вопросы</span>
+                {content.hero.title} <span className="text-gradient-primary">{content.hero.subtitle}</span>
               </h1>
               <p className="text-xl text-muted-foreground">
-                Техническая документация для любопытных
+                {content.hero.description}
               </p>
             </div>
           </AnimatedSection>
@@ -184,42 +218,48 @@ const FAQ = () => {
           {/* Category Navigation */}
           <AnimatedSection delay={0.1}>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
-              {categories.map((cat) => (
+              {content.categories.map((cat: any) => {
+                const CategoryIcon = iconMap[cat.id] || Server;
+                const color = colorMap[cat.id] || 'primary';
+                return (
                 <a
                   key={cat.id}
                   href={`#${cat.id}`}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 hover:scale-105 ${
-                    cat.color === 'primary'
+                    color === 'primary'
                       ? 'border-primary/30 bg-primary/5 text-primary hover:bg-primary/10'
-                      : cat.color === 'wireguard'
+                      : color === 'wireguard'
                       ? 'border-[#B10000]/30 bg-[#B10000]/5 text-[#FF3333] hover:bg-[#B10000]/10'
                       : 'border-accent/30 bg-accent/5 text-accent hover:bg-accent/10'
                   }`}
                 >
-                  <cat.icon className="h-4 w-4" />
+                  <CategoryIcon className="h-4 w-4" />
                   <span className="text-sm font-medium">{cat.title}</span>
                 </a>
-              ))}
+              )})}
             </div>
           </AnimatedSection>
 
           {/* FAQ Categories */}
           <div className="max-w-4xl mx-auto space-y-12">
-            {categories.map((category, catIndex) => (
+            {content.categories.map((category: any, catIndex: number) => {
+              const CategoryIcon = iconMap[category.id] || Server;
+              const color = colorMap[category.id] || 'primary';
+              return (
               <AnimatedSection key={category.id} delay={0.1 * (catIndex + 1)}>
                 <div id={category.id}>
                   <div className="flex items-center gap-3 mb-6">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                      category.color === 'primary'
+                      color === 'primary'
                         ? 'bg-primary/20'
-                        : category.color === 'wireguard'
+                        : color === 'wireguard'
                         ? 'bg-[#B10000]/20'
                         : 'bg-accent/20'
                     }`}>
-                      <category.icon className={`h-5 w-5 ${
-                        category.color === 'primary'
+                      <CategoryIcon className={`h-5 w-5 ${
+                        color === 'primary'
                           ? 'text-primary'
-                          : category.color === 'wireguard'
+                          : color === 'wireguard'
                           ? 'text-[#FF3333]'
                           : 'text-accent'
                       }`} />
@@ -228,7 +268,7 @@ const FAQ = () => {
                   </div>
                   
                   <Accordion type="single" collapsible className="space-y-4">
-                    {category.items.map((item, index) => (
+                    {category.items.map((item: any, index: number) => (
                       <AccordionItem 
                         key={index} 
                         value={`${category.id}-${index}`}
@@ -237,9 +277,9 @@ const FAQ = () => {
                         <div className="relative group">
                           <div 
                             className={`absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 ${
-                              category.color === 'primary' 
+                              color === 'primary' 
                                 ? 'bg-gradient-to-r from-primary/40 to-primary/20' 
-                                : category.color === 'wireguard'
+                                : color === 'wireguard'
                                 ? 'bg-gradient-to-r from-[#B10000]/40 to-primary/20'
                                 : 'bg-gradient-to-r from-accent/40 to-purple-500/20'
                             }`}
@@ -250,18 +290,18 @@ const FAQ = () => {
                               <div className="flex items-center gap-4 text-left">
                                 <div 
                                   className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                                    category.color === 'primary' 
+                                    color === 'primary' 
                                       ? 'bg-primary/20' 
-                                      : category.color === 'wireguard'
+                                      : color === 'wireguard'
                                       ? 'bg-[#B10000]/20'
                                       : 'bg-accent/20'
                                   }`}
                                 >
-                                  <item.icon 
+                                  <CategoryIcon 
                                     className={`h-5 w-5 ${
-                                      category.color === 'primary' 
+                                      color === 'primary' 
                                         ? 'text-primary' 
-                                        : category.color === 'wireguard'
+                                        : color === 'wireguard'
                                         ? 'text-[#FF3333]'
                                         : 'text-accent'
                                     }`}
@@ -287,14 +327,14 @@ const FAQ = () => {
                   </Accordion>
                 </div>
               </AnimatedSection>
-            ))}
+            )})}
           </div>
 
           {/* Bottom CTA */}
           <AnimatedSection delay={0.3}>
             <div className="mt-16 text-center">
               <p className="text-muted-foreground mb-4 font-mono-tech text-sm">
-                Не нашли ответ? // <a href="mailto:support@3lab.pro" className="text-primary hover:underline">support@3lab.pro</a>
+                {content.footer.text} // <a href={`mailto:${content.footer.email}`} className="text-primary hover:underline">{content.footer.email}</a>
               </p>
             </div>
           </AnimatedSection>

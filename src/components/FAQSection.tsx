@@ -5,96 +5,67 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
-const faqItems = [
-  {
-    icon: Shield,
-    question: 'Чем AmneziaWG отличается от обычного VPN?',
-    answer: `Обычные VPN используют стандартные протоколы, которые легко распознаются системами Deep Packet Inspection (DPI). 
-    
-AmneziaWG — это модифицированный WireGuard, который маскирует VPN-трафик под обычный HTTPS. Для систем фильтрации ваш трафик выглядит как обычный веб-сёрфинг.
-
-**Технические детали:**
-\`\`\`
-protocol: AmneziaWG
-obfuscation: enabled
-dpi_bypass: true
-packet_signature: randomized
-\`\`\``,
-    color: 'primary',
-  },
-  {
-    icon: Zap,
-    question: 'Какая скорость у WireGuard сервера?',
-    answer: `WireGuard — самый быстрый VPN-протокол на сегодняшний день. Наши серверы обеспечивают:
-
-• **Скорость:** до 1 Гбит/с (зависит от вашего провайдера)
-• **Пинг:** от 5ms до Европы, от 80ms до США
-• **Шифрование:** ChaCha20-Poly1305 (не замедляет соединение)
-
-Идеально для 4K стриминга, онлайн-игр и видеозвонков без лагов.`,
-    color: 'wireguard',
-  },
-  {
-    icon: Globe,
-    question: 'Работает ли в Китае, Иране, Туркменистане?',
-    answer: `Да, но с нюансами. Для стран с агрессивной цензурой мы рекомендуем:
-
-1. **AmneziaWG** — основной протокол с обфускацией
-2. **ShadowSocks** — резервный вариант через CDN
-3. **Cloak** — для экстремальных случаев
-
-Мы не гарантируем 100% работу в любой момент времени, так как блокировки постоянно обновляются. Но наши инженеры оперативно адаптируют конфигурации.`,
-    color: 'accent',
-  },
-  {
-    icon: Smartphone,
-    question: 'Как настроить VPN на телефоне/компьютере?',
-    answer: `Мы предоставляем готовые конфигурационные файлы:
-
-**Для WireGuard:**
-1. Скачайте приложение WireGuard (iOS/Android/Windows/macOS)
-2. Импортируйте .conf файл из личного кабинета или Telegram-бота
-3. Нажмите "Подключить"
-
-**Для Amnezia:**
-1. Скачайте AmneziaVPN с официального сайта
-2. Отсканируйте QR-код из бота
-3. Готово!
-
-Весь процесс занимает около 2 минут.`,
-    color: 'primary',
-  },
-  {
-    icon: Lock,
-    question: 'Вы храните логи подключений?',
-    answer: `**Нет.** Это не маркетинг — это архитектура.
-
-Наши серверы настроены так, что технически не могут записывать:
-• IP-адреса пользователей
-• Временные метки подключений
-• Объём переданных данных
-• Посещённые сайты
-
-Мы используем RAM-only режим — при перезагрузке сервера все данные стираются. Юридически мы находимся в юрисдикции, где нет требований о хранении данных.`,
-    color: 'accent',
-  },
-  {
-    icon: Server,
-    question: 'Что значит "личный сервер"?',
-    answer: `В отличие от массовых VPN-сервисов (NordVPN, ExpressVPN), где тысячи пользователей делят один IP-адрес, в 3LAB вы получаете:
-
-• **Выделенный IP** — не в спам-листах, не забанен
-• **Изолированные ресурсы** — никто не влияет на вашу скорость
-• **Полный контроль** — root-доступ по запросу
-• **Приватность** — только вы знаете, что делаете через этот IP
-
-Это как разница между коммуналкой и личной квартирой.`,
-    color: 'wireguard',
-  },
-];
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 export const FAQSection = () => {
+  const { content } = useBlockContent('faq_section', {
+    section_title: 'Частые вопросы',
+    section_subtitle: 'Техническая документация для любопытных',
+    support_text: 'Не нашли ответ? // support@3wg.ru',
+    faq_1_question: 'Чем AmneziaWG отличается от обычного VPN?',
+    faq_1_answer: 'Обычные VPN используют стандартные протоколы, которые легко распознаются системами Deep Packet Inspection (DPI).\n\nAmneziaWG — это модифицированный WireGuard, который маскирует VPN-трафик под обычный HTTPS.',
+    faq_2_question: 'Какая скорость у WireGuard сервера?',
+    faq_2_answer: 'WireGuard — самый быстрый VPN-протокол на сегодняшний день.',
+    faq_3_question: 'Работает ли в Китае, Иране, Туркменистане?',
+    faq_3_answer: 'Да, но с нюансами. Для стран с агрессивной цензурой мы рекомендуем AmneziaWG.',
+    faq_4_question: 'Как настроить VPN на телефоне/компьютере?',
+    faq_4_answer: 'Мы предоставляем готовые конфигурационные файлы.',
+    faq_5_question: 'Вы храните логи подключений?',
+    faq_5_answer: 'Нет. Наши серверы не записывают логи.',
+    faq_6_question: 'Что значит "личный сервер"?',
+    faq_6_answer: 'Вы получаете выделенный IP и изолированные ресурсы.',
+  });
+
+  const faqItems = [
+    {
+      icon: Shield,
+      question: content.faq_1_question,
+      answer: content.faq_1_answer,
+      color: 'primary',
+    },
+    {
+      icon: Zap,
+      question: content.faq_2_question,
+      answer: content.faq_2_answer,
+      color: 'wireguard',
+    },
+    {
+      icon: Globe,
+      question: content.faq_3_question,
+      answer: content.faq_3_answer,
+      color: 'accent',
+    },
+    {
+      icon: Smartphone,
+      question: content.faq_4_question,
+      answer: content.faq_4_answer,
+      color: 'primary',
+    },
+    {
+      icon: Lock,
+      question: content.faq_5_question,
+      answer: content.faq_5_answer,
+      color: 'accent',
+    },
+    {
+      icon: Server,
+      question: content.faq_6_question,
+      answer: content.faq_6_answer,
+      color: 'wireguard',
+    },
+  ];
+
   return (
     <section id="faq" className="py-24 relative">
       {/* Background */}
@@ -109,10 +80,10 @@ export const FAQSection = () => {
             </span>
             
             <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-4">
-              Частые <span className="text-gradient-primary">вопросы</span>
+              {highlightUppercase(content.section_title)}
             </h2>
             <p className="text-muted-foreground text-lg">
-              Техническая документация для любопытных
+              {content.section_subtitle}
             </p>
           </div>
 
@@ -167,7 +138,7 @@ export const FAQSection = () => {
                     <AccordionContent className="px-6 pb-6">
                       <div className="pl-14 prose prose-invert prose-sm max-w-none">
                         <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                          {item.answer}
+                          {highlightUppercase(item.answer)}
                         </div>
                       </div>
                     </AccordionContent>
@@ -180,7 +151,7 @@ export const FAQSection = () => {
           {/* Bottom CTA */}
           <div className="mt-12 text-center">
             <p className="text-muted-foreground mb-4 font-mono-tech text-sm">
-              Не нашли ответ? // support@3lab.pro
+              {content.support_text}
             </p>
           </div>
         </div>

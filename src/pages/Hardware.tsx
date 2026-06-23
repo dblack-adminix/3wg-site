@@ -58,7 +58,7 @@ const Hardware = () => {
               </div>
               
               <h1 className="text-4xl md:text-6xl font-bold font-['Montserrat'] mb-4">
-                <span className="bg-gradient-to-r from-gray-200 via-primary to-gray-300 bg-clip-text text-transparent">3LAB NODE-1</span>
+                <span className="bg-gradient-to-r from-gray-200 via-primary to-gray-300 bg-clip-text text-transparent">3WG NODE-1</span>
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground">
                 Готовый роутер с VPN из коробки
@@ -78,7 +78,7 @@ const Hardware = () => {
                     <div className="w-2.5 h-2.5 rounded-full bg-primary/60 animate-pulse" style={{ animationDelay: '0.2s' }} />
                     <div className="w-2.5 h-2.5 rounded-full bg-primary/40 animate-pulse" style={{ animationDelay: '0.4s' }} />
                     <div className="flex-1" />
-                    <span className="text-xs text-primary font-mono-tech font-bold">3LAB NODE-1</span>
+                    <span className="text-xs text-primary font-mono-tech font-bold">3WG NODE-1</span>
                   </div>
                   
                   {/* Ventilation Lines */}

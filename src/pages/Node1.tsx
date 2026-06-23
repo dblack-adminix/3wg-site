@@ -1,8 +1,9 @@
 import { Layout } from '@/components/Layout';
 import { AnimatedSection } from '@/components/AnimatedSection';
+import { RouterVisualization } from '@/components/RouterVisualization';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -15,10 +16,17 @@ import {
   Server,
   Wifi,
   HardDrive,
-  Terminal
+  Terminal,
+  Download,
+  CheckCircle
 } from 'lucide-react';
+import bgImage from '@/assets/unnamed02.png';
 import node1Internal from '@/assets/node1-internal.jpg';
 import node1Router from '@/assets/node1-router.png';
+import keeneticImage02 from '@/assets/Image02.png';
+import whatIs3 from '@/assets/what-is-3.png';
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 const firmwareFeatures = [
   {
@@ -47,6 +55,127 @@ const Node1 = () => {
   const [wireGuardOn, setWireGuardOn] = useState(true);
   const [amneziaOn, setAmneziaOn] = useState(true);
   const [tiltStyle, setTiltStyle] = useState({ transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)' });
+  
+  // Load hero content
+  const { content: heroContent } = useBlockContent('node1_hero', {
+    badge: 'Production Ready',
+    title: 'NODE-1:',
+    subtitle: 'Железо, которое не сдается.',
+    description: 'Ваш личный шлюз в цифровую свободу. Производство 3WG.RU.',
+    features: [
+      'OEM-платформа: Проверенная база, доработанная 3WG.',
+      'Кастомная прошивка: Управление каждым пакетом на уровне ядра.',
+      'Интегрированный AmneziaWG: Маскировка трафика по умолчанию.',
+    ],
+  });
+
+  // Load Keenetic firmware content
+  const { content: keeneticContent } = useBlockContent('node1_keenetic', {
+    badge: 'KEENETIC_FIRMWARE',
+    title: 'Прошивка для Keenetic',
+    subtitle: 'Превратите ваш роутер в защищённый узел с AmneziaWG',
+    sectionTitle: 'Полная интеграция с AmneziaWG',
+    sectionDescription: 'Кастомная прошивка добавляет нативную поддержку AmneziaWG с возможностью переключения протоколов на лету.',
+    features: [
+      { title: 'Простая установка', desc: 'Один клик — роутер готов' },
+      { title: 'Встроенная защита', desc: 'Kill Switch из коробки' },
+      { title: 'Производительность', desc: 'Оптимизация под ARM' },
+      { title: 'Web-интерфейс', desc: 'Управление через браузер' },
+    ],
+    buttonText: 'Скачать прошивку',
+    buttonLink: '',
+    supportedModels: 'Keenetic Giga / Ultra / Viva / Speedster',
+  });
+
+  // Load CTA content
+  const { content: ctaContent } = useBlockContent('node1_cta', {
+    title: 'Готовы к цифровой свободе?',
+    description: 'Доступно ограниченное количество устройств. Обеспечьте свой суверенитет сегодня.',
+    buttonText: 'Заказать NODE-1',
+    buttonLink: '/pricing',
+  });
+
+  // Load firmware features content
+  const { content: featuresContent } = useBlockContent('node1_features', {
+    title: 'Возможности прошивки',
+    features: [
+      { title: 'Мгновенное переключение', description: 'WireGuard для скорости, AmneziaWG для маскировки.' },
+      { title: 'Kill Switch', description: 'Защита от утечек при обрыве соединения.' },
+      { title: 'Мониторинг трафика', description: 'Всегда знайте, что происходит в вашей сети.' },
+      { title: 'Автоматические обновления', description: 'Мы позаботились о защите.' },
+    ],
+  });
+
+  // Load performance content
+  const { content: performanceContent } = useBlockContent('node1_performance', {
+    sectionTitle: 'Под Капотом:',
+    sectionSubtitle: 'Производительность',
+    mainTitle: 'Не просто router.\nВаш личный сервер.',
+    mainDescription: 'NODE-1 — это не клиентское устройство. Это выделенный вычислительный узел, созданный для одной цели: обеспечить ваш цифровой суверенитет. Отказоустойчивость, скорость и невидимость — его фундаментальные принципы.',
+    hardwareSpecs: {
+      cpu: 'Custom ARM Core @ 1.8 GHz',
+      ram: '2GB DDR4 ECC (Error-Correcting Code)',
+      storage: '32GB eMMC (Secure Flash)',
+    },
+    performanceSpecs: {
+      wireguard: 'Up to 950 Mbps (WireGuard)',
+      amneziawg: 'Up to 800 Mbps (AmneziaWG)',
+      power: '<10W (optimized 24/7 operation)',
+      temperature: '-20°C to +60°C',
+    },
+  });
+
+  // Load command center content
+  const { content: commandContent } = useBlockContent('node1_command', {
+    title: 'Прошивка: Ваш командный центр',
+    description: 'Интуитивный интерфейс для управления вашей приватной сетью. Переключайте протоколы, мониторьте трафик и настраивайте правила безопасности.',
+    terminalSpecs: {
+      cpu: 'Quad-core ARM 1.8GHz (Optimized for AES)',
+      ram: '2GB DDR4 High-Speed',
+      flash: '32GB Secure Storage',
+      os: '3WG Custom Hardened Linux',
+    },
+    cornerLabels: {
+      wan: 'WAN',
+      lan: 'LAN',
+      storage: '32GB',
+      memory: '2GB DDR4',
+    },
+    cardLabel: 'NODE-1 ARCHITECTURE',
+  });
+
+  // Load block visibility settings
+  const { content: blockVisibility } = useBlockContent('node1_visibility', {
+    'node1-hero': true,
+    'node1-keenetic': true,
+    'node1-performance': true,
+    'node1-command': true,
+    'node1-features': true,
+    'node1-cta': true,
+  });
+
+  // Load block order settings
+  const { content: blockOrderData } = useBlockContent<{ order: string[] }>('node1_order', {
+    order: ['node1-hero', 'node1-keenetic', 'node1-performance', 'node1-command', 'node1-features', 'node1-cta']
+  });
+  const blockOrder = blockOrderData.order || ['node1-hero', 'node1-keenetic', 'node1-performance', 'node1-command', 'node1-features', 'node1-cta'];
+  const visibleSections = blockOrder.some((sectionId) => blockVisibility[sectionId as keyof typeof blockVisibility]);
+  const effectiveBlockVisibility = visibleSections
+    ? blockVisibility
+    : {
+        'node1-hero': true,
+        'node1-keenetic': true,
+        'node1-performance': true,
+        'node1-command': true,
+        'node1-features': true,
+        'node1-cta': true,
+      };
+
+  // Debug logging
+  useEffect(() => {
+    console.log('Block Visibility:', effectiveBlockVisibility);
+    console.log('Block Order:', blockOrder);
+  }, [effectiveBlockVisibility, blockOrder]);
   
   // Animated network graph data
   const [graphPoints, setGraphPoints] = useState<number[]>([40, 35, 30, 25, 20, 28, 15, 22, 18, 12, 20, 10]);
@@ -118,17 +247,179 @@ const Node1 = () => {
 
   return (
     <Layout>
+      {/* Render sections in dynamic order */}
+      {blockOrder.map((sectionId) => {
+        switch (sectionId) {
+          case 'node1-hero':
+            return effectiveBlockVisibility['node1-hero'] ? (
+              <React.Fragment key="node1-hero">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        {/* Background Effects */}
+        {/* Animated Background Effects */}
         <div className="absolute inset-0 bg-background" />
-        <div className="absolute inset-0 cyber-grid opacity-30" />
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20"
+        
+        {/* Animated Grid with Pulse */}
+        <div className="absolute inset-0 opacity-20">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(0, 180, 216, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 180, 216, 0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: '50px 50px',
+              animation: 'gridPulse 4s ease-in-out infinite',
+            }}
+          />
+        </div>
+
+        {/* Energy Charges Moving Along Grid Lines */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Horizontal charges */}
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={`h-${i}`}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                top: `${(i + 1) * 20}%`,
+                left: '0%',
+                background: 'radial-gradient(circle, rgba(0, 180, 216, 1) 0%, rgba(0, 180, 216, 0.4) 50%, transparent 100%)',
+                boxShadow: '0 0 10px 2px rgba(0, 180, 216, 0.8)',
+              }}
+              animate={{
+                left: ['0%', '100%'],
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 10 + Math.random() * 3,
+                repeat: Infinity,
+                delay: i * 2.5,
+                ease: "linear",
+              }}
+            />
+          ))}
+          
+          {/* Vertical charges */}
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={`v-${i}`}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                left: `${(i + 1) * 20}%`,
+                top: '0%',
+                background: 'radial-gradient(circle, rgba(204, 255, 0, 1) 0%, rgba(204, 255, 0, 0.4) 50%, transparent 100%)',
+                boxShadow: '0 0 10px 2px rgba(204, 255, 0, 0.8)',
+              }}
+              animate={{
+                top: ['0%', '100%'],
+                opacity: [0, 1, 1, 0],
+              }}
+              transition={{
+                duration: 10 + Math.random() * 3,
+                repeat: Infinity,
+                delay: i * 2.5,
+                ease: "linear",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Animated Gradient Orbs */}
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
         />
+        
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-15 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, hsl(73 100% 50% / 0.4) 0%, transparent 70%)',
+          }}
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.15, 0.25, 0.15],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Scanning Lines Effect */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(180deg, transparent 0%, rgba(0, 180, 216, 0.1) 50%, transparent 100%)',
+            height: '200px',
+          }}
+          animate={{
+            y: ['-200px', 'calc(100vh + 200px)'],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+
+        {/* Glowing Lines */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+              <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          
+          {/* Animated horizontal lines */}
+          <motion.line
+            x1="0" y1="20%" x2="100%" y2="20%"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: [0, 1, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.line
+            x1="0" y1="60%" x2="100%" y2="60%"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: [0, 1, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          />
+          <motion.line
+            x1="0" y1="80%" x2="100%" y2="80%"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: [0, 1, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+        </svg>
+
+        {/* CSS Animations */}
+        <style>
+          {`
+            @keyframes gridPulse {
+              0%, 100% { opacity: 0.2; }
+              50% { opacity: 0.4; }
+            }
+          `}
+        </style>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -138,27 +429,22 @@ const Node1 = () => {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5">
                   <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                   <span className="text-xs font-mono-tech text-primary uppercase tracking-wider">
-                    Production Ready
+                    {heroContent.badge}
                   </span>
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-mono-tech leading-tight">
-                  <span className="text-foreground">NODE-1:</span>
+                  <span className="text-foreground">{heroContent.title}</span>
                   <br />
-                  <span className="text-gradient-primary">Железо, которое не сдается.</span>
+                  <span className="text-gradient-primary">{heroContent.subtitle}</span>
                 </h1>
                 
                 <p className="text-lg md:text-xl text-muted-foreground max-w-lg">
-                  Ваш личный шлюз в цифровую свободу. 
-                  <span className="text-primary font-medium"> Производство 3LAB.PRO.</span>
+                  {heroContent.description}
                 </p>
                 
                 <ul className="space-y-3 pt-4">
-                  {[
-                    'OEM-платформа: Проверенная база, доработанная 3LAB.',
-                    'Кастомная прошивка: Управление каждым пакетом на уровне ядра.',
-                    'Интегрированный AmneziaWG: Маскировка трафика по умолчанию.',
-                  ].map((feature, i) => (
+                  {heroContent.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3 text-muted-foreground">
                       <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                       <span className="font-mono-tech text-sm">{feature}</span>
@@ -170,169 +456,303 @@ const Node1 = () => {
             
             {/* Right: NODE-1 3D Router Image */}
             <AnimatedSection delay={0.2} direction="right">
-              <div className="relative flex items-center justify-center">
-                {/* Animated background glow layers */}
-                <motion.div 
-                  className="absolute w-[550px] h-[550px] rounded-full"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.3, 0.5, 0.3],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    background: 'radial-gradient(circle, hsl(73 100% 50% / 0.2) 0%, transparent 60%)',
-                    filter: 'blur(60px)',
-                  }}
-                />
-                <motion.div 
-                  className="absolute w-[400px] h-[400px] rounded-full"
-                  animate={{
-                    scale: [1.1, 1, 1.1],
-                    opacity: [0.4, 0.6, 0.4],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5,
-                  }}
-                  style={{
-                    background: 'radial-gradient(circle, hsl(180 100% 50% / 0.15) 0%, transparent 50%)',
-                    filter: 'blur(40px)',
-                  }}
-                />
-                
-                {/* Rotating ring effect */}
+              <RouterVisualization routerImage={node1Router} />
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+              </React.Fragment>
+            ) : null;
+
+          case 'node1-keenetic':
+            return effectiveBlockVisibility['node1-keenetic'] ? (
+              <React.Fragment key="node1-keenetic">
+      {/* Keenetic Firmware Section - Cyber Style */}
+      <section className="py-24 relative overflow-hidden bg-[#0a0a0a]">
+        {/* Background grid */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(204, 255, 0, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <AnimatedSection delay={0.1}>
+            <div className="text-center mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/5 text-accent text-sm font-medium mb-6"
+              >
+                <Download className="h-4 w-4" />
+                <span className="font-mono text-xs tracking-widest">{keeneticContent.badge}</span>
+              </motion.div>
+              
+              <h2 className="text-3xl md:text-5xl font-bold font-mono-tech mb-4">
+                {keeneticContent.title}
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-mono">
+                {keeneticContent.subtitle}
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+            {/* Left: 3D Router Visualization */}
+            <AnimatedSection delay={0.2} direction="left">
+              <div className="relative aspect-square max-w-[500px] mx-auto group cursor-pointer">
+                {/* Background flash on hover */}
                 <motion.div
-                  className="absolute w-[480px] h-[480px] rounded-full border border-primary/20"
+                  className="absolute inset-[-50%] rounded-full blur-[100px] pointer-events-none"
+                  style={{ background: 'radial-gradient(circle, rgba(204, 255, 0, 0.3) 0%, transparent 70%)' }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ 
+                    opacity: [0, 1, 0.5],
+                    scale: [0.8, 1.2, 1],
+                  }}
+                  transition={{ duration: 0.6 }}
+                />
+
+                {/* Orbital rings */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border border-primary/20"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                  style={{
-                    boxShadow: '0 0 30px hsl(73 100% 50% / 0.1)',
-                  }}
-                >
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary/50" />
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-cyan-400/50" />
-                </motion.div>
-                
-                {/* Second rotating ring (opposite direction) */}
+                  transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+                />
                 <motion.div
-                  className="absolute w-[420px] h-[420px] rounded-full border border-cyan-500/10"
+                  className="absolute inset-[10%] rounded-full border border-accent/20"
                   animate={{ rotate: -360 }}
-                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                >
-                  <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary/40" />
-                </motion.div>
-                
-                {/* Circuit background pattern */}
+                  transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                />
+                <motion.div
+                  className="absolute inset-[20%] rounded-full border border-primary/10"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+                />
+
+                {/* Orbital particles animation styles */}
+                <style>
+                  {`
+                    @keyframes orbitOuter {
+                      from { transform: rotate(0deg) translateX(250px) rotate(0deg); }
+                      to { transform: rotate(360deg) translateX(250px) rotate(-360deg); }
+                    }
+                    @keyframes orbitMiddle {
+                      from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+                      to { transform: rotate(-360deg) translateX(150px) rotate(360deg); }
+                    }
+                    @keyframes orbitInner {
+                      from { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+                      to { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+                    }
+                  `}
+                </style>
+
+                {/* Single glowing particle on outer orbit */}
                 <div 
-                  className="absolute inset-0 opacity-10"
+                  className="absolute w-3 h-3 rounded-full"
                   style={{
-                    backgroundImage: `
-                      linear-gradient(90deg, hsl(var(--primary) / 0.2) 1px, transparent 1px),
-                      linear-gradient(hsl(var(--primary) / 0.2) 1px, transparent 1px)
-                    `,
-                    backgroundSize: '40px 40px',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-6px',
+                    marginLeft: '-6px',
+                    background: '#CCFF00',
+                    boxShadow: '0 0 15px 5px rgba(204, 255, 0, 0.8)',
+                    animation: 'orbitOuter 8s linear infinite',
                   }}
                 />
-                
-                {/* 3D Router Image with floating animation */}
-                <motion.div 
-                  className="relative z-10"
-                  animate={{
-                    y: [0, -15, 0],
+
+                {/* Single glowing particle on middle orbit */}
+                <div 
+                  className="absolute w-2.5 h-2.5 rounded-full"
+                  style={{
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-5px',
+                    marginLeft: '-5px',
+                    background: '#00FFFF',
+                    boxShadow: '0 0 12px 4px rgba(0, 255, 255, 0.7)',
+                    animation: 'orbitMiddle 6s linear infinite',
                   }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
+                />
+
+                {/* Single glowing particle on inner orbit */}
+                <div 
+                  className="absolute w-2 h-2 rounded-full"
+                  style={{
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-4px',
+                    marginLeft: '-4px',
+                    background: '#FF9900',
+                    boxShadow: '0 0 10px 3px rgba(255, 153, 0, 0.6)',
+                    animation: 'orbitInner 10s linear infinite',
                   }}
-                >
-                  {/* Image shadow (separate for 3D effect) */}
+                />
+
+                {/* Center router images */}
+                <div className="absolute inset-[-20%] flex items-center justify-center">
+                  {/* Main router image with glow */}
                   <motion.div
-                    className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-8 rounded-full"
+                    className="relative w-full cursor-pointer group/router"
                     animate={{
-                      scale: [1, 0.9, 1],
-                      opacity: [0.3, 0.2, 0.3],
+                      y: [0, -15, 0],
                     }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity, 
+                      ease: 'easeInOut' 
                     }}
-                    style={{
-                      background: 'radial-gradient(ellipse, hsl(73 100% 50% / 0.3) 0%, transparent 70%)',
-                      filter: 'blur(15px)',
-                    }}
-                  />
-                  
-                  <motion.img 
-                    src={node1Router} 
-                    alt="NODE-1 Router" 
-                    className="w-full max-w-[500px] h-auto"
-                    whileHover={{
-                      scale: 1.05,
-                      rotateY: 5,
-                      rotateX: -5,
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 20,
-                    }}
-                    style={{
-                      filter: 'drop-shadow(0 0 40px hsl(73 100% 50% / 0.4)) drop-shadow(0 0 80px hsl(180 100% 50% / 0.2))',
-                    }}
-                  />
-                  
-                  {/* Glowing accent points on the device */}
-                  <motion.div
-                    className="absolute top-[35%] left-[45%] w-4 h-4 rounded-full"
-                    animate={{
-                      opacity: [0.5, 1, 0.5],
-                      scale: [1, 1.2, 1],
-                      boxShadow: [
-                        '0 0 10px hsl(73 100% 50% / 0.5)',
-                        '0 0 25px hsl(73 100% 50% / 0.8)',
-                        '0 0 10px hsl(73 100% 50% / 0.5)',
-                      ],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    style={{
-                      background: 'radial-gradient(circle, hsl(73 100% 70%) 0%, hsl(73 100% 50%) 100%)',
-                    }}
-                  />
-                </motion.div>
-                
-                {/* Tech labels floating around */}
+                  >
+                    {/* Glow layers */}
+                    <div
+                      className="absolute inset-[-10%] rounded-full blur-3xl pointer-events-none transition-all duration-500"
+                      style={{ 
+                        background: 'radial-gradient(circle, rgba(204, 255, 0, 0.4) 0%, transparent 70%)',
+                      }}
+                    />
+                    
+                    {/* Hover glow - stronger */}
+                    <div
+                      className="absolute inset-[-10%] rounded-full blur-3xl pointer-events-none opacity-0 group-hover/router:opacity-100 transition-opacity duration-500"
+                      style={{ 
+                        background: 'radial-gradient(circle, rgba(204, 255, 0, 0.8) 0%, rgba(204, 255, 0, 0.3) 50%, transparent 70%)',
+                        transform: 'scale(1.3)',
+                      }}
+                    />
+                    
+                    {/* Router image - no frame, transparent background */}
+                    <div className="relative transition-transform duration-300 group-hover/router:scale-110">
+                      <img 
+                        src={keeneticImage02} 
+                        alt="Keenetic Router" 
+                        className="relative z-10 w-full"
+                      />
+                    </div>
+
+                    {/* READY badge */}
+                    <motion.div
+                      className="absolute top-4 right-4 px-4 py-2 rounded-lg bg-accent font-mono text-xs font-bold text-background border-2 border-accent"
+                      animate={{
+                        boxShadow: [
+                          '0 0 20px rgba(255, 153, 0, 0.4)',
+                          '0 0 40px rgba(255, 153, 0, 0.8)',
+                          '0 0 20px rgba(255, 153, 0, 0.4)',
+                        ],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      READY
+                    </motion.div>
+                  </motion.div>
+                </div>
+
+                {/* WireGuard info text - bottom right where image was */}
                 <motion.div
-                  className="absolute top-10 right-10 font-mono-tech text-xs text-primary/60 tracking-widest"
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute bottom-4 right-4 font-mono text-sm space-y-2 text-right"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6 }}
                 >
-                  AmneziaWG
+                  <div className="text-primary font-bold text-lg">[ WireGuard ]</div>
+                  <div className="text-accent">[ ULTRA FAST ]</div>
+                  <div className="text-muted-foreground text-xs">Modern VPN Protocol</div>
                 </motion.div>
-                <motion.div
-                  className="absolute bottom-16 left-10 font-mono-tech text-xs text-cyan-400/60 tracking-widest"
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                >
-                  ENCRYPTED
+
+                {/* Status labels */}
+                <div className="absolute top-4 left-4 font-mono text-xs text-primary space-y-1">
+                  <div>[ AmneziaWG ]</div>
+                  <div className="text-accent">[ ENCRYPTED ]</div>
+                </div>
+                <div className="absolute bottom-4 left-4 font-mono text-xs text-muted-foreground space-y-1">
+                  <div>[ KEENETIC ]</div>
+                  <div className="text-primary">[ ACTIVE ]</div>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            {/* Right: Features */}
+            <AnimatedSection delay={0.3} direction="right">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold font-mono-tech mb-4">
+                    {keeneticContent.sectionTitle}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6 font-mono text-sm">
+                    {keeneticContent.sectionDescription}
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-3">
+                  {keeneticContent.features.map((feature, index) => {
+                    const icons = [CheckCircle, Shield, Zap, Terminal];
+                    const FeatureIcon = icons[index] || CheckCircle;
+                    return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center gap-4 p-3 rounded-lg border border-border bg-card/20 hover:border-accent/30 transition-all group"
+                    >
+                      <div className="p-2 rounded bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                        <FeatureIcon className="w-4 h-4 text-accent" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm text-foreground">{feature.title}</h4>
+                        <p className="text-xs text-muted-foreground font-mono">{feature.desc}</p>
+                      </div>
+                    </motion.div>
+                  );
+                  })}
+                </div>
+
+                {/* Download button */}
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-bold group"
+                    asChild={!!keeneticContent.buttonLink}
+                  >
+                    {keeneticContent.buttonLink ? (
+                      <a href={keeneticContent.buttonLink} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 w-5 h-5" />
+                        {keeneticContent.buttonText}
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </a>
+                    ) : (
+                      <>
+                        <Download className="mr-2 w-5 h-5" />
+                        {keeneticContent.buttonText}
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
                 </motion.div>
+
+                <p className="text-xs text-muted-foreground text-center font-mono">
+                  {keeneticContent.supportedModels}
+                </p>
               </div>
             </AnimatedSection>
           </div>
         </div>
       </section>
+              </React.Fragment>
+            ) : null;
 
+          case 'node1-performance':
+            return effectiveBlockVisibility['node1-performance'] ? (
+              <React.Fragment key="node1-performance">
       {/* Performance Section - Chip Schematic */}
       <section className="py-24 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
@@ -340,9 +760,9 @@ const Node1 = () => {
           <AnimatedSection delay={0.1}>
             <div className="mb-16">
               <h2 className="text-3xl md:text-4xl font-bold font-mono-tech">
-                Под Капотом:
+                {performanceContent.sectionTitle}
               </h2>
-              <p className="text-xl text-muted-foreground mt-2">Производительность</p>
+              <p className="text-xl text-muted-foreground mt-2">{performanceContent.sectionSubtitle}</p>
             </div>
           </AnimatedSection>
 
@@ -352,14 +772,25 @@ const Node1 = () => {
               <div className="relative">
                 {/* Main Frame */}
                 <div 
-                  className="relative aspect-square max-w-[450px] mx-auto rounded-lg border border-cyan-500/30 p-6"
+                  className="relative aspect-square max-w-[450px] mx-auto rounded-lg border border-cyan-500/30 p-6 overflow-hidden"
                   style={{
                     background: 'linear-gradient(135deg, rgba(0,40,60,0.3) 0%, rgba(0,20,30,0.5) 100%)',
                     boxShadow: '0 0 30px rgba(0, 180, 255, 0.1), inset 0 0 30px rgba(0, 180, 255, 0.05)',
                   }}
                 >
+                  {/* Background Image inside frame */}
+                  <div 
+                    className="absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: `url(${bgImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      opacity: 0.25,
+                    }}
+                  />
+                  
                   {/* SVG Circuit Board */}
-                  <svg className="w-full h-full" viewBox="0 0 400 400">
+                  <svg className="w-full h-full relative z-10" viewBox="0 0 400 400">
                     <defs>
                       {/* Cyan glow gradient */}
                       <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -647,14 +1078,14 @@ const Node1 = () => {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold font-mono-tech mb-4">
-                    Не просто router.
-                    <br />
-                    <span className="text-gradient-primary">Ваш личный сервер.</span>
+                    {performanceContent.mainTitle.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {i === 0 ? line : <><br /><span className="text-gradient-primary">{line}</span></>}
+                      </React.Fragment>
+                    ))}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    NODE-1 — это не клиентское устройство. Это выделенный вычислительный узел, 
-                    созданный для одной цели: обеспечить ваш цифровой суверенитет. 
-                    Отказоустойчивость, скорость и невидимость — его фундаментальные принципы.
+                    {performanceContent.mainDescription}
                   </p>
                 </div>
                 
@@ -667,27 +1098,27 @@ const Node1 = () => {
                 >
                   <div className="font-mono-tech text-sm text-primary mb-3">Hardware Specs:</div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    <span className="text-cyan-400">{'>'}</span> CPU: Custom ARM Core @ 1.8 GHz
+                    <span className="text-cyan-400">{'>'}</span> CPU: {performanceContent.hardwareSpecs.cpu}
                   </div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    RAM: 2GB DDR4 ECC (Error-Correcting Code)
+                    RAM: {performanceContent.hardwareSpecs.ram}
                   </div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    Storage: 32GB eMMC (Secure Flash)
+                    Storage: {performanceContent.hardwareSpecs.storage}
                   </div>
                   
                   <div className="font-mono-tech text-sm text-primary mt-4 mb-2">Performance Specs:</div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    Throughput (VPN): Up to 950 Mbps (WireGuard)
+                    Throughput (VPN): {performanceContent.performanceSpecs.wireguard}
                   </div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    Throughput (VPN): Up to 800 Mbps (AmneziaWG)
+                    Throughput (VPN): {performanceContent.performanceSpecs.amneziawg}
                   </div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    Power Draw: {'<'}10W (optimized 24/7 operation)
+                    Power Draw: {performanceContent.performanceSpecs.power}
                   </div>
                   <div className="font-mono-tech text-sm text-muted-foreground">
-                    Operating Temperature: -20°C to +60°C
+                    Operating Temperature: {performanceContent.performanceSpecs.temperature}
                   </div>
                 </div>
               </div>
@@ -695,7 +1126,12 @@ const Node1 = () => {
           </div>
         </div>
       </section>
+              </React.Fragment>
+            ) : null;
 
+          case 'node1-command':
+            return effectiveBlockVisibility['node1-command'] ? (
+              <React.Fragment key="node1-command">
       {/* NEW: Command Center Section - Two Column with Tilt Effect */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
@@ -720,8 +1156,19 @@ const Node1 = () => {
                     boxShadow: '0 0 60px hsl(var(--primary) / 0.1), inset 0 1px 0 hsl(var(--primary) / 0.1)',
                   }}
                 >
+                  {/* Background Image inside card */}
+                  <div 
+                    className="absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: `url(${bgImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      opacity: 0.2,
+                    }}
+                  />
+                  
                   {/* Circuit Board Lines */}
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+                  <svg className="absolute inset-0 w-full h-full relative z-10" viewBox="0 0 400 400">
                     <defs>
                       <linearGradient id="traceGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0" />
@@ -764,6 +1211,82 @@ const Node1 = () => {
                       <circle cx="100" cy="340" r="4" />
                       <circle cx="300" cy="340" r="4" />
                     </g>
+                    
+                    {/* Animated Data Packets */}
+                    <style>
+                      {`
+                        @keyframes dataFlow1 {
+                          0% { cx: 200; cy: 200; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { cx: 40; cy: 200; opacity: 0; }
+                        }
+                        @keyframes dataFlow2 {
+                          0% { cx: 200; cy: 200; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { cx: 360; cy: 200; opacity: 0; }
+                        }
+                        @keyframes dataFlow3 {
+                          0% { cx: 200; cy: 200; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { cx: 200; cy: 40; opacity: 0; }
+                        }
+                        @keyframes dataFlow4 {
+                          0% { cx: 200; cy: 200; opacity: 0; }
+                          10% { opacity: 1; }
+                          90% { opacity: 1; }
+                          100% { cx: 200; cy: 360; opacity: 0; }
+                        }
+                        @keyframes dataFlow5 {
+                          0% { cx: 200; cy: 180; opacity: 0; }
+                          5% { cx: 130; cy: 180; }
+                          10% { opacity: 1; }
+                          45% { cx: 60; cy: 180; }
+                          50% { cx: 60; cy: 140; }
+                          90% { opacity: 1; }
+                          100% { cx: 60; cy: 100; opacity: 0; }
+                        }
+                        @keyframes dataFlow6 {
+                          0% { cx: 200; cy: 220; opacity: 0; }
+                          5% { cx: 130; cy: 220; }
+                          10% { opacity: 1; }
+                          45% { cx: 60; cy: 220; }
+                          50% { cx: 60; cy: 260; }
+                          90% { opacity: 1; }
+                          100% { cx: 60; cy: 300; opacity: 0; }
+                        }
+                        .data-packet-1 { animation: dataFlow1 2.5s ease-in-out infinite; }
+                        .data-packet-2 { animation: dataFlow2 2.8s ease-in-out infinite 0.3s; }
+                        .data-packet-3 { animation: dataFlow3 2.3s ease-in-out infinite 0.6s; }
+                        .data-packet-4 { animation: dataFlow4 2.6s ease-in-out infinite 0.9s; }
+                        .data-packet-5 { animation: dataFlow5 3s ease-in-out infinite 0.4s; }
+                        .data-packet-6 { animation: dataFlow6 3.2s ease-in-out infinite 1s; }
+                      `}
+                    </style>
+                    
+                    {/* Data packets moving along traces */}
+                    <g>
+                      <circle className="data-packet-1" r="3" fill="#CCFF00" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="2.5s" repeatCount="indefinite" />
+                      </circle>
+                      <circle className="data-packet-2" r="3" fill="#00FFFF" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="2.8s" begin="0.3s" repeatCount="indefinite" />
+                      </circle>
+                      <circle className="data-packet-3" r="3" fill="#CCFF00" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="2.3s" begin="0.6s" repeatCount="indefinite" />
+                      </circle>
+                      <circle className="data-packet-4" r="3" fill="#00FFFF" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="2.6s" begin="0.9s" repeatCount="indefinite" />
+                      </circle>
+                      <circle className="data-packet-5" r="3" fill="#FF9900" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin="0.4s" repeatCount="indefinite" />
+                      </circle>
+                      <circle className="data-packet-6" r="3" fill="#FF9900" filter="url(#glow)">
+                        <animate attributeName="opacity" values="0;1;1;0" dur="3.2s" begin="1s" repeatCount="indefinite" />
+                      </circle>
+                    </g>
                   </svg>
                   
                   {/* CPU Core - Center */}
@@ -792,18 +1315,18 @@ const Node1 = () => {
                   {/* Corner Labels */}
                   <div className="absolute top-6 left-6 flex items-center gap-2">
                     <Wifi className="w-4 h-4 text-primary/60" />
-                    <span className="font-mono-tech text-xs text-muted-foreground">WAN</span>
+                    <span className="font-mono-tech text-xs text-muted-foreground">{commandContent.cornerLabels.wan}</span>
                   </div>
                   <div className="absolute top-6 right-6 flex items-center gap-2">
-                    <span className="font-mono-tech text-xs text-muted-foreground">LAN</span>
+                    <span className="font-mono-tech text-xs text-muted-foreground">{commandContent.cornerLabels.lan}</span>
                     <Server className="w-4 h-4 text-primary/60" />
                   </div>
                   <div className="absolute bottom-6 left-6 flex items-center gap-2">
                     <HardDrive className="w-4 h-4 text-primary/60" />
-                    <span className="font-mono-tech text-xs text-muted-foreground">32GB</span>
+                    <span className="font-mono-tech text-xs text-muted-foreground">{commandContent.cornerLabels.storage}</span>
                   </div>
                   <div className="absolute bottom-6 right-6 flex items-center gap-2">
-                    <span className="font-mono-tech text-xs text-muted-foreground">2GB DDR4</span>
+                    <span className="font-mono-tech text-xs text-muted-foreground">{commandContent.cornerLabels.memory}</span>
                     <Zap className="w-4 h-4 text-primary/60" />
                   </div>
                   
@@ -816,7 +1339,7 @@ const Node1 = () => {
                 
                 {/* Card label */}
                 <div className="text-center mt-4">
-                  <span className="font-mono-tech text-sm text-muted-foreground">NODE-1 ARCHITECTURE</span>
+                  <span className="font-mono-tech text-sm text-muted-foreground">{commandContent.cardLabel}</span>
                 </div>
               </motion.div>
             </AnimatedSection>
@@ -827,11 +1350,10 @@ const Node1 = () => {
                 {/* Header */}
                 <div>
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-mono-tech leading-tight text-primary mb-4">
-                    Прошивка: Ваш командный центр
+                    {commandContent.title}
                   </h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    Интуитивный интерфейс для управления вашей приватной сетью. 
-                    Переключайте протоколы, мониторьте трафик и настраивайте правила безопасности.
+                    {commandContent.description}
                   </p>
                 </div>
                 
@@ -854,19 +1376,19 @@ const Node1 = () => {
                   <div className="p-4 space-y-2 font-mono-tech text-sm">
                     <div className="flex">
                       <span className="text-primary w-20">CPU:</span>
-                      <span className="text-muted-foreground">Quad-core ARM 1.8GHz (Optimized for AES)</span>
+                      <span className="text-muted-foreground">{commandContent.terminalSpecs.cpu}</span>
                     </div>
                     <div className="flex">
                       <span className="text-primary w-20">RAM:</span>
-                      <span className="text-muted-foreground">2GB DDR4 High-Speed</span>
+                      <span className="text-muted-foreground">{commandContent.terminalSpecs.ram}</span>
                     </div>
                     <div className="flex">
                       <span className="text-primary w-20">Flash:</span>
-                      <span className="text-muted-foreground">32GB Secure Storage</span>
+                      <span className="text-muted-foreground">{commandContent.terminalSpecs.flash}</span>
                     </div>
                     <div className="flex">
                       <span className="text-primary w-20">OS:</span>
-                      <span className="text-muted-foreground">3LAB Custom Hardened Linux</span>
+                      <span className="text-muted-foreground">{commandContent.terminalSpecs.os}</span>
                     </div>
                   </div>
                 </div>
@@ -1104,18 +1626,26 @@ const Node1 = () => {
           </div>
         </div>
       </section>
+              </React.Fragment>
+            ) : null;
 
+          case 'node1-features':
+            return effectiveBlockVisibility['node1-features'] ? (
+              <React.Fragment key="node1-features">
       {/* Firmware Features Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <AnimatedSection delay={0.1}>
             <h2 className="text-3xl md:text-4xl font-bold font-mono-tech text-center mb-12">
-              Возможности <span className="text-gradient-primary">прошивки</span>
+              {highlightUppercase(featuresContent.title)}
             </h2>
           </AnimatedSection>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {firmwareFeatures.map((feature, i) => (
+            {featuresContent.features.map((feature, i) => {
+              const icons = [ToggleRight, Shield, Activity, Lock];
+              const FeatureIcon = icons[i] || ToggleRight;
+              return (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
                 <motion.div 
                   className="p-6 bg-card/50 rounded-lg border border-border h-full relative overflow-hidden group cursor-pointer"
@@ -1155,7 +1685,7 @@ const Node1 = () => {
                       }}
                       transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
-                      <feature.icon className="w-6 h-6 text-primary" />
+                      <FeatureIcon className="w-6 h-6 text-primary" />
                     </motion.div>
                     <h4 className="font-medium text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                       {feature.title}
@@ -1164,11 +1694,17 @@ const Node1 = () => {
                   </div>
                 </motion.div>
               </AnimatedSection>
-            ))}
+            );
+            })}
           </div>
         </div>
       </section>
+              </React.Fragment>
+            ) : null;
 
+          case 'node1-cta':
+            return effectiveBlockVisibility['node1-cta'] ? (
+              <React.Fragment key="node1-cta">
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
         <div 
@@ -1181,21 +1717,27 @@ const Node1 = () => {
         <div className="container mx-auto px-4 relative z-10 text-center">
           <AnimatedSection delay={0.1}>
             <h2 className="text-3xl md:text-4xl font-bold font-mono-tech mb-6">
-              Готовы к <span className="text-gradient-primary">цифровой свободе</span>?
+              {highlightUppercase(ctaContent.title)}
             </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Доступно ограниченное количество устройств. 
-              Обеспечьте свой суверенитет сегодня.
+              {ctaContent.description}
             </p>
             <Button asChild size="lg" className="group">
-              <Link to="/pricing">
-                Заказать NODE-1
+              <Link to={ctaContent.buttonLink}>
+                {ctaContent.buttonText}
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
           </AnimatedSection>
         </div>
       </section>
+              </React.Fragment>
+            ) : null;
+
+          default:
+            return null;
+        }
+      })}
     </Layout>
   );
 };

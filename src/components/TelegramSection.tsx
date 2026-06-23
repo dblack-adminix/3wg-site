@@ -1,28 +1,48 @@
 import { Bot, Activity, Download, Headphones, Terminal, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const botFeatures = [
-  {
-    icon: Activity,
-    command: '/status',
-    title: 'Статус моих VPN',
-    description: 'Бот проверяет статус сервера (Online/Offline) и выводит текущую нагрузку.',
-  },
-  {
-    icon: Download,
-    command: '/config',
-    title: 'Получить конфиг',
-    description: 'Бот выдает файл .conf для WireGuard или ссылку для Amnezia прямо в мессенджер.',
-  },
-  {
-    icon: Headphones,
-    command: '/support',
-    title: 'Поддержка',
-    description: 'Прямой чат с инженером 3LAB. Ответ в течение 15 минут.',
-  },
-];
+import { useBlockContent } from '@/hooks/useBlockContent';
+import { highlightUppercase } from '@/lib/textHighlight';
 
 export const TelegramSection = () => {
+  const { content } = useBlockContent('telegram_section', {
+    section_title: 'Telegram-бот 3WG',
+    section_description: 'Управляйте VPN-серверами прямо из Telegram. Мониторинг, конфиги, поддержка — всё в одном месте.',
+    welcome_message: 'Добро пожаловать в систему мониторинга 3WG. Выберите действие:',
+    feature_1_command: '/status',
+    feature_1_title: 'Статус моих VPN',
+    feature_1_description: 'Бот проверяет статус сервера (Online/Offline) и выводит текущую нагрузку.',
+    feature_2_command: '/config',
+    feature_2_title: 'Получить конфиг',
+    feature_2_description: 'Бот выдает файл .conf для WireGuard или ссылку для Amnezia прямо в мессенджер.',
+    feature_3_command: '/support',
+    feature_3_title: 'Поддержка',
+    feature_3_description: 'Прямой чат с инженером 3WG. Ответ в течение 15 минут.',
+    button_text: 'Подключить Telegram-бота',
+    button_url: 'https://t.me/your_bot',
+    button_note: 'После заказа VPN вы получите ссылку на бота автоматически',
+  });
+
+  const botFeatures = [
+    {
+      icon: Activity,
+      command: content.feature_1_command,
+      title: content.feature_1_title,
+      description: content.feature_1_description,
+    },
+    {
+      icon: Download,
+      command: content.feature_2_command,
+      title: content.feature_2_title,
+      description: content.feature_2_description,
+    },
+    {
+      icon: Headphones,
+      command: content.feature_3_command,
+      title: content.feature_3_title,
+      description: content.feature_3_description,
+    },
+  ];
+
   return (
     <section id="cabinet" className="py-24 relative overflow-hidden">
       {/* Background */}
@@ -39,12 +59,11 @@ export const TelegramSection = () => {
             </span>
             
             <h2 className="text-3xl md:text-5xl font-bold font-['Montserrat'] mb-6">
-              Telegram-бот <span className="text-gradient-primary">3LAB</span>
+              {highlightUppercase(content.section_title)}
             </h2>
             
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Управляйте VPN-серверами прямо из Telegram. 
-              Мониторинг, конфиги, поддержка — всё в одном месте.
+              {highlightUppercase(content.section_description)}
             </p>
           </div>
 
@@ -60,7 +79,7 @@ export const TelegramSection = () => {
                   <Bot className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold text-foreground">3LAB_Bot</h4>
+                  <h4 className="font-bold text-foreground">3WG_Bot</h4>
                   <p className="text-sm text-muted-foreground">Система мониторинга</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -78,8 +97,7 @@ export const TelegramSection = () => {
                       <span className="text-primary">/start</span>
                     </p>
                     <p className="text-muted-foreground">
-                      Добро пожаловать в систему мониторинга <span className="text-primary font-bold">3LAB</span>. 
-                      <br />Выберите действие:
+                      {highlightUppercase(content.welcome_message)}
                     </p>
                   </div>
                 </div>
@@ -108,16 +126,18 @@ export const TelegramSection = () => {
 
           {/* CTA */}
           <div className="text-center">
-            <Button 
-              size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg px-8 glow-primary group"
-            >
-              <Bot className="mr-2 h-5 w-5" />
-              Подключить Telegram-бота
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <a href={content.button_url} target="_blank" rel="noopener noreferrer">
+              <Button 
+                size="lg" 
+                className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-lg px-8 glow-primary group"
+              >
+                <Bot className="mr-2 h-5 w-5" />
+                {content.button_text}
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
             <p className="text-sm text-muted-foreground mt-4">
-              После заказа VPN вы получите ссылку на бота автоматически
+              {content.button_note}
             </p>
           </div>
         </div>
