@@ -1,6 +1,6 @@
 // API Client для 3wg VPN Backend
 
-const API_BASE_URL = 'http://localhost:3001/api/v1';
+const API_BASE_URL = '/api/v1';
 
 // Типы данных
 export interface User {
