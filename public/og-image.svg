@@ -1,0 +1,229 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#0d1f1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#CCFF00" stroke-width="0.5" opacity="0.08"/>
+    </pattern>
+    
+    <!-- Glow effects -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="strongGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Text gradients -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#CCFF00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#AAFF00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#88FF00;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF9900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFAA00;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Cyber lines pattern -->
+    <pattern id="cyberLines" width="200" height="200" patternUnits="userSpaceOnUse">
+      <path d="M0,50 L200,50 M0,100 L200,100 M0,150 L200,150" stroke="#CCFF00" stroke-width="0.3" opacity="0.05"/>
+      <path d="M50,0 L50,200 M100,0 L100,200 M150,0 L150,200" stroke="#CCFF00" stroke-width="0.3" opacity="0.05"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#cyberLines)"/>
+  
+  <!-- Corner decorations -->
+  <g opacity="0.6">
+    <!-- Top-left corner -->
+    <path d="M40,40 L160,40 L160,44 L44,44 L44,160 L40,160 Z" fill="#CCFF00"/>
+    <circle cx="160" cy="40" r="3" fill="#CCFF00" filter="url(#glow)"/>
+    
+    <!-- Top-right corner -->
+    <path d="M1160,40 L1040,40 L1040,44 L1156,44 L1156,160 L1160,160 Z" fill="#FF9900"/>
+    <circle cx="1040" cy="40" r="3" fill="#FF9900" filter="url(#glow)"/>
+    
+    <!-- Bottom-left corner -->
+    <path d="M40,590 L160,590 L160,586 L44,586 L44,470 L40,470 Z" fill="#FF9900"/>
+    <circle cx="160" cy="590" r="3" fill="#FF9900" filter="url(#glow)"/>
+    
+    <!-- Bottom-right corner -->
+    <path d="M1160,590 L1040,590 L1040,586 L1156,586 L1156,470 L1160,470 Z" fill="#CCFF00"/>
+    <circle cx="1040" cy="590" r="3" fill="#CCFF00" filter="url(#glow)"/>
+  </g>
+  
+  <!-- 3WG.RU Logo (inline) -->
+  <g transform="translate(80, 120)">
+    <rect x="0" y="0" width="50" height="50" fill="#CCFF00"/>
+    <rect x="60" y="15" width="60" height="20" fill="#CCFF00"/>
+    <rect x="130" y="0" width="50" height="50" fill="#CCFF00"/>
+    
+    <text x="25" y="35" font-family="Arial Black, sans-serif" font-size="36" font-weight="900" 
+          fill="#000000" text-anchor="middle">3</text>
+    <text x="90" y="30" font-family="Arial Black, sans-serif" font-size="14" font-weight="900" 
+          fill="#000000" text-anchor="middle">LAB</text>
+    <text x="155" y="35" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" 
+          fill="#000000" text-anchor="middle">PRO</text>
+    
+    <text x="25" y="48" font-family="Arial, sans-serif" font-size="8" font-weight="bold" 
+          fill="#000000" text-anchor="middle">DATA</text>
+  </g>
+  
+  <!-- 3WG.RU Logo (inline) -->
+  <g transform="translate(80, 220)">
+    <rect x="0" y="0" width="50" height="50" fill="#CCFF00"/>
+    <rect x="60" y="0" width="80" height="50" fill="#CCFF00"/>
+    <rect x="150" y="15" width="30" height="20" fill="#CCFF00"/>
+    
+    <text x="25" y="35" font-family="Arial Black, sans-serif" font-size="36" font-weight="900" 
+          fill="#000000" text-anchor="middle">3</text>
+    <text x="100" y="35" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" 
+          fill="#000000" text-anchor="middle">WG</text>
+    <text x="165" y="30" font-family="Arial Black, sans-serif" font-size="12" font-weight="900" 
+          fill="#000000" text-anchor="middle">RU</text>
+  </g>
+  
+  <!-- Main title -->
+  <g transform="translate(300, 200)">
+    <text y="60" font-family="monospace" font-size="72" font-weight="bold" 
+          fill="url(#primaryGradient)" filter="url(#strongGlow)">VPN INFRASTRUCTURE</text>
+    
+    <!-- Subtitle with tech styling -->
+    <text y="110" font-family="monospace" font-size="24" fill="#CCFF00" opacity="0.8">
+      [ WIREGUARD + AMNEZIAWG PROTOCOLS ]</text>
+    
+    <!-- Protocol badges -->
+    <g transform="translate(0, 140)">
+      <rect width="140" height="32" rx="4" fill="#CCFF00" opacity="0.1" stroke="#CCFF00" stroke-width="1"/>
+      <text x="70" y="22" font-family="monospace" font-size="14" font-weight="bold" 
+            fill="#CCFF00" text-anchor="middle">WIREGUARD</text>
+      
+      <rect x="160" width="140" height="32" rx="4" fill="#FF9900" opacity="0.1" stroke="#FF9900" stroke-width="1"/>
+      <text x="230" y="22" font-family="monospace" font-size="14" font-weight="bold" 
+            fill="#FF9900" text-anchor="middle">AMNEZIAWG</text>
+    </g>
+  </g>
+  
+  <!-- Feature list -->
+  <g transform="translate(300, 380)">
+    <text font-family="monospace" font-size="18" fill="#888">
+      <tspan x="0" dy="0">→ DPI-RESISTANT PROTOCOLS</tspan>
+      <tspan x="0" dy="30">→ ZERO-LOGS POLICY</tspan>
+      <tspan x="0" dy="30">→ HIGH-SPEED SERVERS</tspan>
+      <tspan x="0" dy="30">→ BYPASS RKN BLOCKS</tspan>
+    </text>
+  </g>
+  
+  <!-- Status indicators -->
+  <g transform="translate(850, 100)">
+    <!-- Server status -->
+    <rect width="280" height="80" rx="8" fill="#0a0a0a" stroke="#CCFF00" stroke-width="2" opacity="0.8"/>
+    <text x="20" y="30" font-family="monospace" font-size="16" fill="#CCFF00" opacity="0.7">SERVER_STATUS:</text>
+    <text x="20" y="55" font-family="monospace" font-size="24" font-weight="bold" fill="#CCFF00" filter="url(#glow)">
+      [ ONLINE ]
+    </text>
+    
+    <!-- Pulse indicator -->
+    <circle cx="250" cy="40" r="8" fill="#CCFF00" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Network visualization -->
+  <g transform="translate(850, 220)">
+    <!-- Network nodes -->
+    <circle cx="50" cy="50" r="6" fill="#CCFF00" opacity="0.8"/>
+    <circle cx="150" cy="30" r="5" fill="#FF9900" opacity="0.7"/>
+    <circle cx="120" cy="80" r="4" fill="#CCFF00" opacity="0.6"/>
+    <circle cx="200" cy="60" r="5" fill="#FF9900" opacity="0.8"/>
+    
+    <!-- Connection lines -->
+    <path d="M50,50 L150,30 L200,60 M50,50 L120,80 L200,60" 
+          stroke="#CCFF00" stroke-width="1" opacity="0.4"/>
+    
+    <!-- Data flow animation -->
+    <circle r="2" fill="#00D9FF">
+      <animateMotion dur="3s" repeatCount="indefinite">
+        <path d="M50,50 L150,30 L200,60"/>
+      </animateMotion>
+    </circle>
+    
+    <circle r="2" fill="#00D9FF">
+      <animateMotion dur="4s" repeatCount="indefinite">
+        <path d="M50,50 L120,80 L200,60"/>
+      </animateMotion>
+    </circle>
+  </g>
+  
+  <!-- Performance metrics -->
+  <g transform="translate(850, 350)">
+    <rect width="280" height="120" rx="8" fill="#0a0a0a" stroke="#FF9900" stroke-width="1" opacity="0.6"/>
+    <text x="20" y="30" font-family="monospace" font-size="14" fill="#FF9900" opacity="0.8">PERFORMANCE:</text>
+    
+    <text x="20" y="55" font-family="monospace" font-size="16" fill="#CCFF00">
+      SPEED: 1GBPS+
+    </text>
+    <text x="20" y="80" font-family="monospace" font-size="16" fill="#CCFF00">
+      LATENCY: &lt;20MS
+    </text>
+    <text x="20" y="105" font-family="monospace" font-size="16" fill="#CCFF00">
+      UPTIME: 99.9%
+    </text>
+    
+    <!-- Performance bars -->
+    <rect x="180" y="45" width="80" height="8" fill="#333" rx="4"/>
+    <rect x="180" y="45" width="75" height="8" fill="url(#primaryGradient)" rx="4"/>
+    
+    <rect x="180" y="70" width="80" height="8" fill="#333" rx="4"/>
+    <rect x="180" y="70" width="70" height="8" fill="url(#accentGradient)" rx="4"/>
+    
+    <rect x="180" y="95" width="80" height="8" fill="#333" rx="4"/>
+    <rect x="180" y="95" width="78" height="8" fill="url(#primaryGradient)" rx="4"/>
+  </g>
+  
+  <!-- Floating particles -->
+  <g opacity="0.4">
+    <circle cx="300" cy="120" r="2" fill="#00D9FF">
+      <animate attributeName="cy" values="120;100;120" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    
+    <circle cx="450" cy="500" r="1.5" fill="#CCFF00">
+      <animate attributeName="cy" values="500;480;500" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    
+    <circle cx="750" cy="150" r="2" fill="#FF9900">
+      <animate attributeName="cy" values="150;130;150" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.9;0.2" dur="5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Scan lines effect -->
+  <g opacity="0.03">
+    <rect width="1200" height="2" fill="#CCFF00">
+      <animate attributeName="y" values="-2;632;-2" dur="8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+</svg>
