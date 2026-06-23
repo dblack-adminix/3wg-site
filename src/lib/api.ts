@@ -6,8 +6,15 @@ const API_BASE_URL = '/api/v1';
 export interface User {
   id: number;
   email: string;
+  full_name?: string;
+  phone?: string;
+  telegram_id?: string;
   balance: number;
   tariff: string;
+  is_admin?: boolean;
+  is_active?: boolean;
+  email_verified?: boolean;
+  last_login_at?: string;
   created_at: string;
 }
 
@@ -19,6 +26,9 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
+  full_name?: string;
+  phone?: string;
+  telegram_id?: string;
 }
 
 export interface AuthResponse {
@@ -554,8 +564,44 @@ class ApiClient {
     return this.request<AdminDashboard>('/admin/dashboard');
   }
 
-  async getAdminUsers(): Promise<User[]> {
-    return this.request<User[]>('/admin/users');
+  async getAdminUsers(search = ''): Promise<User[]> {
+    const params = search ? `?search=${encodeURIComponent(search)}&limit=100` : '?limit=100';
+    const response = await this.request<User[] | {users: User[]; total: number}>(`/admin/users${params}`);
+    return Array.isArray(response) ? response : response.users;
+  }
+
+  async createAdminUser(data: Partial<User> & { password?: string }): Promise<{user: User; temporary_pass?: string}> {
+    return this.request<{user: User; temporary_pass?: string}>('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateAdminUser(id: number, data: Partial<User> & { password?: string }): Promise<User> {
+    return this.request<User>(`/admin/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async setAdminUserStatus(id: number, isActive: boolean): Promise<User> {
+    return this.request<User>(`/admin/users/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_active: isActive }),
+    });
+  }
+
+  async resetAdminUserPassword(id: number, password?: string, sendEmail = true): Promise<{user: User; temporary_pass: string; email_sent: boolean}> {
+    return this.request<{user: User; temporary_pass: string; email_sent: boolean}>(`/admin/users/${id}/reset-password`, {
+      method: 'POST',
+      body: JSON.stringify({ password, send_email: sendEmail }),
+    });
+  }
+
+  async deleteAdminUser(id: number): Promise<void> {
+    return this.request<void>(`/admin/users/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   async getAdminAnalytics(): Promise<any> {
