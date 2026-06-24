@@ -63,8 +63,7 @@ const Account = () => {
 
   const handleLogout = () => {
     logout();
-    toast.success('Вы вышли из аккаунта');
-    navigate('/', { replace: true });
+    window.location.replace('/');
   };
 
   // Редактирование профиля
