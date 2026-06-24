@@ -8,7 +8,7 @@ import {
   Key, 
   CreditCard, 
   BarChart3, 
-  Settings,
+  LogOut,
   Download,
   Copy,
   Eye,
@@ -38,6 +38,7 @@ import { useUserKeys } from '@/hooks/useUserKeys';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 type Tab = 'profile' | 'servers' | 'keys' | 'payments' | 'stats' | 'speedtest';
 
@@ -58,6 +59,13 @@ const Account = () => {
   const { keys: userKeys, refreshKeys } = useUserKeys();
   const profileData = profile;
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Вы вышли из аккаунта');
+    navigate('/login', { replace: true });
+  };
 
   // Редактирование профиля
   const [editEmail, setEditEmail] = useState('');
@@ -506,9 +514,9 @@ const Account = () => {
                 </h1>
                 <p className="text-muted-foreground font-mono">{profile?.email || '...'}</p>
               </div>
-              <Button variant="outline" className="group">
-                <Settings className="mr-2 w-4 h-4" />
-                Настройки
+              <Button variant="outline" className="group" onClick={handleLogout}>
+                <LogOut className="mr-2 w-4 h-4" />
+                Выйти
               </Button>
             </div>
           </AnimatedSection>
