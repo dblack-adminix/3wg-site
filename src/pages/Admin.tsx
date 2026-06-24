@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { api, AdminDashboard as AdminDashboardData } from '@/lib/api';
 import { UsersTab } from '@/components/admin/UsersTab';
@@ -38,7 +37,6 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 type AdminTab = 'dashboard' | 'users' | 'servers' | 'keys' | 'finance' | 'content' | 'settings';
 
 const Admin = () => {
-  const navigate = useNavigate();
   const { user, login, logout, isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
   const [email, setEmail] = useState('');
@@ -112,7 +110,7 @@ const Admin = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    window.location.replace('/admin');
   };
 
   // Если не авторизован или не админ - показываем форму логина для админа
