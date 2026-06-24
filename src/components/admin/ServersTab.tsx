@@ -458,7 +458,7 @@ export function ServersTab() {
         usage_type: server.usage_type || 'shared',
         dedicated_user_id: server.dedicated_user_id ? String(server.dedicated_user_id) : '',
         panel_type: server.panel_type || 'wgdashboard',
-        panel_user: '',
+        panel_user: server.panel_user || '',
         panel_password: '',
       });
     } else {

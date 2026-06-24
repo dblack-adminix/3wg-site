@@ -49,6 +49,7 @@ export interface Server {
   usage_type?: string; // shared (общие пиры) | dedicated (целиком клиенту)
   dedicated_user_id?: number | null; // Кому выдан сервер (для dedicated)
   panel_type?: string; // wgdashboard | 3wg-panel
+  panel_user?: string;
   current_peers?: number; // Текущее количество пиров (из кэша)
   wg_dashboard_url?: string;
   wg_dashboard_key?: string;
