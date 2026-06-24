@@ -33,6 +33,19 @@ const getCountryFlag = (countryCode: string) => {
   );
 };
 
+const getPanelHost = (server: ServerType) => {
+  if (!server.wg_dashboard_url) return '';
+  try {
+    const rawUrl = server.wg_dashboard_url.includes('://')
+      ? server.wg_dashboard_url
+      : `http://${server.wg_dashboard_url}`;
+    const hostname = new URL(rawUrl).hostname;
+    return /^\d{1,3}(?:\.\d{1,3}){3}$/.test(hostname) ? '' : hostname;
+  } catch {
+    return '';
+  }
+};
+
 export function ServersTab() {
   const [servers, setServers] = useState<ServerType[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>(() =>
@@ -1969,7 +1982,13 @@ export function ServersTab() {
               <div className="space-y-2 mb-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-mono">IP адрес:</span>
-                  <span className="font-mono">{server.ip_address}</span>
+                  <span className="font-mono">{server.ip_address || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground font-mono">Домен:</span>
+                  <span className="max-w-[230px] truncate font-mono" title={getPanelHost(server) || undefined}>
+                    {getPanelHost(server) || '—'}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground font-mono">Протоколы:</span>
@@ -2205,7 +2224,9 @@ export function ServersTab() {
                 <tr className="text-left font-mono text-xs uppercase text-muted-foreground">
                   <th className="px-4 py-3">Сервер</th>
                   <th className="px-4 py-3">Статус</th>
-                  <th className="px-4 py-3">IP / протоколы</th>
+                  <th className="px-4 py-3">IP адрес</th>
+                  <th className="px-4 py-3">Домен</th>
+                  <th className="px-4 py-3">Протоколы</th>
                   <th className="px-4 py-3">Панель</th>
                   <th className="px-4 py-3">Пиры</th>
                   <th className="px-4 py-3">Ресурсы</th>
@@ -2271,10 +2292,15 @@ export function ServersTab() {
                         </div>
                       </td>
                       <td className="px-4 py-3 font-mono text-xs">
-                        <div>{server.ip_address || '—'}</div>
-                        <div className="mt-1 uppercase text-muted-foreground">
-                          {server.protocols?.join(', ') || '—'}
-                        </div>
+                        {server.ip_address || '—'}
+                      </td>
+                      <td className="max-w-[210px] px-4 py-3 font-mono text-xs">
+                        <span className="block truncate" title={getPanelHost(server) || undefined}>
+                          {getPanelHost(server) || '—'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs uppercase text-muted-foreground">
+                        {server.protocols?.join(', ') || '—'}
                       </td>
                       <td className="px-4 py-3">
                         {server.wg_dashboard_url ? (
