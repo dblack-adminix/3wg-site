@@ -91,7 +91,11 @@ const Admin = () => {
     setIsLoading(true);
 
     try {
-      await login({ email, password });
+      const formData = new FormData(e.currentTarget as HTMLFormElement);
+      const submittedEmail = String(formData.get('email') || email).trim().toLowerCase();
+      const submittedPassword = String(formData.get('password') || password);
+
+      await login({ email: submittedEmail, password: submittedPassword });
       // Проверяем что пользователь админ
       const userData = await api.getCurrentUser();
       if (!(userData as any).is_admin) {
@@ -100,7 +104,7 @@ const Admin = () => {
         return;
       }
     } catch (error: any) {
-      setError(error.message || 'Ошибка входа');
+      setError(error.message === 'Unauthorized' ? 'Неверный email или пароль' : (error.message || 'Ошибка входа'));
     } finally {
       setIsLoading(false);
     }
@@ -176,6 +180,8 @@ const Admin = () => {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="email"
+                      name="email"
+                      autoComplete="username"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="admin@3wg.ru"
@@ -193,6 +199,8 @@ const Admin = () => {
                     <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="password"
+                      name="password"
+                      autoComplete="current-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Введите пароль"

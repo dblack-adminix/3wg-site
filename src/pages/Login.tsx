@@ -20,14 +20,18 @@ export default function Login() {
     setIsLoading(true);
 
     try {
+      const formData = new FormData(e.currentTarget as HTMLFormElement);
+      const submittedEmail = String(formData.get('email') || email).trim().toLowerCase();
+      const submittedPassword = String(formData.get('password') || password);
+
       if (isLogin) {
-        await login({ email, password });
+        await login({ email: submittedEmail, password: submittedPassword });
       } else {
-        await register({ email, password });
+        await register({ email: submittedEmail, password: submittedPassword });
       }
       navigate('/account');
     } catch (error: any) {
-      setError(error.message || 'Ошибка авторизации');
+      setError(error.message === 'Unauthorized' ? 'Неверный email или пароль' : (error.message || 'Ошибка авторизации'));
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +104,8 @@ export default function Login() {
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
@@ -117,6 +123,8 @@ export default function Login() {
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
                     type="password"
+                    name="password"
+                    autoComplete={isLogin ? 'current-password' : 'new-password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
