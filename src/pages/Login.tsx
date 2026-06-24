@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield, User, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { Shield, User, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Login() {
@@ -11,6 +11,7 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -107,7 +108,10 @@ export default function Login() {
                     name="email"
                     autoComplete="username"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setError('');
+                    }}
                     placeholder="your@email.com"
                     className="w-full pl-11 pr-4 py-3 rounded-lg bg-background/50 border border-border focus:border-primary font-mono transition-colors text-sm"
                     required
@@ -122,16 +126,28 @@ export default function Login() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     name="password"
                     autoComplete={isLogin ? 'current-password' : 'new-password'}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setError('');
+                    }}
                     placeholder="••••••••"
-                    className="w-full pl-11 pr-4 py-3 rounded-lg bg-background/50 border border-border focus:border-primary font-mono transition-colors text-sm"
+                    className="w-full pl-11 pr-12 py-3 rounded-lg bg-background/50 border border-border focus:border-primary font-mono transition-colors text-sm"
                     required
                     minLength={6}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((value) => !value)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary"
+                    aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                    title={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
                 {!isLogin && (
                   <p className="mt-1 text-xs text-muted-foreground font-mono">
