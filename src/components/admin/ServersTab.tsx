@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Server, MapPin, Activity, Users, Plus, Edit, Trash2, Eye, CheckCircle, XCircle, Loader2, Network, Download, Upload, Clock, ArrowLeft, QrCode, FileDown, Power } from 'lucide-react';
+import { Server, MapPin, Activity, Users, Plus, Edit, Trash2, Eye, CheckCircle, XCircle, Loader2, Network, Download, Upload, Clock, ArrowLeft, QrCode, FileDown, Power, LayoutGrid, Table2 } from 'lucide-react';
 import { api, Server as ServerType, InterfaceTraffic } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
@@ -35,6 +35,9 @@ const getCountryFlag = (countryCode: string) => {
 
 export function ServersTab() {
   const [servers, setServers] = useState<ServerType[]>([]);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>(() =>
+    localStorage.getItem('admin_servers_view') === 'table' ? 'table' : 'grid'
+  );
   const [trafficMap, setTrafficMap] = useState<Record<number, Record<string, InterfaceTraffic>>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -75,6 +78,11 @@ export function ServersTab() {
   const [isNewCategory, setIsNewCategory] = useState(false);
   const [isLoadingConfig, setIsLoadingConfig] = useState(false);
   const [showQR, setShowQR] = useState(false);
+
+  const changeViewMode = (mode: 'grid' | 'table') => {
+    setViewMode(mode);
+    localStorage.setItem('admin_servers_view', mode);
+  };
   
   // Ref для хранения текущего activeConfig в интервале
   const activeConfigRef = useRef<string>('');
@@ -1860,13 +1868,39 @@ export function ServersTab() {
             Всего: {servers.length} серверов
           </p>
         </div>
-        <Button 
-          onClick={() => handleOpenDialog()}
-          className="bg-primary hover:bg-primary/90 text-black font-mono"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Добавить сервер
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center rounded-md border border-border bg-card p-1">
+            <button
+              type="button"
+              onClick={() => changeViewMode('grid')}
+              className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                viewMode === 'grid' ? 'bg-primary text-black' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+              title="Плитки"
+              aria-label="Показать сервера плитками"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => changeViewMode('table')}
+              className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                viewMode === 'table' ? 'bg-primary text-black' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+              title="Таблица"
+              aria-label="Показать сервера таблицей"
+            >
+              <Table2 className="h-4 w-4" />
+            </button>
+          </div>
+          <Button
+            onClick={() => handleOpenDialog()}
+            className="bg-primary hover:bg-primary/90 text-black font-mono"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Добавить сервер
+          </Button>
+        </div>
       </div>
 
       {/* Servers Grid */}
@@ -1889,7 +1923,7 @@ export function ServersTab() {
             Добавить сервер
           </Button>
         </motion.div>
-      ) : (
+      ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {servers.map((server, index) => (
             <motion.div
@@ -2162,6 +2196,162 @@ export function ServersTab() {
               </div>
             </motion.div>
           ))}
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-lg border border-border bg-card">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[1180px] border-collapse">
+              <thead className="border-b border-border bg-background/60">
+                <tr className="text-left font-mono text-xs uppercase text-muted-foreground">
+                  <th className="px-4 py-3">Сервер</th>
+                  <th className="px-4 py-3">Статус</th>
+                  <th className="px-4 py-3">IP / протоколы</th>
+                  <th className="px-4 py-3">Панель</th>
+                  <th className="px-4 py-3">Пиры</th>
+                  <th className="px-4 py-3">Ресурсы</th>
+                  <th className="px-4 py-3">Трафик 30 дней</th>
+                  <th className="px-4 py-3 text-right">Действия</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {servers.map((server, index) => {
+                  const peersPercent = server.max_users
+                    ? Math.min(((server.current_peers || 0) / server.max_users) * 100, 100)
+                    : 0;
+                  const cpu = server.systemStatus?.CPU?.cpu_percent;
+                  const ram = server.systemStatus?.Memory?.VirtualMemory?.percent;
+                  const disk = server.systemStatus?.Disks?.[0]?.percent;
+                  const traffic = trafficMap[server.id]
+                    ? Object.values(trafficMap[server.id]).reduce((sum, item) => sum + (item.month_total || 0), 0)
+                    : null;
+
+                  return (
+                    <motion.tr
+                      key={server.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.03 }}
+                      className="transition-colors hover:bg-primary/[0.04]"
+                    >
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10">
+                            <Server className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="min-w-0">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedServerId(server.id)}
+                              className="block max-w-[220px] truncate text-left font-mono text-sm font-bold hover:text-primary"
+                              title={server.name}
+                            >
+                              {server.name}
+                            </button>
+                            <div className="mt-1 flex items-center gap-1 font-mono text-xs text-muted-foreground">
+                              {getCountryFlag(server.country)}
+                              <span>{server.country || '—'}</span>
+                              <MapPin className="h-3 w-3" />
+                              <span className="max-w-[110px] truncate">{server.location || '—'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col items-start gap-1">
+                          <span className={`rounded px-2 py-1 font-mono text-xs ${getStatusColor(server.status)}`}>
+                            {getStatusText(server.status)}
+                          </span>
+                          <span className={`rounded px-2 py-0.5 font-mono text-[10px] ${
+                            server.usage_type === 'dedicated'
+                              ? 'bg-accent/20 text-accent'
+                              : 'bg-blue-500/20 text-blue-400'
+                          }`}>
+                            {server.usage_type === 'dedicated' ? 'Выделенный' : 'Общий'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs">
+                        <div>{server.ip_address || '—'}</div>
+                        <div className="mt-1 uppercase text-muted-foreground">
+                          {server.protocols?.join(', ') || '—'}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        {server.wg_dashboard_url ? (
+                          <span className={`rounded px-2 py-1 font-mono text-xs ${
+                            server.panel_type === '3wg-panel'
+                              ? 'bg-primary/15 text-primary'
+                              : 'bg-cyan-500/15 text-cyan-400'
+                          }`}>
+                            {server.panel_type === '3wg-panel' ? '3WG Panel' : 'WGDashboard'}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-xs text-muted-foreground">Не подключена</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="w-32">
+                          <div className="mb-1 flex justify-between font-mono text-xs">
+                            <span>{server.current_peers || 0} / {server.max_users || 0}</span>
+                            <span className="text-muted-foreground">{peersPercent.toFixed(0)}%</span>
+                          </div>
+                          <div className="h-1.5 overflow-hidden rounded-full bg-muted/50">
+                            <div
+                              className={`h-full rounded-full ${
+                                peersPercent > 80 ? 'bg-red-500' : peersPercent > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                              }`}
+                              style={{ width: `${peersPercent}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="grid min-w-32 grid-cols-3 gap-2 font-mono text-[11px]">
+                          <span className="text-orange-400">CPU {typeof cpu === 'number' ? `${cpu.toFixed(1)}%` : '—'}</span>
+                          <span className="text-green-400">RAM {typeof ram === 'number' ? `${ram.toFixed(1)}%` : '—'}</span>
+                          <span className="text-cyan-400">SSD {typeof disk === 'number' ? `${disk.toFixed(1)}%` : '—'}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs">
+                        {traffic === null ? '—' : formatBytes(traffic)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedServerId(server.id)}
+                            className="flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
+                            title="Подробнее"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenDialog(server)}
+                            className="flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
+                            title="Редактировать"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDeletingServer(server);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                            className="flex h-8 w-8 items-center justify-center rounded border border-red-500/30 text-red-400 hover:bg-red-500/10"
+                            title="Удалить"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
